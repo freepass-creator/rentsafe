@@ -1,0 +1,14 @@
+rules_version = '2';
+// ⚠️ MVP/데모용 — 인증 전이라 우선 열어둠. 상용화 전 반드시 잠글 것.
+//   - 가맹사 인증(로그인) 도입 후 request.auth 기반으로 제한
+//   - 조회는 결과 최소화, 쓰기는 가맹사만
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /consents/{id} {
+      allow read, write: if true;   // TODO: 가맹사/본인 한정
+    }
+    match /risks/{id} {
+      allow read, write: if true;   // TODO: 가맹사 한정 + 조회 최소화
+    }
+  }
+}

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#16314d">
+<meta name="robots" content="noindex, nofollow">
+<title>RentSafe · 거래안전 동의</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --navy:#16314d;--navy2:#1f4263;--navy50:#eef3f8;
+    --safe:#15916b;--safe50:#e6f5ef;
+    --ink:#1b2733;--ink2:#445466;--ink3:#7c8a98;--line:#e6ebf1;
+    --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  }
+  html,body{height:100%}
+  body{font-family:"Pretendard",-apple-system,system-ui,sans-serif;color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;background:#dfe4ea;font-size:15px;overscroll-behavior:none}
+  .app{max-width:480px;margin:0 auto;background:#fff;min-height:100dvh;min-height:100vh;display:flex;flex-direction:column;position:relative}
+  @media(min-width:520px){body{padding:20px 0}.app{min-height:auto;height:calc(100vh - 40px);border-radius:22px;overflow:hidden;box-shadow:0 12px 50px rgba(22,49,77,.22)}}
+
+  .head{background:var(--navy);color:#fff;padding:calc(20px + var(--sat)) 22px 22px;flex-shrink:0}
+  .head .eyebrow{font-size:11px;font-weight:700;opacity:.8;letter-spacing:.5px}
+  .head h1{font-size:21px;font-weight:800;margin-top:5px;letter-spacing:-.3px}
+  .head .co{font-size:13px;opacity:.85;margin-top:8px;display:flex;align-items:center;gap:6px}
+  .head .co::before{content:"";width:6px;height:6px;border-radius:50%;background:#5fd0a8}
+
+  .steps{display:flex;gap:6px;padding:16px 22px 4px;flex-shrink:0}
+  .steps .s{flex:1;height:4px;border-radius:2px;background:var(--line);transition:.3s}
+  .steps .s.on{background:var(--safe)}
+
+  .body{padding:18px 22px 8px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .slabel{font-size:12px;font-weight:800;color:var(--safe);margin-bottom:7px;letter-spacing:.3px}
+  .stitle{font-size:20px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px;line-height:1.3}
+  .sdesc{font-size:14px;color:var(--ink3);margin-bottom:22px}
+  .back{display:inline-flex;align-items:center;gap:5px;color:var(--ink3);font-weight:700;font-size:13.5px;margin-bottom:14px;cursor:pointer}
+
+  .auth-opt{display:flex;align-items:center;gap:14px;border:1.5px solid var(--line);border-radius:14px;padding:17px;margin-bottom:11px;cursor:pointer;font-weight:700;font-size:15px;transition:transform .08s,border-color .12s,background .12s;min-height:62px}
+  .auth-opt:active{transform:scale(.98);background:var(--navy50)}
+  .auth-opt.rec{border-color:var(--navy);background:var(--navy50)}
+  .auth-opt .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:18px;flex-shrink:0;color:#fff;font-weight:900}
+  .auth-opt .ic.phone{background:var(--navy)}
+  .auth-opt .ic.kakao{background:#FEE500;color:#3c1e1e}
+  .auth-opt .ic.toss{background:#3182f6}
+  .auth-opt .tx small{display:block;font-size:11.5px;color:var(--ink3);font-weight:600;margin-top:1px}
+  .auth-opt .arr{margin-left:auto;color:var(--ink3);font-size:20px}
+
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:6px}
+  .field input,.field select{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:14px 14px;font-size:16px;font-family:inherit;outline:none;background:#fff;transition:.12s;color:var(--ink)}
+  .field input:focus,.field select:focus{border-color:var(--navy2);box-shadow:0 0 0 3px var(--navy50)}
+  .field .row2{display:flex;gap:10px}
+  .field .row2 input{flex:1}
+  .codebox{text-align:center}
+  .codebox input{font-size:26px;letter-spacing:10px;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+  .timer{color:#d0563f;font-weight:700;font-size:13px;margin-top:8px}
+  .resend{color:var(--ink3);font-size:13px;margin-top:10px;text-decoration:underline;cursor:pointer;display:inline-block}
+  .sent-to{background:var(--navy50);border-radius:10px;padding:11px 14px;font-size:13.5px;color:var(--ink2);margin-bottom:16px}
+  .sent-to b{color:var(--navy)}
+
+  .verifying{text-align:center;padding:60px 10px}
+  .spinner{width:50px;height:50px;border:4px solid var(--navy50);border-top-color:var(--navy);border-radius:50%;margin:0 auto 18px;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .verified{background:var(--safe50);border:1px solid #bfe3d3;border-radius:14px;padding:15px 17px;margin-bottom:20px}
+  .verified .vrow{display:flex;align-items:center;gap:7px;font-weight:800;color:var(--safe);font-size:14px;margin-bottom:9px}
+  .verified .vrow .chk{width:20px;height:20px;border-radius:50%;background:var(--safe);color:#fff;display:grid;place-items:center;font-size:12px}
+  .verified .info{font-size:14px;color:var(--ink2);display:grid;gap:4px}
+  .verified .info b{color:var(--ink);font-weight:700}
+
+  .notice{display:grid;gap:13px;margin:14px 0 18px}
+  .ni{display:flex;gap:11px;font-size:14px;line-height:1.5}
+  .ni .n{width:22px;height:22px;border-radius:50%;background:var(--navy50);color:var(--navy);font-weight:800;font-size:11px;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
+  .ni.safe .n{background:var(--safe50);color:var(--safe)}
+  .statement{border:1px solid var(--line);border-radius:12px;padding:15px;font-size:12.5px;color:var(--ink2);line-height:1.7;max-height:150px;overflow-y:auto;background:#fbfcfd;margin-bottom:16px;-webkit-overflow-scrolling:touch}
+  .cc{display:flex;align-items:center;gap:11px;padding:15px 16px;border:1.5px solid var(--line);border-radius:13px;cursor:pointer;font-weight:700;font-size:14.5px;transition:.12s;line-height:1.4}
+  .cc:active{transform:scale(.99)}
+  .cc.on{border-color:var(--safe);background:var(--safe50)}
+  .cc input{width:21px;height:21px;accent-color:var(--safe);flex-shrink:0}
+
+  .footer{flex-shrink:0;padding:12px 20px calc(14px + var(--sab));background:#fff;border-top:1px solid var(--line)}
+  .btn{width:100%;padding:17px;border:none;border-radius:14px;background:var(--navy);color:#fff;font-weight:800;font-size:16px;cursor:pointer;font-family:inherit;transition:.12s}
+  .btn:active{transform:scale(.99)}
+  .btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+  .btn.safe{background:var(--safe)}
+
+  .done{text-align:center;padding:48px 16px 20px;flex:1;display:flex;flex-direction:column;justify-content:center}
+  .done .big{width:80px;height:80px;border-radius:50%;background:var(--safe50);color:var(--safe);display:grid;place-items:center;font-size:40px;margin:0 auto 18px;animation:pop .4s ease}
+  @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+  .done h2{font-size:21px;font-weight:800}
+  .done p{color:var(--ink3);margin-top:9px;font-size:14px}
+  .receipt{background:#f7f9fb;border:1px solid var(--line);border-radius:13px;padding:16px;margin-top:24px;text-align:left;font-size:13px}
+  .receipt .r{display:flex;justify-content:space-between;padding:5px 0}
+  .receipt .r .k{color:var(--ink3)}
+  .receipt .r .v{font-weight:700;font-variant-numeric:tabular-nums}
+
+  .hint{font-size:12px;color:var(--ink3);text-align:center;margin-top:14px;line-height:1.6}
+  .demo-tag{position:fixed;top:calc(6px + var(--sat));left:50%;transform:translateX(-50%);background:rgba(185,130,26,.95);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;z-index:99;backdrop-filter:blur(4px)}
+</style>
+</head>
+<body>
+<div class="demo-tag">DEMO · 본인인증 mock</div>
+<div class="app">
+  <div class="head">
+    <div class="eyebrow">RENTSAFE · 렌터카 안전거래</div>
+    <h1>거래안전 동의</h1>
+    <div class="co">스피드렌터카 차량 임대차계약</div>
+  </div>
+  <div class="steps"><div class="s on" id="s1"></div><div class="s" id="s2"></div><div class="s" id="s3"></div></div>
+  <div class="body" id="body"></div>
+  <div class="footer" id="footer"></div>
+</div>
+
+<script>
+const COMPANY = "스피드렌터카";
+const CID = new URLSearchParams(location.search).get("cid"); // 가맹사 발송건과 연결
+const CONSENTS_KEY = "rentsafe_consents_v1";
+let stage = "auth-select";  // auth-select | auth-form | auth-code | auth-loading | consent | done
+let auth = { carrier:"", name:"", birth:"", phone:"" };
+let verified = null, agreed = false;
+
+function setStep(n){ for(let i=1;i<=3;i++) document.getElementById("s"+i).classList.toggle("on", i<=n); }
+function hyphen(el){ let v=el.value.replace(/\D/g,"").slice(0,11); el.value = v.length<4?v : v.length<8?v.slice(0,3)+"-"+v.slice(3) : v.slice(0,3)+"-"+v.slice(3,7)+"-"+v.slice(7); }
+
+function render(){
+  const body=document.getElementById("body"), footer=document.getElementById("footer");
+  footer.style.display="block";
+  if(stage==="done"){ setStep(3); body.innerHTML=viewDone(); footer.style.display="none"; return; }
+  if(stage==="consent"){ setStep(2); body.innerHTML=viewConsent(); footer.innerHTML=`<button class="btn safe" ${agreed?'':'disabled'} onclick="finish()">동의 완료</button>`; return; }
+  // STEP 1
+  setStep(1);
+  if(stage==="auth-select"){ body.innerHTML=viewSelect(); footer.style.display="none"; }
+  else if(stage==="auth-form"){ body.innerHTML=viewForm(); footer.innerHTML=`<button class="btn" onclick="requestCode()">인증번호 받기</button>`; }
+  else if(stage==="auth-code"){ body.innerHTML=viewCode(); footer.innerHTML=`<button class="btn" onclick="verifyCode()">확인</button>`; }
+  else if(stage==="auth-loading"){ body.innerHTML=`<div class="verifying"><div class="spinner"></div><div style="font-weight:700;font-size:15px">본인인증 처리 중…</div></div>`; footer.style.display="none"; }
+}
+
+/* STEP 1-a : 수단 선택 */
+function viewSelect(){
+  return `
+    <div class="slabel">STEP 1 · 본인확인</div>
+    <div class="stitle">본인인증 방법을<br>선택해 주세요</div>
+    <div class="sdesc">동의 전 본인 명의 확인이 필요합니다.</div>
+    <div class="auth-opt rec" onclick="goForm()"><span class="ic phone">📱</span><span class="tx">휴대폰 본인확인<small>이름·생년월일·통신사로 인증</small></span><span class="arr">›</span></div>
+    <div class="auth-opt" onclick="goSimple('카카오')"><span class="ic kakao">k</span><span class="tx">카카오 간편인증</span><span class="arr">›</span></div>
+    <div class="auth-opt" onclick="goSimple('토스')"><span class="ic toss">t</span><span class="tx">토스 간편인증</span><span class="arr">›</span></div>
+    <div class="hint">실제 서비스에서는 본인확인기관(나이스·KCB) 인증이 연동됩니다.</div>`;
+}
+function goForm(){ stage="auth-form"; render(); }
+function goSimple(m){ auth.carrier=m; stage="auth-loading"; render(); setTimeout(()=>{ /* 간편인증=외부앱 승인 가정 */ stage="auth-code"; auth.simple=m; render(); }, 1300); }
+
+/* STEP 1-b : 정보 입력 */
+function viewForm(){
+  return `
+    <div class="back" onclick="stage='auth-select';render()">‹ 뒤로</div>
+    <div class="slabel">STEP 1 · 휴대폰 본인확인</div>
+    <div class="stitle">본인 정보를 입력해 주세요</div>
+    <div class="sdesc" style="margin-bottom:18px">통신사에 등록된 본인 명의 정보와 일치해야 합니다.</div>
+    <div class="field"><label>통신사</label>
+      <select id="f-carrier"><option value="">선택</option><option>SKT</option><option>KT</option><option>LG U+</option><option>알뜰폰</option></select></div>
+    <div class="field"><label>이름</label><input id="f-name" placeholder="홍길동" value="${auth.name}"></div>
+    <div class="field"><label>생년월일 6자리</label><input id="f-birth" inputmode="numeric" maxlength="6" placeholder="900715" value="${auth.birth}"></div>
+    <div class="field"><label>휴대폰번호</label><input id="f-phone" inputmode="numeric" oninput="hyphen(this)" placeholder="010-0000-0000" value="${auth.phone}"></div>
+    <div class="hint">데모이므로 아무 값이나 입력해도 됩니다.</div>`;
+}
+function requestCode(){
+  auth.carrier=document.getElementById("f-carrier").value;
+  auth.name=document.getElementById("f-name").value.trim();
+  auth.birth=document.getElementById("f-birth").value.replace(/\D/g,"").slice(0,6);
+  auth.phone=document.getElementById("f-phone").value.trim();
+  if(!auth.carrier||!auth.name||auth.birth.length<6||!auth.phone){ alert("모든 항목을 입력해 주세요. (데모: 아무 값)"); return; }
+  stage="auth-loading"; render();
+  setTimeout(()=>{ stage="auth-code"; render(); }, 900);
+}
+
+/* STEP 1-c : 인증번호 */
+function viewCode(){
+  const to = auth.simple ? `${auth.simple} 간편인증 앱` : auth.phone;
+  return `
+    <div class="back" onclick="stage='${auth.simple?'auth-select':'auth-form'}';render()">‹ 뒤로</div>
+    <div class="slabel">STEP 1 · 인증번호 입력</div>
+    <div class="stitle">인증번호를 입력해 주세요</div>
+    <div class="sent-to">📩 <b>${to}</b> 로<br>인증번호를 발송했습니다.</div>
+    <div class="field codebox"><input id="f-code" inputmode="numeric" maxlength="6" placeholder="● ● ● ● ● ●">
+      <div class="timer">남은 시간 02:59</div>
+      <span class="resend" onclick="alert('재발송했습니다 (데모)')">인증번호 재발송</span></div>
+    <div class="hint">데모: 아무 숫자 6자리나 입력하세요.</div>`;
+}
+function verifyCode(){
+  const c=(document.getElementById("f-code").value||"").replace(/\D/g,"");
+  if(c.length<6){ alert("인증번호 6자리를 입력해 주세요."); return; }
+  stage="auth-loading"; render();
+  setTimeout(()=>{
+    const fmtB = auth.birth ? `${auth.birth.slice(0,2)}.${auth.birth.slice(2,4)}.${auth.birth.slice(4,6)}` : "90.07.15";
+    verified = { name: auth.name||"홍길동", birth: (auth.birth?("19"+auth.birth.slice(0,2)+"."+auth.birth.slice(2,4)+"."+auth.birth.slice(4,6)):"1990.07.15"), method: auth.simple?`${auth.simple} 간편인증`:"휴대폰 본인확인" };
+    stage="consent"; render();
+  }, 900);
+}
+
+/* STEP 2 : 동의 */
+function viewConsent(){
+  return `
+    <div class="verified">
+      <div class="vrow"><span class="chk">✓</span> 본인확인 완료 <span style="font-size:11px;color:var(--ink3);font-weight:600">· ${verified.method}</span></div>
+      <div class="info"><span><b>${verified.name}</b> 님</span><span>생년월일 ${verified.birth}</span></div>
+    </div>
+    <div class="slabel">STEP 2 · 거래안전 동의</div>
+    <div class="stitle">거래안전 동의 안내</div>
+    <div class="notice">
+      <div class="ni safe"><div class="n">1</div><div><b>정상 이용 시 등록되지 않습니다.</b> 정상 납부·반환 시 거래위험정보는 남지 않아요.</div></div>
+      <div class="ni"><div class="n">2</div><div><b>중대한 계약위반 시에만 등록됩니다.</b> 대여료 미납·차량 미반납 등.</div></div>
+      <div class="ni"><div class="n">3</div><div><b>가맹사가 제한 조회합니다.</b> 신규 계약 판단 목적의 등록 여부 확인만.</div></div>
+      <div class="ni safe"><div class="n">4</div><div><b>해소 시 삭제됩니다.</b> 정산·반환 완료 시 지체 없이 삭제·변경.</div></div>
+    </div>
+    <div class="statement">본인은 렌터카 안전거래 플랫폼 가입 및 본 플랫폼을 통한 대여료 결제·정산 서비스 이용에 동의합니다. 정상 이행 시 거래위험정보는 등록되지 않으며, 대여료 미납·차량 미반납 등 거래상 문제 발생 시 본인의 거래정보가 <b>암호화되어 본 플랫폼 가맹 자동차대여사업자에게 제공</b>되어 신규 계약 판단 시 확인될 수 있음에 동의합니다. 문제 해소 시 해당 정보는 지체 없이 삭제·상태변경됩니다.</div>
+    <label class="cc ${agreed?'on':''}" onclick="toggleAgree()"><input type="checkbox" ${agreed?'checked':''} onclick="event.stopPropagation()"> 위 내용을 모두 확인하였으며 거래위험정보 제공에 동의합니다.</label>`;
+}
+function toggleAgree(){ agreed=!agreed; render(); }
+
+/* STEP 3 : 완료 — 가맹사 발송건에 결과 기록 (localStorage 공유) */
+function finish(){
+  if(CID){
+    try{
+      const arr = JSON.parse(localStorage.getItem(CONSENTS_KEY)||"[]");
+      const c = arr.find(x=>x.cid===CID);
+      if(c){ c.status="completed"; c.verified={ name:verified.name, birth:verified.birth, method:verified.method }; c.completedAt=new Date().toISOString(); localStorage.setItem(CONSENTS_KEY, JSON.stringify(arr)); }
+    }catch(e){}
+  }
+  stage="done"; render();
+}
+function viewDone(){
+  const cid="CS-"+Math.random().toString(36).slice(2,8).toUpperCase();
+  const n=new Date();
+  const ts=`${n.getFullYear()}.${String(n.getMonth()+1).padStart(2,'0')}.${String(n.getDate()).padStart(2,'0')} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+  return `
+    <div class="done">
+      <div class="big">✓</div>
+      <h2>동의가 완료되었습니다</h2>
+      <p>${COMPANY} 거래안전 동의가<br>정상 처리되었습니다.</p>
+      <div class="receipt">
+        <div class="r"><span class="k">동의번호</span><span class="v">${cid}</span></div>
+        <div class="r"><span class="k">본인확인</span><span class="v">완료 · ${verified.method}</span></div>
+        <div class="r"><span class="k">동의자</span><span class="v">${verified.name}</span></div>
+        <div class="r"><span class="k">동의일시</span><span class="v">${ts}</span></div>
+        <div class="r"><span class="k">문구버전</span><span class="v">v1.0</span></div>
+      </div>
+      <div class="hint">이 화면은 닫으셔도 됩니다.<br>동의 증빙은 안전하게 보관됩니다.</div>
+    </div>`;
+}
+
+render();
+</script>
+</body>
+</html>
