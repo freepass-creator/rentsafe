@@ -95,7 +95,7 @@ export default function SelfConsentPage() {
 
   return (
     <div className="app">
-      <FlowHeader title="착한거래 동의하기" sub={target ? `${target.company} 와의 거래` : `${CODE_LABEL}를 입력해 시작하세요`} steps={4} step={step} />
+      <FlowHeader title="착한거래 동의하기" sub={target ? `${target.company}와의 거래` : `${CODE_LABEL}를 입력해 시작하세요`} steps={4} step={step} />
 
       {started && !verified ? (
         <AuthFlow onVerified={setVerified} onCancel={() => setStarted(false)} />
@@ -159,7 +159,7 @@ export default function SelfConsentPage() {
             </div>
             <div className="slabel">STEP 3 · 전자서명</div>
             <div className="stitle">동의 확인을 위해 서명해 주세요</div>
-            <div className="sdesc">{target.company} 와의 거래에 대한 착한거래 동의를 본인이 직접 확인하는 전자서명입니다.</div>
+            <div className="sdesc">{target.company}와의 거래에 대한 착한거래 동의를 본인이 직접 확인하는 전자서명입니다.</div>
             <SignaturePad onChange={setSig} />
           </>
         )}
