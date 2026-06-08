@@ -13,11 +13,11 @@
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+html,body{height:100%;overscroll-behavior:none}
 body{
   font-family:"Pretendard",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
-  min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
+  min-height:100vh;min-height:100svh;display:flex;flex-direction:column;
   word-break:keep-all;overflow-wrap:break-word;
 }
 button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
@@ -136,7 +136,7 @@ a{color:inherit;text-decoration:none}
 .steps{display:flex;gap:6px;padding:16px 22px 4px;flex-shrink:0}
 .steps .s{flex:1;height:4px;border-radius:2px;background:var(--line);transition:.3s}
 .steps .s.on{background:var(--safe)}
-.c-body{padding:18px 22px 8px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.c-body{padding:18px 22px 8px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .slabel{font-size:12px;font-weight:800;color:var(--safe);margin-bottom:7px;letter-spacing:.3px}
 .stitle{font-size:18px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px;line-height:1.3}
 .sdesc{font-size:14px;color:var(--ink3);margin-bottom:22px}

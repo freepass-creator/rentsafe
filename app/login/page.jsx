@@ -3,56 +3,49 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login, TEST_LOGIN } from "@/lib/auth";
-import BrandMark from "@/components/BrandMark";
-import Icon from "@/components/Icon";
+import StepFooter from "@/components/StepFooter";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
 
-  async function submit(e) {
-    e.preventDefault();
+  async function submit() {
     setErr("");
     setBusy(true);
-    const f = e.target;
-    const s = await login(f.email.value, f.pw.value);
+    const s = await login(email, pw);
     setBusy(false);
     if (!s) { setErr("이메일 또는 비밀번호가 올바르지 않습니다."); return; }
     router.replace(s.role === "admin" ? "/admin" : "/console");
   }
-  function fillTest() {
-    document.getElementById("le").value = TEST_LOGIN.email;
-    document.getElementById("lp").value = TEST_LOGIN.pw;
-  }
 
   return (
-    <div className="auth-wrap">
-      <div className="auth-card">
-        <a className="c-back-auth" href="/" aria-label="뒤로"><Icon name="back" size={20} /></a>
-        <div className="auth-brand">
-          <BrandMark size={26} className="auth-mark" />
-          <div className="auth-name"><span className="accent">착한</span>거래</div>
-          <div className="auth-tag">회원 로그인</div>
-        </div>
-
-        <form onSubmit={submit}>
+    <div className="app">
+      <div className="c-head">
+        <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
+        <h1>회원 로그인</h1>
+        <div className="co">렌터카 사업자 회원 전용</div>
+      </div>
+      <div className="c-body">
+        <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
           <div className="field"><label>이메일</label>
-            <input id="le" name="email" type="email" placeholder="name@company.com" autoComplete="username" /></div>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@company.com" autoComplete="username" /></div>
           <div className="field"><label>비밀번호</label>
-            <input id="lp" name="pw" type="password" placeholder="비밀번호" autoComplete="current-password" /></div>
+            <input value={pw} onChange={(e) => setPw(e.target.value)} type="password" placeholder="비밀번호" autoComplete="current-password" /></div>
           {err && <div className="auth-err">{err}</div>}
-          <button className="btn btn-primary btn-block" style={{ marginTop: 8 }} type="submit" disabled={busy}>{busy ? "로그인 중…" : "로그인"}</button>
         </form>
-        <div className="auth-links"><a href="/reset">비밀번호를 잊으셨나요?</a></div>
 
         <div className="auth-test">
           <span>테스트 계정</span>
           <span><code>{TEST_LOGIN.email}</code> / <code>{TEST_LOGIN.pw}</code>
-            <button className="btn btn-sm" style={{ marginLeft: 8 }} onClick={fillTest}>입력</button></span>
+            <button className="btn btn-sm" style={{ marginLeft: 8 }} onClick={() => { setEmail(TEST_LOGIN.email); setPw(TEST_LOGIN.pw); }}>입력</button></span>
         </div>
+        <div className="auth-links"><a href="/reset">비밀번호를 잊으셨나요?</a></div>
         <div className="auth-alt">아직 회원이 아니신가요? <a href="/signup">계정 만들기</a></div>
       </div>
+      <StepFooter prev={{ label: "이전", onClick: () => router.push("/") }} next={{ label: busy ? "로그인 중…" : "로그인", onClick: submit, disabled: busy }} />
     </div>
   );
 }
