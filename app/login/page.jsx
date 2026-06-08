@@ -38,8 +38,11 @@ export default function LoginPage() {
           <span><code>{TEST_LOGIN.email}</code> / <code>{TEST_LOGIN.pw}</code>
             <button className="btn btn-sm" style={{ marginLeft: 8 }} onClick={() => { setEmail(TEST_LOGIN.email); setPw(TEST_LOGIN.pw); }}>입력</button></span>
         </div>
-        <div className="auth-links"><a href="/reset">비밀번호를 잊으셨나요?</a></div>
-        <div className="auth-alt">아직 회원이 아니신가요? <a href="/signup">계정 만들기</a></div>
+        <div className="auth-foot">
+          <a href="/reset">비밀번호 찾기</a>
+          <span className="sep">·</span>
+          <a href="/signup">회원 가입</a>
+        </div>
       </div>
       <StepFooter prev={{ label: "이전", onClick: () => router.push("/") }} next={{ label: busy ? "로그인 중…" : "로그인", onClick: submit, disabled: busy }} />
     </div>
