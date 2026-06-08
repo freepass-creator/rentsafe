@@ -8,6 +8,7 @@ import { CONSENT_STATEMENT, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CA
 import { fmtBirth, fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
 import NoticeList from "@/components/NoticeList";
+import SignaturePad from "@/components/SignaturePad";
 
 export default function SelfConsentPage() {
   const router = useRouter();
@@ -18,6 +19,8 @@ export default function SelfConsentPage() {
   const [started, setStarted] = useState(false);
   const [verified, setVerified] = useState(null);
   const [agreed, setAgreed] = useState(false);
+  const [signing, setSigning] = useState(false);
+  const [sig, setSig] = useState("");
   const [done, setDone] = useState(false);
   const [receipt, setReceipt] = useState(null);
 
@@ -38,16 +41,18 @@ export default function SelfConsentPage() {
       const id = await createSelfConsent({
         name: verified.name, company: target.company, code: target.code,
         verified: { name: verified.name, birth: verified.birth, method: verified.method },
+        signed: !!sig,
       });
       setReceipt({ cid: id.slice(-8).toUpperCase(), ts: fmtDateTime(new Date()) });
     } catch (e) { console.error(e); setReceipt({ cid: "-", ts: fmtDateTime(new Date()) }); }
     setDone(true);
   }
 
-  const step = done ? 3 : verified ? 2 : 1;
+  const step = done ? 4 : signing ? 3 : verified ? 2 : 1;
 
   function goBack() {
     if (done) { router.push("/"); return; }
+    if (signing) { setSigning(false); return; }
     if (verified) { setVerified(null); setAgreed(false); return; }
     if (started) { setStarted(false); return; }
     if (target) { setTarget(null); setCode(""); setErr(""); return; }
@@ -62,7 +67,7 @@ export default function SelfConsentPage() {
         <h1>착한거래 동의하기</h1>
         <div className="co">{target ? `${target.company} 와의 거래` : `${CODE_LABEL}를 입력해 시작하세요`}</div>
       </div>
-      <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /></div>
+      <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /><div className={`s ${step >= 4 ? "on" : ""}`} /></div>
 
       <div className="c-body">
         {/* STEP 0 — 업체코드 입력 */}
@@ -94,7 +99,7 @@ export default function SelfConsentPage() {
         {target && started && !verified && <AuthFlow onVerified={setVerified} />}
 
         {/* STEP 2 — 동의 */}
-        {verified && !done && (
+        {verified && !signing && !done && (
           <>
             <div className="verified">
               <div className="vrow"><span className="chk">✓</span> 본인확인 완료 <span style={{ fontSize: 11, color: "var(--ink3)", fontWeight: 600 }}>· {verified.method}</span></div>
@@ -110,7 +115,21 @@ export default function SelfConsentPage() {
           </>
         )}
 
-        {/* STEP 3 — 완료 */}
+        {/* STEP 3 — 서명 */}
+        {verified && signing && !done && (
+          <>
+            <div className="verified">
+              <div className="vrow"><span className="chk">✓</span> 본인확인 완료 <span style={{ fontSize: 11, color: "var(--ink3)", fontWeight: 600 }}>· {verified.method}</span></div>
+              <div className="info"><span><b>{verified.name}</b> 님</span><span>생년월일 {fmtBirth(verified.birth)}</span></div>
+            </div>
+            <div className="slabel">STEP 3 · 전자서명</div>
+            <div className="stitle">동의 확인을 위해 서명해 주세요</div>
+            <div className="sdesc">{target.company} 와의 거래에 대한 착한거래 동의를 본인이 직접 확인하는 전자서명입니다.</div>
+            <SignaturePad onChange={setSig} />
+          </>
+        )}
+
+        {/* STEP 4 — 완료 */}
         {done && verified && receipt && (
           <div className="done">
             <div className="big">✓</div>
@@ -121,6 +140,7 @@ export default function SelfConsentPage() {
               <div className="r"><span className="k">대상 회원사</span><span className="v">{target.company}</span></div>
               <div className="r"><span className="k">본인확인</span><span className="v">완료 · {verified.method}</span></div>
               <div className="r"><span className="k">동의자</span><span className="v">{verified.name}</span></div>
+              <div className="r"><span className="k">전자서명</span><span className="v">{sig ? "완료" : "—"}</span></div>
               <div className="r"><span className="k">동의일시</span><span className="v mono">{receipt.ts}</span></div>
               <div className="r"><span className="k">문구버전</span><span className="v">{CONSENT_VERSION}</span></div>
             </div>
@@ -132,8 +152,11 @@ export default function SelfConsentPage() {
       {target && !started && !verified && (
         <div className="c-footer"><button className="btn btn-safe btn-block" onClick={() => setStarted(true)}>본인인증하고 동의 진행</button></div>
       )}
-      {verified && !done && (
-        <div className="c-footer"><button className="btn btn-safe btn-block" disabled={!agreed} onClick={finish}>동의 완료</button></div>
+      {verified && !signing && !done && (
+        <div className="c-footer"><button className="btn btn-safe btn-block" disabled={!agreed} onClick={() => setSigning(true)}>동의하고 서명하기</button></div>
+      )}
+      {verified && signing && !done && (
+        <div className="c-footer"><button className="btn btn-safe btn-block" disabled={!sig} onClick={finish}>서명 완료 · 동의 제출</button></div>
       )}
     </div>
   );

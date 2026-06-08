@@ -1,0 +1,53 @@
+"use client";
+
+import { useRef, useEffect } from "react";
+
+// 손가락/마우스 서명 캔버스. onChange(dataURL|"") 로 결과 전달.
+export default function SignaturePad({ onChange }) {
+  const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
+  const drawing = useRef(false);
+  const dirty = useRef(false);
+
+  useEffect(() => {
+    const c = canvasRef.current;
+    const ratio = window.devicePixelRatio || 1;
+    const rect = c.getBoundingClientRect();
+    c.width = Math.round(rect.width * ratio);
+    c.height = Math.round(rect.height * ratio);
+    const ctx = c.getContext("2d");
+    ctx.scale(ratio, ratio);
+    ctx.lineWidth = 2.5; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#16314d";
+    ctxRef.current = ctx;
+  }, []);
+
+  function pos(e) {
+    const r = canvasRef.current.getBoundingClientRect();
+    const p = e.touches ? e.touches[0] : e;
+    return { x: p.clientX - r.left, y: p.clientY - r.top };
+  }
+  function start(e) { e.preventDefault(); drawing.current = true; const { x, y } = pos(e); ctxRef.current.beginPath(); ctxRef.current.moveTo(x, y); }
+  function move(e) { if (!drawing.current) return; e.preventDefault(); const { x, y } = pos(e); ctxRef.current.lineTo(x, y); ctxRef.current.stroke(); dirty.current = true; }
+  function end() { if (!drawing.current) return; drawing.current = false; if (dirty.current) onChange?.(canvasRef.current.toDataURL("image/png")); }
+  function clear() {
+    const c = canvasRef.current;
+    ctxRef.current.clearRect(0, 0, c.width, c.height);
+    dirty.current = false;
+    onChange?.("");
+  }
+
+  return (
+    <div className="sig">
+      <canvas
+        ref={canvasRef}
+        className="sig-canvas"
+        onMouseDown={start} onMouseMove={move} onMouseUp={end} onMouseLeave={end}
+        onTouchStart={start} onTouchMove={move} onTouchEnd={end}
+      />
+      <div className="sig-bar">
+        <span className="sig-hint">위 칸에 손가락으로 서명해 주세요</span>
+        <button type="button" className="btn btn-sm" onClick={clear}>지우기</button>
+      </div>
+    </div>
+  );
+}
