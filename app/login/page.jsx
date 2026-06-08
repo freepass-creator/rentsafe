@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   return (
     <div className="app">
-      <FlowHeader title="회원 로그인" sub="렌터카·분양·렌탈·외상 등 사업자 회원 전용" />
+      <FlowHeader title="회원 로그인" sub="사업자 회원 전용" />
       <div className="c-body c-center">
         <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
           <div className="field"><label>이메일</label>
@@ -39,9 +39,8 @@ export default function LoginPage() {
             <button className="btn btn-sm" style={{ marginLeft: 8 }} onClick={() => { setEmail(TEST_LOGIN.email); setPw(TEST_LOGIN.pw); }}>입력</button></span>
         </div>
         <div className="auth-foot">
-          <a href="/reset">비밀번호 찾기</a>
-          <span className="sep">·</span>
           <a href="/signup">회원 가입</a>
+          <a href="/reset">비밀번호 찾기</a>
         </div>
       </div>
       <StepFooter prev={{ label: "이전", onClick: () => router.push("/") }} next={{ label: busy ? "로그인 중…" : "로그인", onClick: submit, disabled: busy }} />

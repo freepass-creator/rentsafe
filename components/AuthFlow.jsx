@@ -10,9 +10,14 @@ import StepFooter from "@/components/StepFooter";
 // onVerified({ name, birth(6), phone, method }) / onCancel() = 첫 단계에서 뒤로(인증 취소)
 export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
   const [stage, setStage] = useState("select"); // select | form | code | loading
+  const [chosen, setChosen] = useState(""); // phone | 카카오 | 토스
   const [a, setA] = useState({ carrier: "", name: "", birth: "", phone: "", simple: "", code: "" });
   const set = (k) => (e) => setA((s) => ({ ...s, [k]: e.target.value }));
 
+  function proceed() {
+    if (chosen === "phone") { setStage("form"); return; }
+    if (chosen) goSimple(chosen);
+  }
   function goSimple(method) {
     setA((s) => ({ ...s, simple: method }));
     setStage("loading");
@@ -50,13 +55,13 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
           <div className="slabel">STEP 1 · 본인확인</div>
           <div className="stitle">본인인증 방법을 선택해 주세요</div>
           <div className="sdesc">동의 전 본인 명의 확인이 필요합니다.</div>
-          <div className="auth-opt rec" onClick={() => setStage("form")}><span className="ic phone"><Icon name="phone" size={18} /></span><span className="tx">휴대폰 본인확인<small>이름·생년월일·통신사</small></span><span className="arr">›</span></div>
-          <div className="auth-opt" onClick={() => goSimple("카카오")}><span className="ic kakao">k</span><span className="tx">카카오 간편인증</span><span className="arr">›</span></div>
-          <div className="auth-opt" onClick={() => goSimple("토스")}><span className="ic toss">t</span><span className="tx">토스 간편인증</span><span className="arr">›</span></div>
+          <div className={`auth-opt ${chosen === "phone" ? "sel" : ""}`} onClick={() => setChosen("phone")}><span className="ic phone"><Icon name="phone" size={18} /></span><span className="tx">휴대폰 본인확인<small>이름·생년월일·통신사</small></span><span className="arr">{chosen === "phone" ? "✓" : "›"}</span></div>
+          <div className={`auth-opt ${chosen === "카카오" ? "sel" : ""}`} onClick={() => setChosen("카카오")}><span className="ic kakao">k</span><span className="tx">카카오 간편인증</span><span className="arr">{chosen === "카카오" ? "✓" : "›"}</span></div>
+          <div className={`auth-opt ${chosen === "토스" ? "sel" : ""}`} onClick={() => setChosen("토스")}><span className="ic toss">t</span><span className="tx">토스 간편인증</span><span className="arr">{chosen === "토스" ? "✓" : "›"}</span></div>
           {supportHelp}
           <div className="hint">실제 서비스에서는 본인확인기관(나이스·KCB) 인증이 연동됩니다.</div>
         </div>
-        <StepFooter prev={{ onClick: onCancel }} />
+        <StepFooter prev={{ onClick: onCancel }} next={{ label: "다음", disabled: !chosen, onClick: proceed }} />
       </>
     );
 
