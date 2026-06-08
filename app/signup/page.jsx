@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { signup } from "@/lib/auth";
 import Icon from "@/components/Icon";
 import StepFooter from "@/components/StepFooter";
+import FlowHeader from "@/components/FlowHeader";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -30,11 +31,7 @@ export default function SignupPage() {
 
   return (
     <div className="app">
-      <div className="c-head">
-        <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
-        <h1>회원 가입</h1>
-        <div className="co">가입 시 사업자등록증 확인이 필요합니다</div>
-      </div>
+      <FlowHeader title="회원 가입" sub="가입 시 사업자등록증 확인이 필요합니다" />
       <div className="c-body">
         <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
           <div className="field"><label>회사명 <span className="req">*</span></label><input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="스피드렌터카" /></div>

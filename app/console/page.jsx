@@ -167,7 +167,7 @@ function RegisterTab({ toast, company }) {
         license: f.license.value.trim(), phone: f.phone.value.trim(), reason: f.reason.value.trim(), evidence,
       });
       f.reset(); setName(""); setBirth(""); setEvidence("");
-      toast(`${VIOLATION_LABEL}이 등록되었습니다.`, "safe");
+      toast(`${VIOLATION_LABEL} 내역이 등록되었습니다.`, "safe");
     } catch (err) { console.error(err); toast("저장 실패 — Firestore 설정/규칙을 확인하세요.", "danger"); }
     setBusy(false);
   }
@@ -186,12 +186,12 @@ function RegisterTab({ toast, company }) {
                 {completed.map((c) => <option key={c.id} value={c.id}>{mask(c.name)} · {fmtBirth(c.verified?.birth)}</option>)}
               </select></div>
           )}
-          <div className="field"><label>이름 <span className="req">*</span></label><input value={name} onChange={(e) => setName(e.target.value)} required placeholder="홍길동" /></div>
-          <div className="field"><label>생년월일 <span className="req">*</span></label><input value={birth} onChange={(e) => setBirth(e.target.value)} required inputMode="numeric" maxLength={6} placeholder="900715" /></div>
-          <div className="field"><label>위반 유형 <span className="req">*</span></label>
+          <div className="field full"><label>이름 <span className="req">*</span></label><input value={name} onChange={(e) => setName(e.target.value)} required placeholder="홍길동" /></div>
+          <div className="field full"><label>생년월일 <span className="req">*</span></label><input value={birth} onChange={(e) => setBirth(e.target.value)} required inputMode="numeric" maxLength={6} placeholder="900715" /></div>
+          <div className="field full"><label>위반 유형 <span className="req">*</span></label>
             <select name="type" required>{Object.entries(RISK_TYPES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></div>
-          <div className="field"><label>운전면허번호</label><input name="license" placeholder="11-22-334455-66" /></div>
-          <div className="field"><label>휴대폰번호</label><input name="phone" inputMode="numeric" placeholder="010-0000-0000" /></div>
+          <div className="field full"><label>운전면허번호</label><input name="license" placeholder="11-22-334455-66" /></div>
+          <div className="field full"><label>휴대폰번호</label><input name="phone" inputMode="numeric" placeholder="010-0000-0000" /></div>
           <div className="field full"><label>등록 사유 <span className="req">*</span></label><textarea name="reason" rows={3} required placeholder="계약위반 경위 (예: 대여료 4개월 미납, 3차 통지 후 무응답)" /></div>
           <div className="field full">
             <label>증빙 첨부 <span className="req">*</span> <span className="opt">내용증명·미납내역·반납요청 등</span></label>

@@ -9,6 +9,7 @@ import AuthFlow from "@/components/AuthFlow";
 import NoticeList from "@/components/NoticeList";
 import SignaturePad from "@/components/SignaturePad";
 import StepFooter from "@/components/StepFooter";
+import FlowHeader from "@/components/FlowHeader";
 
 export default function SelfConsentPage() {
   const router = useRouter();
@@ -85,12 +86,7 @@ export default function SelfConsentPage() {
 
   return (
     <div className="app">
-      <div className="c-head">
-        <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
-        <h1>착한거래 동의하기</h1>
-        <div className="co">{target ? `${target.company} 와의 거래` : `${CODE_LABEL}를 입력해 시작하세요`}</div>
-      </div>
-      <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /><div className={`s ${step >= 4 ? "on" : ""}`} /></div>
+      <FlowHeader title="착한거래 동의하기" sub={target ? `${target.company} 와의 거래` : `${CODE_LABEL}를 입력해 시작하세요`} steps={4} step={step} />
 
       {started && !verified ? (
         <AuthFlow onVerified={setVerified} onCancel={() => setStarted(false)} />

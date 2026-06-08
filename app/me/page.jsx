@@ -9,6 +9,7 @@ import AuthFlow from "@/components/AuthFlow";
 import Icon from "@/components/Icon";
 import NoticeList from "@/components/NoticeList";
 import StepFooter from "@/components/StepFooter";
+import FlowHeader from "@/components/FlowHeader";
 
 export default function MyStatus() {
   const router = useRouter();
@@ -76,12 +77,7 @@ export default function MyStatus() {
 
   return (
     <div className="app">
-      <div className="c-head">
-        <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
-        <h1>내 거래이력 확인</h1>
-        <div className="co">본인인증 후 본인의 정보만 열람하실 수 있습니다</div>
-      </div>
-      <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /></div>
+      <FlowHeader title="내 거래이력 확인" sub="본인인증 후 본인의 정보만 열람하실 수 있습니다" steps={3} step={step} />
 
       {stage === "auth" && started ? (
         <AuthFlow onVerified={onVerified} onCancel={() => setStarted(false)} supportHelp={supportHelp} />

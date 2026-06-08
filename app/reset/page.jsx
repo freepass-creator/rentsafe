@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { resetPassword } from "@/lib/auth";
 import StepFooter from "@/components/StepFooter";
+import FlowHeader from "@/components/FlowHeader";
 
 export default function ResetPage() {
   const router = useRouter();
@@ -23,11 +24,7 @@ export default function ResetPage() {
 
   return (
     <div className="app">
-      <div className="c-head">
-        <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
-        <h1>비밀번호 재설정</h1>
-        <div className="co">가입하신 이메일로 재설정 링크를 보내드립니다</div>
-      </div>
+      <FlowHeader title="비밀번호 재설정" sub="가입하신 이메일로 재설정 링크를 보내드립니다" />
       <div className="c-body">
         {sent ? (
           <div className="r-clean"><div className="ic">✓</div><div><h3>메일을 보냈습니다</h3><p>메일함의 링크로 새 비밀번호를 설정해 주세요.</p></div></div>

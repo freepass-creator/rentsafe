@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login, TEST_LOGIN } from "@/lib/auth";
 import StepFooter from "@/components/StepFooter";
+import FlowHeader from "@/components/FlowHeader";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,11 +24,7 @@ export default function LoginPage() {
 
   return (
     <div className="app">
-      <div className="c-head">
-        <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
-        <h1>회원 로그인</h1>
-        <div className="co">렌터카 사업자 회원 전용</div>
-      </div>
+      <FlowHeader title="회원 로그인" sub="렌터카 사업자 회원 전용" />
       <div className="c-body">
         <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
           <div className="field"><label>이메일</label>
