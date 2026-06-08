@@ -1,11 +1,13 @@
 import "./globals.css";
 import { DEMO_MODE } from "@/lib/constants";
 import DemoNav from "@/components/DemoNav";
+import PWARegister from "@/components/PWARegister";
 
 export const metadata = {
   title: "렌터카 착한거래",
   description: "외상·후불 등 비금융 거래의 거래이력 확인 플랫폼 (첫 서비스: 렌터카)",
   robots: { index: false, follow: false },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "착한거래" },
 };
 
 export const viewport = {
@@ -25,6 +27,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <PWARegister />
         {DEMO_MODE && <DemoNav />}
         {children}
       </body>
