@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { RISK_TYPES } from "@/lib/constants";
+import { RISK_TYPES, CONTRACT_CONSENT_FORM, CONSENT_NOTICES, CONSENT_STATEMENT, STATUS_NOTICES } from "@/lib/constants";
 import { mask, hyphenPhone, fmtBirth, fmtDate } from "@/lib/format";
 import { IS_LOCAL, createConsent, listConsents, addRisk } from "@/lib/db";
 import AppHeader from "@/components/AppHeader";
-import DemoNav from "@/components/DemoNav";
 import Icon from "@/components/Icon";
+import NoticeList from "@/components/NoticeList";
 
 // 로그인된 가맹사 (mock) — 실제로는 Firebase Auth 계정에서 가져옴
 const CURRENT_COMPANY = "스피드렌터카";
@@ -32,7 +32,6 @@ export default function Console() {
         {tab === "register" && <RegisterTab toast={showToast} />}
       </div>
       {toast && <div className="toast-host"><div className={`toast ${toast.kind || ""}`}>{toast.msg}</div></div>}
-      <DemoNav />
     </>
   );
 }
@@ -41,6 +40,10 @@ export default function Console() {
 function SendTab({ toast }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showTpl, setShowTpl] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [showStatusPreview, setShowStatusPreview] = useState(false);
+  const copyText = (t) => { navigator.clipboard?.writeText(t); toast("복사되었습니다.", "safe"); };
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -52,10 +55,12 @@ function SendTab({ toast }) {
   async function submit(e) {
     e.preventDefault();
     const f = e.target;
-    await createConsent({ name: f.name.value.trim(), phone: f.phone.value.trim(), company: CURRENT_COMPANY });
-    f.reset();
-    toast("동의요청이 생성되었습니다. ‘고객화면 ↗’으로 열어보세요.", "safe");
-    reload();
+    try {
+      await createConsent({ name: f.name.value.trim(), phone: f.phone.value.trim(), company: CURRENT_COMPANY });
+      f.reset();
+      toast("동의요청이 생성되었습니다. ‘고객화면 ↗’으로 열어보세요.", "safe");
+      reload();
+    } catch (err) { console.error(err); toast("저장 실패 — Firestore 설정/규칙을 확인하세요.", "danger"); }
   }
   function copyLink(id) {
     const url = `${location.origin}/consent/${id}`;
@@ -77,9 +82,35 @@ function SendTab({ toast }) {
           <div className="actions"><button className="btn btn-primary btn-block" type="submit"><Icon name="send" /> 동의요청 생성 · 발송</button></div>
         </form>
       </div>
+
+      <div className="card">
+        <div className="card-title">손님이 보는 동의 내용
+          <button className="btn btn-sm" style={{ marginLeft: "auto" }} onClick={() => setShowPreview((v) => !v)}>{showPreview ? "접기" : "미리보기"}</button>
+        </div>
+        {showPreview && (
+          <>
+            <div className="card-desc">손님이 동의 링크를 열면 아래 내용을 확인하고 동의합니다.</div>
+            <NoticeList items={CONSENT_NOTICES} />
+            <div className="statement">{CONSENT_STATEMENT}</div>
+          </>
+        )}
+      </div>
+
+      <div className="card">
+        <div className="card-title">손님이 보는 상태확인 내용
+          <button className="btn btn-sm" style={{ marginLeft: "auto" }} onClick={() => setShowStatusPreview((v) => !v)}>{showStatusPreview ? "접기" : "미리보기"}</button>
+        </div>
+        {showStatusPreview && (
+          <>
+            <div className="card-desc">손님이 본인인증 후 보는 상태확인 안내입니다.</div>
+            <NoticeList items={STATUS_NOTICES} />
+          </>
+        )}
+      </div>
+
       <div className="card">
         <div className="card-title">동의 현황
-          <button className="btn btn-sm" style={{ float: "right" }} onClick={reload}>↻ 새로고침</button>
+          <button className="btn btn-sm" style={{ marginLeft: "auto" }} onClick={reload}>↻ 새로고침</button>
         </div>
         {loading ? <div className="empty">불러오는 중…</div> :
           list.length === 0 ? <div className="empty">발송 내역이 없습니다.</div> :
@@ -98,6 +129,20 @@ function SendTab({ toast }) {
                     </div>)}
               </div>
             ))}
+      </div>
+
+      <div className="card">
+        <div className="card-title">개인정보 동의서에 항목 추가
+          <button className="btn btn-sm" style={{ marginLeft: "auto" }} onClick={() => setShowTpl((v) => !v)}>{showTpl ? "접기" : "양식 보기"}</button>
+        </div>
+        {showTpl && (
+          <>
+            <div className="card-desc"><b>계약서는 그대로 두고</b>, 기존 「개인정보 수집·이용 동의서」에 아래 <b>제3자 제공 동의 항목만 별도로</b> 추가하면 됩니다. (디지털 동의 링크를 못 쓰는 경우 대안)</div>
+            <div className="tpl-label">개인정보 제3자 제공 동의 항목
+              <button className="btn btn-sm" onClick={() => copyText(CONTRACT_CONSENT_FORM)}><Icon name="file" /> 복사</button></div>
+            <pre className="tpl">{CONTRACT_CONSENT_FORM}</pre>
+          </>
+        )}
       </div>
     </>
   );
@@ -127,13 +172,15 @@ function RegisterTab({ toast }) {
     if (!evidence) { toast("위반 증빙 파일을 첨부해 주세요.", "danger"); return; }
     const f = e.target;
     setBusy(true);
-    await addRisk({
-      name: name.trim(), birth, type: f.type.value, company: CURRENT_COMPANY,
-      license: f.license.value.trim(), phone: f.phone.value.trim(), reason: f.reason.value.trim(), evidence,
-    });
+    try {
+      await addRisk({
+        name: name.trim(), birth, type: f.type.value, company: CURRENT_COMPANY,
+        license: f.license.value.trim(), phone: f.phone.value.trim(), reason: f.reason.value.trim(), evidence,
+      });
+      f.reset(); setName(""); setBirth(""); setEvidence("");
+      toast("위반정보가 등록되었습니다.", "safe");
+    } catch (err) { console.error(err); toast("저장 실패 — Firestore 설정/규칙을 확인하세요.", "danger"); }
     setBusy(false);
-    f.reset(); setName(""); setBirth(""); setEvidence("");
-    toast("위반정보가 등록되었습니다.", "safe");
   }
 
   return (

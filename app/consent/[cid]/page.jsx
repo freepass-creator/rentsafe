@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { getConsent, completeConsent } from "@/lib/db";
-import { CONSENT_STATEMENT, CONSENT_NOTICES, CONSENT_VERSION } from "@/lib/constants";
+import { CONSENT_STATEMENT, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_LEAD } from "@/lib/constants";
 import { fmtBirth, fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
+import NoticeList from "@/components/NoticeList";
 
 export default function ConsentPage({ params }) {
   const cid = params.cid;
   const [company, setCompany] = useState("스피드렌터카");
+  const [started, setStarted] = useState(false);
   const [verified, setVerified] = useState(null);
   const [agreed, setAgreed] = useState(false);
   const [done, setDone] = useState(false);
@@ -30,14 +32,22 @@ export default function ConsentPage({ params }) {
   return (
     <div className="app">
       <div className="c-head">
-        <div className="eyebrow">RENTSAFE · 렌터카 안전거래</div>
+        <div className="eyebrow">착한거래 · 렌터카</div>
         <h1>거래안전 동의</h1>
         <div className="co">{company} 차량 임대차계약</div>
       </div>
       <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /></div>
 
       <div className="c-body">
-        {!verified && <AuthFlow onVerified={setVerified} />}
+        {!started && !verified && (
+          <>
+            <div className="slabel">{CAMPAIGN_TITLE}</div>
+            <div className="stitle">안전한 렌터카 거래, 함께 만들어요</div>
+            <div className="sdesc">{CAMPAIGN_LEAD}</div>
+            <NoticeList items={CONSENT_NOTICES} />
+          </>
+        )}
+        {started && !verified && <AuthFlow onVerified={setVerified} />}
 
         {verified && !done && (
           <>
@@ -47,14 +57,10 @@ export default function ConsentPage({ params }) {
             </div>
             <div className="slabel">STEP 2 · 거래안전 동의</div>
             <div className="stitle">거래안전 동의 안내</div>
-            <div className="notice">
-              {CONSENT_NOTICES.map((n, i) => (
-                <div className={`ni ${n.safe ? "safe" : ""}`} key={i}><div className="n">{i + 1}</div><div><b>{n.title}</b> {n.body}</div></div>
-              ))}
-            </div>
+            <NoticeList items={CONSENT_NOTICES} />
             <div className="statement">{CONSENT_STATEMENT}</div>
             <label className={`cc ${agreed ? "on" : ""}`} onClick={() => setAgreed((v) => !v)}>
-              <input type="checkbox" checked={agreed} readOnly onClick={(e) => e.stopPropagation()} /> 위 내용을 모두 확인하였으며 거래위험정보 제공에 동의합니다.
+              <input type="checkbox" checked={agreed} readOnly onClick={(e) => e.stopPropagation()} /> 위 내용을 모두 확인하였으며 거래이력 제공에 동의합니다.
             </label>
           </>
         )}
@@ -76,9 +82,12 @@ export default function ConsentPage({ params }) {
         )}
       </div>
 
+      {!started && !verified && (
+        <div className="c-footer"><button className="btn btn-safe btn-block" onClick={() => setStarted(true)}>본인인증하고 동의 진행</button></div>
+      )}
       {verified && !done && (
         <div className="c-footer"><button className="btn btn-safe btn-block" disabled={!agreed} onClick={finish}>동의 완료</button></div>
       )}
-    </div>
+      </div>
   );
 }

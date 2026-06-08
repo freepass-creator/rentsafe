@@ -49,7 +49,7 @@ export default function AuthFlow({ onVerified, supportHelp = null }) {
     return (
       <>
         <div className="slabel">STEP 1 · 본인확인</div>
-        <div className="stitle">본인인증 방법을<br />선택해 주세요</div>
+        <div className="stitle">본인인증 방법을 선택해 주세요</div>
         <div className="sdesc">동의 전 본인 명의 확인이 필요합니다.</div>
         <div className="auth-opt rec" onClick={() => setStage("form")}><span className="ic phone"><Icon name="phone" size={18} /></span><span className="tx">휴대폰 본인확인<small>이름·생년월일·통신사</small></span><span className="arr">›</span></div>
         <div className="auth-opt" onClick={() => goSimple("카카오")}><span className="ic kakao">k</span><span className="tx">카카오 간편인증</span><span className="arr">›</span></div>

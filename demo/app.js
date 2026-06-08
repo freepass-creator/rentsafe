@@ -1,5 +1,5 @@
 /* ============================================================
-   RentSafe — 렌터카 거래위험정보 (심플 버전)
+   RentSafe — 렌터카 거래이력 (심플 버전)
    * 기능: 등록 + 조회 (+ 목록)
    * 순수 JS + localStorage(mock). Firebase 없음.
    * 매칭: 이름+생년월일(핵심·필수) / 면허·휴대폰(보조, 동명이인 구분)
@@ -110,8 +110,8 @@ function render(){
 function viewQuery(){
   return `
   <div class="card">
-    <div class="card-title">거래위험정보 조회</div>
-    <div class="card-desc">신규 계약 전, 해당 고객의 거래위험정보 등록 여부만 확인합니다. 개인정보는 암호화 보관되며, 결과는 가린 상태로 ‘있음/없음’만 표시됩니다.</div>
+    <div class="card-title">거래이력 조회</div>
+    <div class="card-desc">신규 계약 전, 해당 고객의 거래이력 등록 여부만 확인합니다. 개인정보는 암호화 보관되며, 결과는 가린 상태로 ‘있음/없음’만 표시됩니다.</div>
     <form onsubmit="runQuery(event)">
       <div class="grid">
         <div class="field"><label>이름 <span class="req">*</span></label><input name="name" required placeholder="홍길동"></div>
@@ -129,13 +129,13 @@ function runQuery(e){
   const res=matchRisk({ name:f.name.value, birth:f.birth.value, license:f.license.value, phone:f.phone.value });
   let html;
   if(res.kind==="none"){
-    html=`<div class="r-clean"><div class="ic">✓</div><div><h3>거래위험정보 없음</h3><p>입력한 정보와 일치하는 등록 내역이 없습니다.</p></div></div>`;
+    html=`<div class="r-clean"><div class="ic">✓</div><div><h3>거래이력 없음</h3><p>입력한 정보와 일치하는 등록 내역이 없습니다.</p></div></div>`;
   }else if(res.kind==="ambiguous"){
     html=`<div class="r-amb"><div class="ic">⚠</div><div><h3>동일 이름·생년월일이 여러 건입니다</h3><p>정확한 확인을 위해 운전면허번호 또는 휴대폰번호를 추가 입력해 주세요. (오탐 방지를 위해 후보는 표시하지 않습니다.)</p></div></div>`;
   }else{
     const who=res.records[0];
     const lines=res.records.map(r=>`<div class="risk-row"><div><div class="type">${RISK_TYPES[r.type]}</div><div class="meta">등록일 ${fmtDate(r.createdAt)}</div></div><div class="sp"></div><span class="badge b-red"><span class="dot"></span>유효</span></div>`).join("");
-    html=`<div class="r-hit"><div class="head"><div class="ic">!</div><div><h3>거래위험정보 있음 · ${res.records.length}건</h3><p>대상 <b>${mask(who.name)} · ${fmtBirth(who.birth)}</b> — 개인정보는 가린 상태로 존재 여부만 확인됩니다.</p></div></div>${lines}</div>`;
+    html=`<div class="r-hit"><div class="head"><div class="ic">!</div><div><h3>거래이력 있음 · ${res.records.length}건</h3><p>대상 <b>${mask(who.name)} · ${fmtBirth(who.birth)}</b> — 개인정보는 가린 상태로 존재 여부만 확인됩니다.</p></div></div>${lines}</div>`;
   }
   document.getElementById("result").innerHTML=`<div class="result">${html}</div>`;
 }
@@ -145,7 +145,7 @@ function viewRegister(){
   const opts=Object.entries(RISK_TYPES).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
   return `
   <div class="card">
-    <div class="card-title">거래위험정보 등록</div>
+    <div class="card-title">거래이력 등록</div>
     <div class="card-desc">중대한 계약위반(미납·미반납·사고비용 미정산 등)이 실제 발생한 경우에만 등록합니다.</div>
     <div class="demo-note">⚠ 데모 버전 — 실제 개인정보는 저장되지 않습니다. 입력값은 브라우저 localStorage의 mock 더미입니다.</div>
     <form onsubmit="addRisk(event)">
@@ -165,7 +165,7 @@ function viewRegister(){
 function addRisk(e){
   e.preventDefault(); const f=e.target;
   DB.unshift({ id:uid(), name:f.name.value.trim(), birth:cleanBirth(f.birth.value), type:f.type.value, company:f.company.value.trim()||"미입력", license:f.license.value.trim(), phone:f.phone.value.trim(), reason:f.reason.value.trim(), createdAt:nowISO(), status:"active" });
-  save(); toast("거래위험정보가 등록되었습니다.","safe"); e.target.reset();
+  save(); toast("거래이력가 등록되었습니다.","safe"); e.target.reset();
 }
 
 /* ---------- 동의요청 (손님에게 발송) ---------- */
@@ -217,13 +217,13 @@ function consentSheet(){
       <div class="cs-step-label">STEP 2 · 거래안전 동의</div>
       <div class="cs-title">거래안전 동의 안내</div>
       <div class="notice">
-        <div class="notice-i safe"><div class="n">1</div><div><b>정상 이용 시 등록되지 않습니다.</b> 정상 납부·반환 시 거래위험정보는 등록되지 않습니다.</div></div>
+        <div class="notice-i safe"><div class="n">1</div><div><b>정상 이용 시 등록되지 않습니다.</b> 정상 납부·반환 시 거래이력는 등록되지 않습니다.</div></div>
         <div class="notice-i"><div class="n">2</div><div><b>중대한 계약위반 시에만 등록됩니다.</b> 대여료 장기 미납·차량 미반납·사고비용 미정산 등.</div></div>
         <div class="notice-i"><div class="n">3</div><div><b>회원사가 제한 조회합니다.</b> 신규 계약·거래조건 판단 목적의 ‘있음/없음’ 확인만.</div></div>
         <div class="notice-i safe"><div class="n">4</div><div><b>해소 시 삭제·상태변경됩니다.</b></div></div>
       </div>
-      <div class="statement">본 절차는 차량 임대차계약의 안전한 이행과 중대한 계약위반 피해 예방을 위한 확인입니다. 정상 이행 시 거래위험정보는 등록되지 않으며, 중대한 계약위반 발생 시에만 거래위험정보(RentSafe)로 등록되어 회원 자동차대여사업자가 제한적으로 조회할 수 있습니다. 문제 해소 시 삭제·상태변경됩니다. 본 동의는 차량 임대차계약 체결의 조건입니다.</div>
-      <label class="cc ${CST.agreed?"on":""}" onclick="toggleAgree()"><input type="checkbox" ${CST.agreed?"checked":""} onclick="event.stopPropagation()"> 위 내용을 확인하였으며 거래위험정보 등록·조회에 동의합니다.</label>
+      <div class="statement">본 절차는 차량 임대차계약의 안전한 이행과 중대한 계약위반 피해 예방을 위한 확인입니다. 정상 이행 시 거래이력는 등록되지 않으며, 중대한 계약위반 발생 시에만 거래이력(RentSafe)로 등록되어 회원 자동차대여사업자가 제한적으로 조회할 수 있습니다. 문제 해소 시 삭제·상태변경됩니다. 본 동의는 차량 임대차계약 체결의 조건입니다.</div>
+      <label class="cc ${CST.agreed?"on":""}" onclick="toggleAgree()"><input type="checkbox" ${CST.agreed?"checked":""} onclick="event.stopPropagation()"> 위 내용을 확인하였으며 거래이력 등록·조회에 동의합니다.</label>
       <button class="btn btn-safe btn-block" ${CST.agreed?"":"disabled"} onclick="finishConsent()">동의 완료</button>`;
   } else {
     body=`<div class="cs-done"><div class="big">✓</div><h2>동의가 완료되었습니다</h2>
@@ -251,7 +251,7 @@ function viewApi(){
     <pre class="code"><span class="c">// 모든 요청 헤더</span>
 Authorization: Bearer <span class="s">rsk_live_8f3a21d9c4b7e0</span></pre>
 
-    <div class="api-label">① 조회 — 거래위험정보 있/없 확인</div>
+    <div class="api-label">① 조회 — 거래이력 있/없 확인</div>
     <div class="api-ep"><span class="method">POST</span><span class="api-url">/api/v1/check</span></div>
     <pre class="code"><span class="c">// 요청</span>
 { <span class="k">"name"</span>: <span class="s">"홍길동"</span>, <span class="k">"birth"</span>: <span class="s">"900715"</span>,
@@ -261,7 +261,7 @@ Authorization: Bearer <span class="s">rsk_live_8f3a21d9c4b7e0</span></pre>
 { <span class="k">"exists"</span>: <span class="s">true</span>, <span class="k">"count"</span>: <span class="s">1</span>,
   <span class="k">"records"</span>: [ { <span class="k">"type"</span>: <span class="s">"unpaid"</span>, <span class="k">"status"</span>: <span class="s">"active"</span>, <span class="k">"registered_at"</span>: <span class="s">"2026-04-02"</span> } ] }</pre>
 
-    <div class="api-label">② 등록 — 거래위험정보 등록</div>
+    <div class="api-label">② 등록 — 거래이력 등록</div>
     <div class="api-ep"><span class="method">POST</span><span class="api-url">/api/v1/register</span></div>
     <pre class="code"><span class="c">// 요청</span>
 { <span class="k">"name"</span>: <span class="s">"홍길동"</span>, <span class="k">"birth"</span>: <span class="s">"880101"</span>, <span class="k">"type"</span>: <span class="s">"unpaid"</span>,

@@ -36,7 +36,8 @@ a{color:inherit;text-decoration:none}
 
 .card{background:var(--white);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:22px}
 .card+.card{margin-top:16px}
-.card-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.card-title{font-size:16px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px;min-height:30px}
+.card-title .sub{font-size:12px;font-weight:500;color:var(--ink3)}
 .card-desc{font-size:13px;color:var(--ink3);margin-bottom:18px}
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
@@ -45,10 +46,10 @@ a{color:inherit;text-decoration:none}
 .field label{font-size:13px;font-weight:700;color:var(--ink2)}
 .field label .req{color:var(--danger);margin-left:2px}
 .field label .opt{color:var(--ink3);font-weight:500;font-size:11.5px;margin-left:4px}
-.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:9px;padding:11px 13px;background:#fff;outline:none;transition:.12s;font-size:16px}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy2);box-shadow:0 0 0 3px var(--navy50)}
+.field input,.field select,.field textarea,.inp{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff;outline:none;transition:.12s;font-size:16px;font-family:inherit;color:var(--ink)}
+.field input:focus,.field select:focus,.field textarea:focus,.inp:focus{border-color:var(--navy2);box-shadow:0 0 0 3px var(--navy50)}
 .hint{font-size:12px;color:var(--ink3);margin-top:10px}
-@media(min-width:560px){.field input,.field select,.field textarea{font-size:14px}}
+@media(min-width:560px){.field input,.field select,.field textarea,.inp{font-size:14.5px}}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 20px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:14px;cursor:pointer;transition:.12s}
 .btn:hover{border-color:var(--ink3)}
@@ -58,7 +59,7 @@ a{color:inherit;text-decoration:none}
 .btn-danger{background:#fff;border-color:var(--danger);color:var(--danger)}
 .btn-safe{background:var(--safe);border-color:var(--safe);color:#fff}
 .btn-sm{padding:7px 12px;font-size:12.5px;border-radius:8px}
-.btn-block{width:100%;padding:14px}
+.btn-block{width:100%;padding:13px 14px}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .actions{margin-top:20px}
 
@@ -89,6 +90,12 @@ a{color:inherit;text-decoration:none}
 .b-amber{background:var(--warn50);color:var(--warn)}
 .empty{text-align:center;color:var(--ink3);padding:28px 0}
 .demo-note{background:var(--warn50);border:1px solid #f0dcae;color:#8a6312;border-radius:10px;padding:10px 14px;font-size:12.5px;font-weight:600;margin-bottom:18px}
+.tpl-label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;font-weight:700;color:var(--ink2);margin-top:14px}
+.tpl{background:#f7f9fb;border:1px solid var(--line);border-radius:10px;padding:14px;font-size:12.5px;line-height:1.7;color:var(--ink2);white-space:pre-wrap;word-break:break-word;font-family:inherit;margin:6px 0 4px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat-box{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 12px;box-shadow:var(--shadow);text-align:center}
+.stat-box .v{font-size:26px;font-weight:800;color:var(--navy);letter-spacing:-.5px;line-height:1}
+.stat-box .k{font-size:12px;color:var(--ink3);font-weight:600;margin-top:6px}
 .mono{font-variant-numeric:tabular-nums}
 
 .toast-host{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center}
@@ -97,7 +104,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---- 손님 동의 (모바일) ---- */
 .app{max-width:480px;margin:0 auto;background:#fff;min-height:100dvh;min-height:100vh;display:flex;flex-direction:column;position:relative}
-@media(min-width:520px){.app{min-height:auto;height:calc(100vh - 40px);margin:20px auto;border-radius:22px;overflow:hidden;box-shadow:0 12px 50px rgba(22,49,77,.22)}}
+@media(min-width:520px){.app{min-height:auto;max-width:400px;height:min(820px,calc(100vh - 64px));margin:24px auto;border-radius:30px;overflow:hidden;box-shadow:0 16px 54px rgba(22,49,77,.24)}}
 .c-head{background:var(--navy);color:#fff;padding:calc(20px + var(--sat)) 22px 22px;flex-shrink:0}
 .c-head .eyebrow{font-size:11px;font-weight:700;opacity:.8;letter-spacing:.5px}
 .c-head h1{font-size:21px;font-weight:800;margin-top:5px;letter-spacing:-.3px}
@@ -135,6 +142,9 @@ a{color:inherit;text-decoration:none}
 .ni{display:flex;gap:11px;font-size:14px;line-height:1.5}
 .ni .n{width:22px;height:22px;border-radius:50%;background:var(--navy50);color:var(--navy);font-weight:800;font-size:11px;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
 .ni.safe .n{background:var(--safe50);color:var(--safe)}
+.ni-tx{flex:1}
+.ni-t{font-weight:700;font-size:13.5px;color:var(--ink)}
+.ni-d{font-size:12.5px;color:var(--ink3);margin-top:2px;line-height:1.5}
 .statement{border:1px solid var(--line);border-radius:12px;padding:15px;font-size:12.5px;color:var(--ink2);line-height:1.7;max-height:150px;overflow-y:auto;background:#fbfcfd;margin-bottom:16px}
 .cc{display:flex;align-items:center;gap:11px;padding:15px 16px;border:1.5px solid var(--line);border-radius:13px;cursor:pointer;font-weight:700;font-size:14.5px;transition:.12s;line-height:1.4}
 .cc.on{border-color:var(--safe);background:var(--safe50)}
@@ -162,14 +172,11 @@ a{color:inherit;text-decoration:none}
 .brand-sub{font-size:11.5px;color:rgba(255,255,255,.6);font-weight:500;margin-top:3px}
 .app-header-right{margin-left:auto;font-size:12px}
 
-/* ---- 데모 역할 전환 바 (플로팅) ---- */
-.demo-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + var(--sab));display:flex;align-items:center;gap:4px;background:rgba(22,49,77,.95);backdrop-filter:blur(10px);padding:6px 8px 6px 12px;border-radius:999px;z-index:90;box-shadow:0 8px 28px rgba(0,0,0,.28)}
-.demo-nav-tag{font-size:9px;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.6px;margin-right:2px}
-.demo-nav-item{color:rgba(255,255,255,.62);font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;transition:.12s}
-.demo-nav-item span{font-size:14px}
-.demo-nav-item.on{background:#fff;color:#16314d}
+/* ---- 데모 역할 전환 바 (상단 고정) ---- */
+.demo-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:4px;background:#0e2032;padding:calc(7px + var(--sat)) 10px 7px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.demo-nav::-webkit-scrollbar{display:none}
+.demo-nav-tag{font-size:9px;font-weight:800;color:rgba(255,255,255,.42);letter-spacing:.6px;flex-shrink:0;margin-right:3px}
+.demo-nav-item{flex-shrink:0;color:rgba(255,255,255,.62);font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;transition:.12s}
+.demo-nav-item.on{background:#fff;color:#0e2032}
 .demo-nav-item:active{transform:scale(.97)}
-
-/* 데모바에 가리지 않게 하단 여백 */
-.container{padding-bottom:88px}
-.c-body{padding-bottom:92px}
+.c-body{padding-bottom:24px}

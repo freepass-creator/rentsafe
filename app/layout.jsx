@@ -1,8 +1,10 @@
 import "./globals.css";
+import { DEMO_MODE } from "@/lib/constants";
+import DemoNav from "@/components/DemoNav";
 
 export const metadata = {
-  title: "RentSafe · 렌터카 안전거래 플랫폼",
-  description: "렌터카 대여료 결제·정산 + 거래위험정보 확인 플랫폼",
+  title: "착한거래 · 거래안전 플랫폼",
+  description: "외상·후불 등 비금융 거래의 거래이력 확인 플랫폼 (첫 서비스: 렌터카)",
   robots: { index: false, follow: false },
 };
 
@@ -22,7 +24,7 @@ export default function RootLayout({ children }) {
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
       </head>
-      <body>{children}</body>
+      <body>{DEMO_MODE && <DemoNav />}{children}</body>
     </html>
   );
 }
