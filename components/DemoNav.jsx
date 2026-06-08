@@ -26,7 +26,7 @@ export default function DemoNav() {
   const router = useRouter();
   return (
     <div className="demo-bar">
-      <span className="demo-bar-tag"><span className="dot" /> 서비스 소개</span>
+      <span className="demo-bar-tag"><span className="dot" /> 서비스 구현</span>
       <select className="demo-bar-sel" value={currentHref(path)} onChange={(e) => router.push(e.target.value)} aria-label="데모 페이지 선택">
         {PAGES.map((p) => <option key={p.href} value={p.href}>{p.label}</option>)}
       </select>
