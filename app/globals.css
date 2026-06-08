@@ -30,7 +30,7 @@ a{color:inherit;text-decoration:none}
 .container{max-width:760px;margin:0 auto;padding:22px 20px 70px}
 
 .tabs{display:flex;gap:6px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:6px;margin-bottom:20px;box-shadow:var(--shadow)}
-.tab{flex:1;text-align:center;padding:11px;border-radius:8px;font-weight:700;font-size:14px;color:var(--ink3);cursor:pointer;border:none;background:none}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:8px;font-weight:700;font-size:14px;color:var(--ink3);cursor:pointer;border:none;background:none}
 .tab:hover{color:var(--navy)}
 .tab.active{background:var(--navy);color:#fff}
 
@@ -150,3 +150,26 @@ a{color:inherit;text-decoration:none}
 .receipt .r .k{color:var(--ink3)}
 .receipt .r .v{font-weight:700}
 .center-msg{display:grid;place-items:center;min-height:60vh;text-align:center;padding:24px;color:var(--ink3)}
+
+/* ---- 공용 헤더 (개선된 디자인) ---- */
+.app-header{background:linear-gradient(118deg,#15304c 0%,#1d4067 100%);color:#fff;padding:calc(18px + var(--sat)) 0 18px}
+.app-header-in{max-width:760px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#1aa97c,#0f7f5b);display:grid;place-items:center;box-shadow:0 3px 10px rgba(15,127,91,.45);flex-shrink:0}
+.brand-tx{line-height:1.15}
+.brand-name{font-size:19px;font-weight:800;letter-spacing:-.5px}
+.brand-name .accent{color:#4fd6a8}
+.brand-sub{font-size:11.5px;color:rgba(255,255,255,.6);font-weight:500;margin-top:3px}
+.app-header-right{margin-left:auto;font-size:12px}
+
+/* ---- 데모 역할 전환 바 (플로팅) ---- */
+.demo-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + var(--sab));display:flex;align-items:center;gap:4px;background:rgba(22,49,77,.95);backdrop-filter:blur(10px);padding:6px 8px 6px 12px;border-radius:999px;z-index:90;box-shadow:0 8px 28px rgba(0,0,0,.28)}
+.demo-nav-tag{font-size:9px;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.6px;margin-right:2px}
+.demo-nav-item{color:rgba(255,255,255,.62);font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;transition:.12s}
+.demo-nav-item span{font-size:14px}
+.demo-nav-item.on{background:#fff;color:#16314d}
+.demo-nav-item:active{transform:scale(.97)}
+
+/* 데모바에 가리지 않게 하단 여백 */
+.container{padding-bottom:88px}
+.c-body{padding-bottom:92px}
