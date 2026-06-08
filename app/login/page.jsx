@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   return (
     <div className="app">
-      <FlowHeader title="회원 로그인" sub="렌터카 사업자 회원 전용" />
+      <FlowHeader title="회원 로그인" sub="렌터카·분양·렌탈·외상 등 사업자 회원 전용" />
       <div className="c-body c-center">
         <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
           <div className="field"><label>이메일</label>

@@ -10,6 +10,7 @@ import StepFooter from "@/components/StepFooter";
 export default function SignupPage() {
   const router = useRouter();
   const [company, setCompany] = useState("");
+  const [service, setService] = useState("");
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
@@ -19,11 +20,11 @@ export default function SignupPage() {
 
   async function submit() {
     setErr("");
-    if (!company.trim() || !email.trim()) { setErr("회사명과 이메일을 입력해 주세요."); return; }
+    if (!company.trim() || !service.trim() || !email.trim()) { setErr("회사명·업종·이메일을 입력해 주세요."); return; }
     if (!bizFile) { setErr("사업자등록증을 첨부해 주세요. (이미지 또는 PDF)"); return; }
     if (pw !== pw2) { setErr("비밀번호가 일치하지 않습니다."); return; }
     setBusy(true);
-    const r = await signup({ company, email, pw, bizFile });
+    const r = await signup({ company, email, pw, bizFile, service });
     setBusy(false);
     if (r.error) { setErr(r.error); return; }
     router.replace("/console");
@@ -34,7 +35,10 @@ export default function SignupPage() {
       <FlowHeader title="회원 가입" sub="가입 시 사업자등록증 확인이 필요합니다" />
       <div className="c-body">
         <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
-          <div className="field"><label>회사명 <span className="req">*</span></label><input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="스피드렌터카" /></div>
+          <div className="field"><label>회사·상호명 <span className="req">*</span></label><input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="예: 스피드렌터카" /></div>
+          <div className="field"><label>업종(서비스) <span className="req">*</span> <span className="opt">손님 화면에 표시됩니다</span></label>
+            <input value={service} onChange={(e) => setService(e.target.value)} placeholder="예: 렌터카" list="svc-list" />
+            <datalist id="svc-list"><option value="렌터카" /><option value="분양" /><option value="렌탈" /><option value="외상거래" /></datalist></div>
           <div className="field"><label>이메일(로그인 ID) <span className="req">*</span></label><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@company.com" /></div>
           <div className="field"><label>비밀번호 <span className="req">*</span></label><input value={pw} onChange={(e) => setPw(e.target.value)} type="password" placeholder="비밀번호" autoComplete="new-password" /></div>
           <div className="field"><label>비밀번호 확인 <span className="req">*</span></label><input value={pw2} onChange={(e) => setPw2(e.target.value)} type="password" placeholder="비밀번호 다시 입력" autoComplete="new-password" /></div>
