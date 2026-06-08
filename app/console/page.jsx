@@ -29,7 +29,7 @@ export default function Console() {
     <>
       <AppHeader
         subtitle={<>회원 콘솔 · <b style={{ opacity: .95 }}>{company}</b></>}
-        right={<button className="btn btn-sm" style={{ background: "transparent", borderColor: "rgba(255,255,255,.3)", color: "#fff" }} onClick={async () => { const t = session.temp; await logout(); router.replace(t ? "/" : "/login"); }}>로그아웃</button>}
+        right={<button className="btn btn-sm" style={{ background: "transparent", borderColor: "rgba(255,255,255,.3)", color: "#fff" }} onClick={async () => { await logout(); router.replace("/login"); }}>로그아웃</button>}
       />
       <div className="container">
         {IS_LOCAL && <div className="demo-note">데모 모드 — Firebase 미연결, 브라우저 로컬 저장으로 동작합니다. (배포 후 Firebase 키 등록 시 실제 DB로 전환)</div>}

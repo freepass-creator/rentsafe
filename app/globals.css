@@ -197,7 +197,7 @@ a{color:inherit;text-decoration:none}
 /* ---- 랜딩 (착한거래 메인) ---- */
 .land{flex:1;display:flex;flex-direction:column;padding:24px 20px calc(24px + var(--sab));max-width:480px;width:100%;margin:0 auto}
 .land-main{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center}
-.land-hero{text-align:center;margin-bottom:30px}
+.land-hero{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:30px}
 .land-mark{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#1aa97c,#0f7f5b);display:inline-grid;place-items:center;box-shadow:0 8px 22px rgba(15,127,91,.4)}
 .svc-badge{display:inline-block;margin-top:14px;font-size:12px;font-weight:800;letter-spacing:.3px;color:var(--safe);background:var(--safe50);border:1px solid #cdeadf;border-radius:999px;padding:5px 12px}
 .land-title{font-size:28px;font-weight:800;letter-spacing:-.6px;color:var(--navy);margin-top:10px}
@@ -228,6 +228,7 @@ a{color:inherit;text-decoration:none}
 .confirm-co{display:flex;align-items:center;gap:8px;background:var(--safe50);border:1px solid #bfe3d3;border-radius:12px;padding:12px 14px;margin-bottom:18px;font-size:14px;color:var(--navy)}
 .confirm-co .cc-chk{width:20px;height:20px;border-radius:50%;background:var(--safe);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
 .confirm-co .cc-ok{margin-left:auto;font-size:12px;font-weight:700;color:var(--safe)}
+.confirm-co .svc-tag{font-size:11px;font-weight:800;color:var(--safe);background:#fff;border:1px solid #cdeadf;border-radius:999px;padding:2px 8px}
 
 /* ---- 공용 헤더 (개선된 디자인) ---- */
 .app-header{background:linear-gradient(118deg,#15304c 0%,#1d4067 100%);color:#fff;padding:calc(18px + var(--sat)) 0 18px}

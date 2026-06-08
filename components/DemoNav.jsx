@@ -7,7 +7,6 @@ const PAGES = [
   { href: "/",        label: "초기화면 · 착한거래 메인" },
   { href: "/consent", label: "손님 · 착한거래 동의하기" },
   { href: "/me",      label: "손님 · 내 거래이력 확인" },
-  { href: "/temp",    label: "직거래 · 임시 거래코드 받기" },
   { href: "/login",   label: "회원 · 로그인" },
   { href: "/console", label: "회원 · 콘솔" },
   { href: "/admin",   label: "관리자" },
@@ -18,7 +17,6 @@ function currentHref(p) {
   if (p.startsWith("/console")) return "/console";
   if (p.startsWith("/admin")) return "/admin";
   if (p.startsWith("/me")) return "/me";
-  if (p.startsWith("/temp")) return "/temp";
   if (p.startsWith("/login") || p.startsWith("/signup") || p.startsWith("/reset")) return "/login";
   return "/";
 }

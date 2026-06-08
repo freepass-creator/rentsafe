@@ -1,6 +1,6 @@
 "use client";
 
-import { CAMPAIGN_HEADLINE, SERVICE_TAG, CODE_LABEL } from "@/lib/constants";
+import { CAMPAIGN_HEADLINE, CODE_LABEL } from "@/lib/constants";
 import Icon from "@/components/Icon";
 import BrandMark from "@/components/BrandMark";
 
@@ -10,7 +10,6 @@ export default function Landing() {
       <div className="land-main">
       <div className="land-hero">
         <BrandMark size={34} className="land-mark" />
-        <span className="svc-badge">{SERVICE_TAG}</span>
         <h1 className="land-title"><span className="accent">착한</span>거래</h1>
         <p className="land-lead">{CAMPAIGN_HEADLINE}<br />본인인증 후 안전하게 진행하세요.</p>
       </div>
@@ -39,7 +38,6 @@ export default function Landing() {
       <div className="land-foot">
         <span>회원이신가요?</span>
         <a href="/login" className="land-biz">회원 로그인</a>
-        <a href="/temp" className="land-templink">개인 간 직거래라면 · 임시 거래코드 받기 →</a>
       </div>
     </div>
   );

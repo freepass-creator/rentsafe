@@ -89,7 +89,7 @@ export default function SelfConsentPage() {
         {/* STEP 1 — 캠페인 안내 + 본인인증 */}
         {target && !started && !verified && (
           <>
-            <div className="confirm-co"><span className="cc-chk">✓</span> <b>{target.company}</b> <span className="cc-ok">거래 상대 확인됨</span></div>
+            <div className="confirm-co"><span className="cc-chk">✓</span> <b>{target.company}</b>{target.service && <span className="svc-tag">{target.service} 서비스</span>} <span className="cc-ok">확인됨</span></div>
             <div className="slabel">{CAMPAIGN_TITLE}</div>
             <div className="stitle">{CAMPAIGN_HEADLINE}</div>
             <div className="sdesc">{CAMPAIGN_LEAD}</div>
