@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signup } from "@/lib/auth";
 import Icon from "@/components/Icon";
-import BrandMark from "@/components/BrandMark";
+import FlowHeader from "@/components/FlowHeader";
+import StepFooter from "@/components/StepFooter";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -29,14 +30,9 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="auth-wrap">
-      <div className="auth-card wide">
-        <div className="auth-brand">
-          <BrandMark size={26} className="auth-mark" />
-          <div className="auth-name"><span className="accent">착한</span>거래</div>
-          <div className="auth-tag">회원 가입</div>
-        </div>
-        <div className="card-desc" style={{ textAlign: "center", marginBottom: 18 }}>가입 시 <b>사업자등록증</b> 확인이 필요합니다.</div>
+    <div className="app">
+      <FlowHeader title="회원 가입" sub="가입 시 사업자등록증 확인이 필요합니다" />
+      <div className="c-body">
         <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
           <div className="field"><label>회사명 <span className="req">*</span></label><input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="스피드렌터카" /></div>
           <div className="field"><label>이메일(로그인 ID) <span className="req">*</span></label><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@company.com" /></div>
@@ -51,13 +47,10 @@ export default function SignupPage() {
             <div className="hint">제출하신 사업자등록증은 회원 자격 확인 용도로만 사용되며 암호화 보관됩니다.</div>
           </div>
           {err && <div className="auth-err">{err}</div>}
-          <div className="auth-actions">
-            <button type="button" className="btn" onClick={() => router.push("/login")}>이전</button>
-            <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? "가입 중…" : "가입"}</button>
-          </div>
         </form>
         <div className="auth-alt">이미 계정이 있으신가요? <a href="/login">로그인</a></div>
       </div>
+      <StepFooter prev={{ label: "이전", onClick: () => router.push("/login") }} next={{ label: busy ? "가입 중…" : "가입", onClick: submit, disabled: busy }} />
     </div>
   );
 }
