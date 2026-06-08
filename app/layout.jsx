@@ -3,7 +3,7 @@ import { DEMO_MODE } from "@/lib/constants";
 import DemoNav from "@/components/DemoNav";
 
 export const metadata = {
-  title: "착한거래 · 거래안전 플랫폼",
+  title: "대여자동차 착한거래",
   description: "외상·후불 등 비금융 거래의 거래이력 확인 플랫폼 (첫 서비스: 렌터카)",
   robots: { index: false, follow: false },
 };

@@ -11,7 +11,7 @@ export default function AppHeader({ subtitle, right }) {
             </svg>
           </span>
           <div className="brand-tx">
-            <div className="brand-name">착한<span className="accent">거래</span></div>
+            <div className="brand-name">대여자동차 착한<span className="accent">거래</span></div>
             {subtitle && <div className="brand-sub">{subtitle}</div>}
           </div>
         </div>

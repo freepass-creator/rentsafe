@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { RISK_TYPES, CONTRACT_CONSENT_FORM, CONSENT_NOTICES, CONSENT_STATEMENT, STATUS_NOTICES } from "@/lib/constants";
 import { mask, hyphenPhone, fmtBirth, fmtDate } from "@/lib/format";
 import { IS_LOCAL, createConsent, listConsents, addRisk } from "@/lib/db";
+import { getSession, logout } from "@/lib/auth";
 import AppHeader from "@/components/AppHeader";
 import Icon from "@/components/Icon";
 import NoticeList from "@/components/NoticeList";
 
-// 로그인된 가맹사 (mock) — 실제로는 Firebase Auth 계정에서 가져옴
-const CURRENT_COMPANY = "스피드렌터카";
-
 export default function Console() {
+  const router = useRouter();
+  const [session, setSession] = useState(undefined);
   const [tab, setTab] = useState("send");
   const [toast, setToast] = useState(null);
   const showToast = useCallback((msg, kind) => {
@@ -19,17 +20,24 @@ export default function Console() {
     setTimeout(() => setToast(null), 2600);
   }, []);
 
+  useEffect(() => { const s = getSession(); if (!s) router.replace("/login"); else setSession(s); }, [router]);
+  if (!session) return null;
+  const company = session.company;
+
   return (
     <>
-      <AppHeader subtitle={<>가맹사 콘솔 · <b style={{ opacity: .95 }}>{CURRENT_COMPANY}</b></>} />
+      <AppHeader
+        subtitle={<>회원사 콘솔 · <b style={{ opacity: .95 }}>{company}</b></>}
+        right={<button className="btn btn-sm" style={{ background: "transparent", borderColor: "rgba(255,255,255,.3)", color: "#fff" }} onClick={() => { logout(); router.replace("/login"); }}>로그아웃</button>}
+      />
       <div className="container">
         {IS_LOCAL && <div className="demo-note">데모 모드 — Firebase 미연결, 브라우저 로컬 저장으로 동작합니다. (배포 후 Firebase 키 등록 시 실제 DB로 전환)</div>}
         <div className="tabs">
           <button className={`tab ${tab === "send" ? "active" : ""}`} onClick={() => setTab("send")}><Icon name="send" /> 동의요청</button>
           <button className={`tab ${tab === "register" ? "active" : ""}`} onClick={() => setTab("register")}><Icon name="plus" /> 위반 등록</button>
         </div>
-        {tab === "send" && <SendTab toast={showToast} />}
-        {tab === "register" && <RegisterTab toast={showToast} />}
+        {tab === "send" && <SendTab toast={showToast} company={company} />}
+        {tab === "register" && <RegisterTab toast={showToast} company={company} />}
       </div>
       {toast && <div className="toast-host"><div className={`toast ${toast.kind || ""}`}>{toast.msg}</div></div>}
     </>
@@ -37,7 +45,7 @@ export default function Console() {
 }
 
 /* ---------- 동의요청 ---------- */
-function SendTab({ toast }) {
+function SendTab({ toast, company }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showTpl, setShowTpl] = useState(false);
@@ -56,7 +64,7 @@ function SendTab({ toast }) {
     e.preventDefault();
     const f = e.target;
     try {
-      await createConsent({ name: f.name.value.trim(), phone: f.phone.value.trim(), company: CURRENT_COMPANY });
+      await createConsent({ name: f.name.value.trim(), phone: f.phone.value.trim(), company });
       f.reset();
       toast("동의요청이 생성되었습니다. ‘고객화면 ↗’으로 열어보세요.", "safe");
       reload();
@@ -149,7 +157,7 @@ function SendTab({ toast }) {
 }
 
 /* ---------- 위반 등록 ---------- */
-function RegisterTab({ toast }) {
+function RegisterTab({ toast, company }) {
   const [busy, setBusy] = useState(false);
   const [evidence, setEvidence] = useState("");
   const [name, setName] = useState("");
@@ -174,7 +182,7 @@ function RegisterTab({ toast }) {
     setBusy(true);
     try {
       await addRisk({
-        name: name.trim(), birth, type: f.type.value, company: CURRENT_COMPANY,
+        name: name.trim(), birth, type: f.type.value, company,
         license: f.license.value.trim(), phone: f.phone.value.trim(), reason: f.reason.value.trim(), evidence,
       });
       f.reset(); setName(""); setBirth(""); setEvidence("");
@@ -186,7 +194,7 @@ function RegisterTab({ toast }) {
   return (
     <div className="card">
       <div className="card-title">위반 등록</div>
-      <div className="card-desc">중대한 계약위반이 발생한 경우에만, <b>동의받은 손님에 한해 객관적 증빙을 첨부하여</b> 등록합니다. 등록처는 로그인 가맹사({CURRENT_COMPANY})로 자동 기록됩니다.</div>
+      <div className="card-desc">중대한 계약위반이 발생한 경우에만, <b>동의받은 손님에 한해 객관적 증빙을 첨부하여</b> 등록합니다. 등록처는 로그인 회원사({company})로 자동 기록됩니다.</div>
       <div className="demo-note">⚠ 데모 단계 — 실제 개인정보 대신 테스트 데이터를 사용하세요.</div>
       <form onSubmit={submit}>
         <div className="grid">

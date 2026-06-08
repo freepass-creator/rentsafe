@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getConsent, completeConsent } from "@/lib/db";
-import { CONSENT_STATEMENT, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_LEAD } from "@/lib/constants";
+import { CONSENT_STATEMENT, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD } from "@/lib/constants";
 import { fmtBirth, fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
 import NoticeList from "@/components/NoticeList";
@@ -32,8 +32,8 @@ export default function ConsentPage({ params }) {
   return (
     <div className="app">
       <div className="c-head">
-        <div className="eyebrow">착한거래 · 렌터카</div>
-        <h1>거래안전 동의</h1>
+        <div className="eyebrow">착한<span style={{ color: "#4fd6a8" }}>거래</span></div>
+        <h1>대여자동차 착한거래 동의 안내</h1>
         <div className="co">{company} 차량 임대차계약</div>
       </div>
       <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /></div>
@@ -42,7 +42,7 @@ export default function ConsentPage({ params }) {
         {!started && !verified && (
           <>
             <div className="slabel">{CAMPAIGN_TITLE}</div>
-            <div className="stitle">안전한 렌터카 거래, 함께 만들어요</div>
+            <div className="stitle">{CAMPAIGN_HEADLINE}</div>
             <div className="sdesc">{CAMPAIGN_LEAD}</div>
             <NoticeList items={CONSENT_NOTICES} />
           </>
@@ -55,8 +55,8 @@ export default function ConsentPage({ params }) {
               <div className="vrow"><span className="chk">✓</span> 본인확인 완료 <span style={{ fontSize: 11, color: "var(--ink3)", fontWeight: 600 }}>· {verified.method}</span></div>
               <div className="info"><span><b>{verified.name}</b> 님</span><span>생년월일 {fmtBirth(verified.birth)}</span></div>
             </div>
-            <div className="slabel">STEP 2 · 거래안전 동의</div>
-            <div className="stitle">거래안전 동의 안내</div>
+            <div className="slabel">STEP 2 · 착한거래 동의</div>
+            <div className="stitle">착한거래 동의 안내</div>
             <NoticeList items={CONSENT_NOTICES} />
             <div className="statement">{CONSENT_STATEMENT}</div>
             <label className={`cc ${agreed ? "on" : ""}`} onClick={() => setAgreed((v) => !v)}>
@@ -69,7 +69,7 @@ export default function ConsentPage({ params }) {
           <div className="done">
             <div className="big">✓</div>
             <h2>동의가 완료되었습니다</h2>
-            <p>{company} 거래안전 동의가<br />정상 처리되었습니다.</p>
+            <p>{company} 착한거래 동의가<br />정상 처리되었습니다.</p>
             <div className="receipt">
               <div className="r"><span className="k">동의번호</span><span className="v mono">{receipt.cid}</span></div>
               <div className="r"><span className="k">본인확인</span><span className="v">완료 · {verified.method}</span></div>
