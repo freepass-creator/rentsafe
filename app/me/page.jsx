@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { RISK_TYPES, SUPPORT, STATUS_NOTICES, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD } from "@/lib/constants";
+import { useRouter } from "next/navigation";
+import { RISK_TYPES, SUPPORT, STATUS_NOTICES, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, DEMO_MODE } from "@/lib/constants";
 import { fmtBirth, fmtDate } from "@/lib/format";
 import { queryRisk, createAppeal } from "@/lib/db";
 import AuthFlow from "@/components/AuthFlow";
@@ -9,6 +10,7 @@ import Icon from "@/components/Icon";
 import NoticeList from "@/components/NoticeList";
 
 export default function MyStatus() {
+  const router = useRouter();
   const [started, setStarted] = useState(false);
   const [verified, setVerified] = useState(null);
   const [result, setResult] = useState(null);
@@ -37,6 +39,13 @@ export default function MyStatus() {
   const step = stage === "appealed" ? 3 : verified ? 2 : 1;
   const clean = result?.kind === "none";
 
+  function goBack() {
+    if (stage === "appealed") { router.push("/"); return; }
+    if (stage === "status") { setStage("auth"); setStarted(false); setVerified(null); setResult(null); return; }
+    if (started) { setStarted(false); return; }
+    router.push("/");
+  }
+
   const supportHelp = (
     <div className="card" style={{ marginTop: 18, padding: 16, boxShadow: "none" }}>
       <div style={{ fontWeight: 700, marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}><Icon name="phoneCall" /> 본인 명의 휴대폰이 없으신가요?</div>
@@ -47,8 +56,9 @@ export default function MyStatus() {
   return (
     <div className="app">
       <div className="c-head">
+        <button className="c-back" onClick={goBack} aria-label="뒤로"><Icon name="back" size={20} /></button>
         <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
-        <h1>렌터카 착한거래 상태 확인</h1>
+        <h1>내 거래이력 확인</h1>
         <div className="co">본인인증 후 본인의 정보만 열람하실 수 있습니다</div>
       </div>
       <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /></div>
@@ -61,6 +71,7 @@ export default function MyStatus() {
             <div className="sdesc">{CAMPAIGN_LEAD}</div>
             <NoticeList items={STATUS_NOTICES} />
             <button className="btn btn-safe btn-block" onClick={() => setStarted(true)}>본인인증하고 확인하기</button>
+            {DEMO_MODE && <div className="demo-hint">샘플 본인인증 — 이름 <b>홍길동</b> / 생년월일 <b>900715</b> 입력 시 거래이력 있음. 다른 이름은 “이력 없음”.</div>}
           </>
         )}
         {stage === "auth" && started && <AuthFlow onVerified={onVerified} supportHelp={supportHelp} />}
@@ -82,8 +93,8 @@ export default function MyStatus() {
                   <div className="r"><span className="k">본인확인</span><span className="v">{verified.method}</span></div>
                 </div>
                 <div className="card" style={{ marginTop: 16, boxShadow: "none" }}>
-                  <div style={{ fontWeight: 700, marginBottom: 10 }}>렌트사에 제출하기</div>
-                  <div className="hint" style={{ marginTop: 0, marginBottom: 12 }}>① 이 화면을 <b>캡처</b>해 제출하거나, ② 렌트사를 지정해 <b>공유</b>하세요.</div>
+                  <div style={{ fontWeight: 700, marginBottom: 10 }}>렌트사에 전달하기</div>
+                  <div className="hint" style={{ marginTop: 0, marginBottom: 12 }}>① 이 화면을 <b>캡처</b>해 전달하거나, ② 렌트사를 지정해 <b>공유</b>하세요.</div>
                   {shared ? (
                     <div className="r-clean" style={{ padding: 14 }}><div className="ic" style={{ width: 36, height: 36, fontSize: 18 }}>✓</div><div><h3 style={{ fontSize: 14 }}>{shared}에 공유 완료</h3><p>상태확인서가 전달되었습니다.</p></div></div>
                   ) : (

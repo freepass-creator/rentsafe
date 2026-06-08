@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { findMemberByCode, createSelfConsent } from "@/lib/db";
-import { CONSENT_STATEMENT, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD } from "@/lib/constants";
+import Icon from "@/components/Icon";
+import { CONSENT_STATEMENT, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE } from "@/lib/constants";
 import { fmtBirth, fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
 import NoticeList from "@/components/NoticeList";
 
 export default function SelfConsentPage() {
+  const router = useRouter();
   const [code, setCode] = useState("");
   const [target, setTarget] = useState(null);   // { company, code }
   const [checking, setChecking] = useState(false);
@@ -21,12 +24,12 @@ export default function SelfConsentPage() {
   async function lookup(e) {
     e.preventDefault();
     setErr("");
-    const c = code.trim().toUpperCase();
-    if (!c) { setErr("업체코드를 입력해 주세요."); return; }
+    const c = code.trim();
+    if (!c) { setErr(`${CODE_LABEL}를 입력해 주세요.`); return; }
     setChecking(true);
     const m = await findMemberByCode(c);
     setChecking(false);
-    if (!m) { setErr(`‘${c}’ 코드의 회원사를 찾을 수 없습니다. 아직 착한거래 회원사가 아니라면 동의를 진행할 수 없어요.`); return; }
+    if (!m) { setErr(`‘${c}’ ${CODE_LABEL}의 거래 상대를 찾을 수 없습니다. 아직 착한거래 회원이 아니라면 동의를 진행할 수 없어요.`); return; }
     setTarget(m);
   }
 
@@ -43,12 +46,21 @@ export default function SelfConsentPage() {
 
   const step = done ? 3 : verified ? 2 : 1;
 
+  function goBack() {
+    if (done) { router.push("/"); return; }
+    if (verified) { setVerified(null); setAgreed(false); return; }
+    if (started) { setStarted(false); return; }
+    if (target) { setTarget(null); setCode(""); setErr(""); return; }
+    router.push("/");
+  }
+
   return (
     <div className="app">
       <div className="c-head">
+        <button className="c-back" onClick={goBack} aria-label="뒤로"><Icon name="back" size={20} /></button>
         <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
-        <h1>렌터카 착한거래 동의하기</h1>
-        <div className="co">{target ? `${target.company} 차량 임대차계약` : "업체코드를 입력해 시작하세요"}</div>
+        <h1>착한거래 동의하기</h1>
+        <div className="co">{target ? `${target.company} 와의 거래` : `${CODE_LABEL}를 입력해 시작하세요`}</div>
       </div>
       <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /></div>
 
@@ -57,21 +69,22 @@ export default function SelfConsentPage() {
         {!target && (
           <>
             <div className="slabel">동의 대상 확인</div>
-            <div className="stitle">어느 회원사에 동의하시나요?</div>
-            <div className="sdesc">거래하시는 렌터카 회원사로부터 받은 <b>업체코드</b>를 입력해 주세요. 등록된 착한거래 회원사만 동의 대상이 될 수 있습니다.</div>
+            <div className="stitle">어느 거래에 동의하시나요?</div>
+            <div className="sdesc">거래 상대로부터 받은 <b>{CODE_LABEL}</b>를 입력해 주세요. 착한거래에 등록된 회원만 동의 대상이 될 수 있습니다.</div>
             <form onSubmit={lookup}>
-              <div className="field"><label>업체코드</label>
-                <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="예: SPEED1" autoCapitalize="characters" style={{ letterSpacing: 1 }} /></div>
+              <div className="field"><label>{CODE_LABEL}</label>
+                <input value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} inputMode="numeric" maxLength={6} placeholder="예: 100001" style={{ letterSpacing: 2 }} /></div>
               {err && <div className="auth-err">{err}</div>}
-              <button className="btn btn-safe btn-block" type="submit" disabled={checking}>{checking ? "확인 중…" : "회원사 확인"}</button>
+              <button className="btn btn-safe btn-block" type="submit" disabled={checking} style={{ marginTop: 16 }}>{checking ? "확인 중…" : "거래 상대 확인"}</button>
             </form>
+            {DEMO_MODE && <div className="demo-hint">샘플 {CODE_LABEL} — <b>100001</b> 스피드렌터카 · <b>100002</b> 테스트렌터카 · <b>100003</b> 하나모빌리티</div>}
           </>
         )}
 
         {/* STEP 1 — 캠페인 안내 + 본인인증 */}
         {target && !started && !verified && (
           <>
-            <div className="confirm-co"><span className="cc-chk">✓</span> <b>{target.company}</b> <span className="cc-ok">회원사 확인됨</span></div>
+            <div className="confirm-co"><span className="cc-chk">✓</span> <b>{target.company}</b> <span className="cc-ok">거래 상대 확인됨</span></div>
             <div className="slabel">{CAMPAIGN_TITLE}</div>
             <div className="stitle">{CAMPAIGN_HEADLINE}</div>
             <div className="sdesc">{CAMPAIGN_LEAD}</div>

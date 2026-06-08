@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signup } from "@/lib/auth";
 import Icon from "@/components/Icon";
+import BrandMark from "@/components/BrandMark";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -27,14 +28,11 @@ export default function SignupPage() {
   return (
     <div className="auth-wrap">
       <div className="auth-card wide">
+        <a className="c-back-auth" href="/" aria-label="뒤로"><Icon name="back" size={20} /></a>
         <div className="auth-brand">
-          <span className="auth-mark">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-          <div className="auth-name">렌터카 <span className="accent">착한</span>거래</div>
-          <div className="auth-tag">회원사 가입</div>
+          <BrandMark size={26} className="auth-mark" />
+          <div className="auth-name"><span className="accent">착한</span>거래</div>
+          <div className="auth-tag">회원 가입</div>
         </div>
 
         <div className="card-desc" style={{ textAlign: "center", marginBottom: 18 }}>가입 시 <b>사업자등록증</b> 확인이 필요합니다.</div>

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { resetPassword } from "@/lib/auth";
+import BrandMark from "@/components/BrandMark";
+import Icon from "@/components/Icon";
 
 export default function ResetPage() {
   const [err, setErr] = useState("");
@@ -21,13 +23,10 @@ export default function ResetPage() {
   return (
     <div className="auth-wrap">
       <div className="auth-card">
+        <a className="c-back-auth" href="/" aria-label="뒤로"><Icon name="back" size={20} /></a>
         <div className="auth-brand">
-          <span className="auth-mark">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-          <div className="auth-name">렌터카 <span className="accent">착한</span>거래</div>
+          <BrandMark size={26} className="auth-mark" />
+          <div className="auth-name"><span className="accent">착한</span>거래</div>
           <div className="auth-tag">비밀번호 재설정</div>
         </div>
 
