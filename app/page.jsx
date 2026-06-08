@@ -2,11 +2,12 @@
 
 import { useEffect, useState, useCallback } from "react";
 import {
-  RISK_TYPES, fmtBirth, cleanBirth,
-  createConsent, listConsents, addRisk, queryRisk,
+  RISK_TYPES, IS_LOCAL,
+  createConsent, listConsents, addRisk,
 } from "@/lib/db";
 
-const FB_READY = !!process.env.NEXT_PUBLIC_FB_PROJECT_ID;
+// 로그인된 가맹사 (mock) — 실제로는 Firebase Auth 로그인 계정에서 가져옴
+const CURRENT_COMPANY = "스피드렌터카";
 
 function mask(n) {
   if (!n) return "";
@@ -27,8 +28,6 @@ export default function Console() {
     setTimeout(() => setToast(null), 2600);
   }, []);
 
-  if (!FB_READY) return <SetupNeeded />;
-
   return (
     <>
       <div className="header">
@@ -36,18 +35,19 @@ export default function Console() {
           <div className="logo">R</div>
           <div>
             <h1>RentSafe</h1>
-            <div className="sub">렌터카 안전거래 플랫폼 · 가맹사 콘솔</div>
+            <div className="sub">가맹사 콘솔 · <b style={{opacity:.95}}>{CURRENT_COMPANY}</b> 로그인</div>
           </div>
         </div>
       </div>
       <div className="container">
+        {IS_LOCAL && (
+          <div className="demo-note">🧪 데모 모드 — Firebase 미연결 상태로 브라우저 로컬 저장(localStorage)으로 동작합니다. (Vercel 환경변수에 Firebase 키 등록 시 실제 DB로 전환)</div>
+        )}
         <div className="tabs">
           <button className={`tab ${tab==="send"?"active":""}`} onClick={() => setTab("send")}>📨 동의요청</button>
-          <button className={`tab ${tab==="query"?"active":""}`} onClick={() => setTab("query")}>⌕ 조회</button>
-          <button className={`tab ${tab==="register"?"active":""}`} onClick={() => setTab("register")}>＋ 등록</button>
+          <button className={`tab ${tab==="register"?"active":""}`} onClick={() => setTab("register")}>＋ 위반 등록</button>
         </div>
         {tab === "send" && <SendTab toast={showToast} />}
-        {tab === "query" && <QueryTab />}
         {tab === "register" && <RegisterTab toast={showToast} />}
       </div>
       {toast && (
@@ -116,112 +116,48 @@ function SendTab({ toast }) {
   );
 }
 
-/* ---------- 조회 ---------- */
-function QueryTab() {
-  const [res, setRes] = useState(null);
-  const [busy, setBusy] = useState(false);
-
-  async function submit(e) {
-    e.preventDefault();
-    const f = e.target;
-    setBusy(true);
-    const r = await queryRisk({
-      name: f.name.value, birth: f.birth.value,
-      license: f.license.value, phone: f.phone.value,
-    });
-    setRes(r);
-    setBusy(false);
-  }
-
-  return (
-    <div className="card">
-      <div className="card-title">거래위험 조회</div>
-      <div className="card-desc">신규 계약 전, 해당 고객의 거래위험정보 등록 여부만 확인합니다. 결과는 등록 여부 + 유형만 표시됩니다.</div>
-      <form onSubmit={submit}>
-        <div className="grid">
-          <div className="field"><label>이름 <span className="req">*</span></label><input name="name" required placeholder="홍길동" /></div>
-          <div className="field"><label>생년월일 <span className="req">*</span></label><input name="birth" required inputMode="numeric" maxLength={6} placeholder="900715 (6자리)" /></div>
-          <div className="field"><label>운전면허번호</label><input name="license" placeholder="11-22-334455-66" /></div>
-          <div className="field"><label>휴대폰번호</label><input name="phone" inputMode="numeric" placeholder="010-0000-0000" /></div>
-        </div>
-        <div className="actions"><button className="btn btn-primary btn-block" type="submit" disabled={busy}>{busy ? "조회 중…" : "⌕ 조회하기"}</button></div>
-      </form>
-      {res && <QueryResult res={res} />}
-    </div>
-  );
-}
-function QueryResult({ res }) {
-  if (res.kind === "none")
-    return <div className="result"><div className="r-clean"><div className="ic">✓</div><div><h3>거래위험정보 없음</h3><p>입력한 정보와 일치하는 등록 내역이 없습니다.</p></div></div></div>;
-  if (res.kind === "ambiguous")
-    return <div className="result"><div className="r-amb"><div style={{fontSize:24}}>⚠</div><div><h3>동일 이름·생년월일이 여러 건입니다</h3><p>정확한 확인을 위해 운전면허번호 또는 휴대폰번호를 추가 입력해 주세요.</p></div></div></div>;
-  const who = res.records[0];
-  return (
-    <div className="result"><div className="r-hit">
-      <div className="head"><div className="ic">!</div><div>
-        <h3>거래위험정보 있음 · {res.records.length}건</h3>
-        <p>대상 <b>{mask(who.name)} · {fmtBirth(who.birth)}</b> — 개인정보는 가린 상태로 존재 여부만 확인됩니다.</p>
-      </div></div>
-      {res.records.map((r) => (
-        <div className="risk-row" key={r.id}>
-          <div><div className="type">{RISK_TYPES[r.type] || r.type}</div><div className="meta">발생/등록 거래위험</div></div>
-          <div className="sp" /><span className="badge b-red"><span className="dot" />유효</span>
-        </div>
-      ))}
-    </div></div>
-  );
-}
-
-/* ---------- 등록 ---------- */
+/* ---------- 위반 등록 ---------- */
 function RegisterTab({ toast }) {
   const [busy, setBusy] = useState(false);
+  const [evidence, setEvidence] = useState("");
   async function submit(e) {
     e.preventDefault();
+    if (!evidence) { toast("위반 증빙 파일을 첨부해 주세요.", "danger"); return; }
     const f = e.target;
     setBusy(true);
     await addRisk({
       name: f.name.value.trim(), birth: f.birth.value, type: f.type.value,
-      company: f.company.value.trim(), license: f.license.value.trim(),
-      phone: f.phone.value.trim(), reason: f.reason.value.trim(),
+      company: CURRENT_COMPANY, license: f.license.value.trim(),
+      phone: f.phone.value.trim(), reason: f.reason.value.trim(), evidence,
     });
     setBusy(false);
-    f.reset();
-    toast("거래위험정보가 등록되었습니다.", "safe");
+    f.reset(); setEvidence("");
+    toast("위반정보가 등록되었습니다.", "safe");
   }
   return (
     <div className="card">
-      <div className="card-title">거래위험정보 등록</div>
-      <div className="card-desc">중대한 계약위반(미납·미반납 등)이 실제 발생한 경우에만 등록합니다.</div>
+      <div className="card-title">위반 등록</div>
+      <div className="card-desc">중대한 계약위반(미납·미반납 등)이 실제 발생한 경우에만, <b>객관적 증빙을 첨부하여</b> 등록합니다. 등록처는 로그인한 가맹사({CURRENT_COMPANY})로 자동 기록됩니다.</div>
       <div className="demo-note">⚠ 데모 단계 — 실제 개인정보 대신 테스트 데이터를 사용하세요.</div>
       <form onSubmit={submit}>
         <div className="grid">
           <div className="field"><label>이름 <span className="req">*</span></label><input name="name" required placeholder="홍길동" /></div>
           <div className="field"><label>생년월일 <span className="req">*</span></label><input name="birth" required inputMode="numeric" maxLength={6} placeholder="900715" /></div>
-          <div className="field"><label>위험유형 <span className="req">*</span></label>
+          <div className="field"><label>위반유형 <span className="req">*</span></label>
             <select name="type" required>{Object.entries(RISK_TYPES).map(([k,v]) => <option key={k} value={k}>{v}</option>)}</select></div>
-          <div className="field"><label>등록처(회사)</label><input name="company" placeholder="우리 회사명" /></div>
           <div className="field"><label>운전면허번호</label><input name="license" placeholder="11-22-334455-66" /></div>
           <div className="field"><label>휴대폰번호</label><input name="phone" inputMode="numeric" placeholder="010-0000-0000" /></div>
-          <div className="field full"><label>등록 사유 <span className="req">*</span></label><textarea name="reason" rows={3} required placeholder="계약위반 경위" /></div>
+          <div className="field full"><label>등록 사유 <span className="req">*</span></label><textarea name="reason" rows={3} required placeholder="계약위반 경위 (예: 대여료 4개월 미납, 3차 통지 후 무응답)" /></div>
+          <div className="field full">
+            <label>위반 증빙 첨부 <span className="req">*</span> <span className="opt">내용증명·미납내역·반납요청 등</span></label>
+            <label className="btn btn-block" style={{cursor:"pointer"}}>
+              {evidence ? `📎 ${evidence}` : "📎 증빙 파일 선택"}
+              <input type="file" style={{display:"none"}} onChange={(e) => setEvidence(e.target.files?.[0]?.name || "")} />
+            </label>
+          </div>
         </div>
-        <div className="actions"><button className="btn btn-primary btn-block" type="submit" disabled={busy}>{busy ? "등록 중…" : "＋ 등록하기"}</button></div>
+        <div className="actions"><button className="btn btn-primary btn-block" type="submit" disabled={busy}>{busy ? "등록 중…" : "＋ 위반 등록"}</button></div>
       </form>
-    </div>
-  );
-}
-
-/* ---------- Firebase 미설정 안내 ---------- */
-function SetupNeeded() {
-  return (
-    <div className="center-msg">
-      <div>
-        <div style={{fontSize:40,marginBottom:12}}>🔧</div>
-        <h2 style={{fontSize:18,fontWeight:800,color:"var(--ink)"}}>Firebase 설정이 필요합니다</h2>
-        <p style={{marginTop:8,maxWidth:380}}>
-          <code>.env.local</code>에 Firebase 키를 넣어주세요.<br/>
-          (<code>.env.local.example</code> 참고 · Vercel은 환경변수에 등록)
-        </p>
-      </div>
     </div>
   );
 }
