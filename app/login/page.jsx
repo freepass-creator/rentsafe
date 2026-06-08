@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login, TEST_LOGIN } from "@/lib/auth";
+import { login, logout, TEST_LOGIN } from "@/lib/auth";
 import FlowHeader from "@/components/FlowHeader";
 import StepFooter from "@/components/StepFooter";
 
@@ -19,7 +19,8 @@ export default function LoginPage() {
     const s = await login(email, pw);
     setBusy(false);
     if (!s) { setErr("이메일 또는 비밀번호가 올바르지 않습니다."); return; }
-    router.replace(s.role === "admin" ? "/admin" : "/console");
+    if (s.role === "admin") { await logout(); setErr("운영자 계정입니다. 관리자 페이지에서 로그인해 주세요."); return; }
+    router.replace("/console");
   }
 
   return (

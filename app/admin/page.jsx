@@ -5,12 +5,18 @@ import { RISK_TYPES } from "@/lib/constants";
 import { mask, fmtBirth, cleanBirth, fmtDate } from "@/lib/format";
 import { IS_LOCAL, listAppeals, resolveAppeal, listRisks } from "@/lib/db";
 import AppHeader from "@/components/AppHeader";
+import FlowHeader from "@/components/FlowHeader";
+import StepFooter from "@/components/StepFooter";
 import { useRouter } from "next/navigation";
-import { getSession, logout } from "@/lib/auth";
+import { getSession, logout, login } from "@/lib/auth";
 
 export default function Admin() {
   const router = useRouter();
-  const [session, setSession] = useState(undefined);
+  const [session, setSession] = useState(undefined); // undefined=확인중, null=로그인필요, obj=운영자
+  const [email, setEmail] = useState("");
+  const [pw, setPw] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
   const [appeals, setAppeals] = useState([]);
   const [risks, setRisks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,10 +24,18 @@ export default function Admin() {
 
   useEffect(() => {
     const s = getSession();
-    if (!s) router.replace("/login");
-    else if (s.role !== "admin") router.replace("/console");
-    else setSession(s);
-  }, [router]);
+    setSession(s && s.role === "admin" ? s : null);
+  }, []);
+
+  async function adminLogin() {
+    setErr("");
+    setBusy(true);
+    const s = await login(email, pw);
+    setBusy(false);
+    if (!s) { setErr("이메일 또는 비밀번호가 올바르지 않습니다."); return; }
+    if (s.role !== "admin") { await logout(); setErr("운영자 전용 계정이 아닙니다."); return; }
+    setSession(s);
+  }
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -46,12 +60,27 @@ export default function Admin() {
   const resolved = risks.filter((r) => r.status === "resolved");
   const people = new Set(active.map((r) => `${r.name}|${cleanBirth(r.birth)}`)).size;
 
-  if (!session) return null;
+  if (session === undefined) return null;
+  if (session === null) return (
+    <div className="app">
+      <FlowHeader title="운영자 로그인" sub="착한거래 운영팀 전용" />
+      <div className="c-body c-center">
+        <form onSubmit={(e) => { e.preventDefault(); adminLogin(); }}>
+          <div className="field"><label>이메일</label>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="운영자 이메일" autoComplete="username" /></div>
+          <div className="field"><label>비밀번호</label>
+            <input value={pw} onChange={(e) => setPw(e.target.value)} type="password" placeholder="비밀번호" autoComplete="current-password" /></div>
+          {err && <div className="auth-err">{err}</div>}
+        </form>
+      </div>
+      <StepFooter prev={{ label: "이전", onClick: () => router.push("/") }} next={{ label: busy ? "확인 중…" : "로그인", onClick: adminLogin, disabled: busy }} />
+    </div>
+  );
 
   return (
     <>
       <AppHeader subtitle="플랫폼 관리자 · 등록 현황 · 소명 심사"
-        right={<button className="btn btn-sm" style={{ background: "transparent", borderColor: "rgba(255,255,255,.3)", color: "#fff" }} onClick={() => { logout(); router.replace("/login"); }}>로그아웃</button>} />
+        right={<button className="btn btn-sm" style={{ background: "transparent", borderColor: "rgba(255,255,255,.3)", color: "#fff" }} onClick={async () => { await logout(); setSession(null); }}>로그아웃</button>} />
       <div className="container">
         {IS_LOCAL && <div className="demo-note">데모 모드 (localStorage). 회원사 등록·손님 소명이 여기로 모입니다.</div>}
 
