@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { RISK_TYPES, SUPPORT, STATUS_NOTICES } from "@/lib/constants";
+import { RISK_TYPES, SUPPORT, STATUS_NOTICES, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD } from "@/lib/constants";
 import { fmtBirth, fmtDate } from "@/lib/format";
 import { queryRisk, createAppeal } from "@/lib/db";
 import AuthFlow from "@/components/AuthFlow";
@@ -56,9 +56,9 @@ export default function MyStatus() {
       <div className="c-body">
         {stage === "auth" && !started && (
           <>
-            <div className="slabel">내 상태 확인</div>
-            <div className="stitle">내 거래이력 상태를 확인합니다</div>
-            <div className="sdesc">본인인증 후 본인 정보만 열람됩니다.</div>
+            <div className="slabel">{CAMPAIGN_TITLE}</div>
+            <div className="stitle">{CAMPAIGN_HEADLINE}</div>
+            <div className="sdesc">{CAMPAIGN_LEAD}</div>
             <NoticeList items={STATUS_NOTICES} />
             <button className="btn btn-safe btn-block" onClick={() => setStarted(true)}>본인인증하고 확인하기</button>
           </>

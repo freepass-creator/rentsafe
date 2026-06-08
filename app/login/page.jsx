@@ -7,13 +7,17 @@ import { login, TEST_LOGIN } from "@/lib/auth";
 export default function LoginPage() {
   const router = useRouter();
   const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
+    setErr("");
+    setBusy(true);
     const f = e.target;
-    const s = login(f.email.value, f.pw.value);
+    const s = await login(f.email.value, f.pw.value);
+    setBusy(false);
     if (!s) { setErr("이메일 또는 비밀번호가 올바르지 않습니다."); return; }
-    router.replace(s.role === "admin" ? "/admin" : "/");
+    router.replace(s.role === "admin" ? "/admin" : "/console");
   }
   function fillTest() {
     document.getElementById("le").value = TEST_LOGIN.email;
@@ -29,8 +33,8 @@ export default function LoginPage() {
               <path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
-          <div className="auth-name"><span className="accent">착한</span>거래</div>
-          <div className="auth-tag">렌터카 착한거래 · 회원사 로그인</div>
+          <div className="auth-name">렌터카 <span className="accent">착한</span>거래</div>
+          <div className="auth-tag">회원사 로그인</div>
         </div>
 
         <form onSubmit={submit}>
@@ -39,8 +43,9 @@ export default function LoginPage() {
           <div className="field"><label>비밀번호</label>
             <input id="lp" name="pw" type="password" placeholder="비밀번호" autoComplete="current-password" /></div>
           {err && <div className="auth-err">{err}</div>}
-          <button className="btn btn-primary btn-block" style={{ marginTop: 8 }} type="submit">로그인</button>
+          <button className="btn btn-primary btn-block" style={{ marginTop: 8 }} type="submit" disabled={busy}>{busy ? "로그인 중…" : "로그인"}</button>
         </form>
+        <div className="auth-links"><a href="/reset">비밀번호를 잊으셨나요?</a></div>
 
         <div className="auth-test">
           <span>테스트 계정</span>

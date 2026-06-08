@@ -17,6 +17,7 @@ html,body{height:100%}
 body{
   font-family:"Pretendard",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
 }
 button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 a{color:inherit;text-decoration:none}
@@ -30,9 +31,10 @@ a{color:inherit;text-decoration:none}
 .container{max-width:760px;margin:0 auto;padding:22px 20px 70px}
 
 .tabs{display:flex;gap:6px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:6px;margin-bottom:20px;box-shadow:var(--shadow)}
-.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:8px;font-weight:700;font-size:14px;color:var(--ink3);cursor:pointer;border:none;background:none}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:8px;font-weight:700;font-size:14px;color:var(--ink3);cursor:pointer;border:none;background:none;transition:background .12s,color .12s,transform .08s}
 .tab:hover{color:var(--navy)}
-.tab.active{background:var(--navy);color:#fff}
+.tab:active{transform:scale(.96)}
+.tab.active{background:var(--navy);color:#fff;box-shadow:0 4px 12px rgba(14,32,50,.30)}
 
 .card{background:var(--white);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:22px}
 .card+.card{margin-top:16px}
@@ -103,8 +105,8 @@ a{color:inherit;text-decoration:none}
 .toast.safe{background:var(--safe)}.toast.danger{background:var(--danger)}
 
 /* ---- 손님 동의 (모바일) ---- */
-.app{max-width:480px;margin:0 auto;background:#fff;min-height:100dvh;min-height:100vh;display:flex;flex-direction:column;position:relative}
-@media(min-width:520px){.app{min-height:auto;max-width:400px;height:min(820px,calc(100vh - 64px));margin:24px auto;border-radius:30px;overflow:hidden;box-shadow:0 16px 54px rgba(22,49,77,.24)}}
+.app{max-width:480px;width:100%;margin:0 auto;background:#fff;flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+@media(min-width:520px){.app{flex:0 0 auto;max-width:400px;height:min(820px,calc(100dvh - 64px));margin:24px auto;border-radius:30px;overflow:hidden;box-shadow:0 16px 54px rgba(22,49,77,.24)}}
 .c-head{background:var(--navy);color:#fff;padding:calc(20px + var(--sat)) 22px 22px;flex-shrink:0}
 .c-head .eyebrow{font-size:11px;font-weight:700;opacity:.8;letter-spacing:.5px}
 .c-head h1{font-size:18px;font-weight:800;margin-top:5px;letter-spacing:-.3px}
@@ -162,7 +164,7 @@ a{color:inherit;text-decoration:none}
 .center-msg{display:grid;place-items:center;min-height:60vh;text-align:center;padding:24px;color:var(--ink3)}
 
 /* ---- 인증 화면 (로그인/회원가입) ---- */
-.auth-wrap{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:28px 18px}
+.auth-wrap{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:28px 18px}
 .auth-card{width:100%;max-width:400px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 40px rgba(22,49,77,.10);padding:30px 26px}
 .auth-card.wide{max-width:460px}
 .auth-brand{text-align:center;margin-bottom:24px}
@@ -177,6 +179,41 @@ a{color:inherit;text-decoration:none}
 .auth-err{color:var(--danger);font-size:13px;margin:10px 0 0}
 .auth-test{margin-top:16px;background:var(--navy50);border-radius:11px;padding:12px 14px;font-size:12.5px;color:var(--ink2);display:flex;align-items:center;justify-content:space-between;gap:8px}
 .auth-test code{font-family:Consolas,Menlo,monospace;color:var(--navy2);font-weight:700}
+.auth-links{text-align:center;margin-top:14px;font-size:13px}
+.auth-links a{color:var(--ink3);font-weight:600}
+
+/* ---- 랜딩 (착한거래 메인) ---- */
+.land{flex:1;display:flex;flex-direction:column;padding:24px 20px calc(24px + var(--sab));max-width:480px;width:100%;margin:0 auto}
+.land-main{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.land-hero{text-align:center;margin-bottom:30px}
+.land-mark{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#1aa97c,#0f7f5b);display:inline-grid;place-items:center;box-shadow:0 8px 22px rgba(15,127,91,.4)}
+.land-title{font-size:27px;font-weight:800;letter-spacing:-.6px;color:var(--navy);margin-top:16px}
+.land-title .accent{color:var(--safe)}
+.land-lead{font-size:14px;line-height:1.6;color:var(--ink3);margin-top:12px}
+.land-cards{width:100%;display:flex;flex-direction:column;gap:12px}
+.land-card{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);transition:transform .1s,box-shadow .15s,border-color .15s}
+.land-card:hover{box-shadow:0 8px 24px rgba(22,49,77,.12);border-color:var(--navy50)}
+.land-card:active{transform:scale(.985)}
+.land-card.primary{border-color:var(--safe);background:linear-gradient(180deg,#fff,#f4fbf8)}
+.land-card .lc-ic{width:46px;height:46px;border-radius:13px;background:var(--navy50);color:var(--navy);display:grid;place-items:center;flex-shrink:0}
+.land-card.primary .lc-ic{background:var(--safe);color:#fff}
+.land-card .lc-tx{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.land-card .lc-tx b{font-size:16px;font-weight:800;color:var(--navy)}
+.land-card .lc-tx span{font-size:12.5px;color:var(--ink3);line-height:1.45}
+.land-card .lc-arrow{color:var(--ink3);font-size:18px;font-weight:700;flex-shrink:0}
+.land-foot{display:flex;flex-direction:column;align-items:center;gap:9px;margin-top:26px;font-size:13px;color:var(--ink3)}
+.land-biz{display:inline-flex;align-items:center;gap:6px;color:var(--navy);font-weight:700;border:1px solid var(--line);border-radius:999px;padding:9px 18px;background:#fff}
+.land-biz:active{transform:scale(.97)}
+
+/* ---- 업체코드 카드 (회원사 콘솔) ---- */
+.code-card{border-color:var(--safe)}
+.code-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.code-val{font-family:Consolas,Menlo,monospace;font-size:22px;font-weight:800;letter-spacing:2px;color:var(--safe);background:var(--safe50);border-radius:10px;padding:7px 16px}
+
+/* ---- 동의 대상(회원사) 확인됨 ---- */
+.confirm-co{display:flex;align-items:center;gap:8px;background:var(--safe50);border:1px solid #bfe3d3;border-radius:12px;padding:12px 14px;margin-bottom:18px;font-size:14px;color:var(--navy)}
+.confirm-co .cc-chk{width:20px;height:20px;border-radius:50%;background:var(--safe);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.confirm-co .cc-ok{margin-left:auto;font-size:12px;font-weight:700;color:var(--safe)}
 
 /* ---- 공용 헤더 (개선된 디자인) ---- */
 .app-header{background:linear-gradient(118deg,#15304c 0%,#1d4067 100%);color:#fff;padding:calc(18px + var(--sat)) 0 18px}
@@ -194,6 +231,5 @@ a{color:inherit;text-decoration:none}
 .demo-nav::-webkit-scrollbar{display:none}
 .demo-nav-tag{font-size:9px;font-weight:800;color:rgba(255,255,255,.42);letter-spacing:.6px;flex-shrink:0;margin-right:3px}
 .demo-nav-item{flex-shrink:0;color:rgba(255,255,255,.62);font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;transition:.12s}
-.demo-nav-item.on{background:#fff;color:#0e2032}
+.demo-nav-item.on{background:#fff;color:#0e2032;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.28)}
 .demo-nav-item:active{transform:scale(.97)}
-.c-body{padding-bottom:24px}
