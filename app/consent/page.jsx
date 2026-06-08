@@ -8,6 +8,7 @@ import { fmtBirth, fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
 import NoticeList from "@/components/NoticeList";
 import SignaturePad from "@/components/SignaturePad";
+import StepFooter from "@/components/StepFooter";
 
 export default function SelfConsentPage() {
   const router = useRouter();
@@ -49,9 +50,7 @@ export default function SelfConsentPage() {
   }
   function nextLabel() {
     if (!target) return checking ? "확인 중…" : "다음";
-    if (!started && !verified) return "본인인증하고 진행";
-    if (verified && !signing) return "동의하고 서명";
-    if (verified && signing) return "동의 완료";
+    if (verified && signing) return "완료";
     return "다음";
   }
   function nextDisabled() {
@@ -93,6 +92,10 @@ export default function SelfConsentPage() {
       </div>
       <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /><div className={`s ${step >= 4 ? "on" : ""}`} /></div>
 
+      {started && !verified ? (
+        <AuthFlow onVerified={setVerified} onCancel={() => setStarted(false)} />
+      ) : (
+        <>
       <div className="c-body">
         {/* STEP 0 — 업체코드 입력 */}
         {!target && (
@@ -119,8 +122,6 @@ export default function SelfConsentPage() {
             <NoticeList items={CONSENT_NOTICES} />
           </>
         )}
-        {target && started && !verified && <AuthFlow onVerified={setVerified} />}
-
         {/* STEP 2 — 동의 */}
         {verified && !signing && !done && (
           <>
@@ -168,23 +169,15 @@ export default function SelfConsentPage() {
               <div className="r"><span className="k">동의자</span><span className="v">{verified.name}</span></div>
               <div className="r"><span className="k">전자서명</span><span className="v">{sig ? "완료" : "—"}</span></div>
               <div className="r"><span className="k">동의일시</span><span className="v mono">{receipt.ts}</span></div>
+              <div className="r"><span className="k">안내 문자</span><span className="v">{verified.phone ? `${verified.phone} 발송` : "본인 휴대폰 발송"}</span></div>
               <div className="r"><span className="k">문구버전</span><span className="v">{CONSENT_VERSION}</span></div>
             </div>
-            <div className="hint">이 화면은 닫으셔도 됩니다.<br />동의 증빙은 안전하게 보관됩니다.</div>
+            <div className="hint">동의 확인 안내를 본인 휴대폰으로 문자 발송했습니다.<br />이 화면은 닫으셔도 되며, 동의 증빙은 안전하게 보관됩니다.</div>
           </div>
         )}
       </div>
-
-      {!done && (
-        started && !verified ? (
-          /* 본인인증(자체 흐름) 중 — 이전만 */
-          <div className="c-footer"><button className="btn btn-block" onClick={goBack}>이전</button></div>
-        ) : (
-          <div className="c-footer wiz">
-            <button className="btn btn-prev" onClick={goBack}>이전</button>
-            <button className="btn btn-safe btn-next" disabled={nextDisabled()} onClick={onNext}>{nextLabel()}</button>
-          </div>
-        )
+      {!done && <StepFooter prev={{ onClick: goBack }} next={{ label: nextLabel(), onClick: onNext, disabled: nextDisabled() }} />}
+        </>
       )}
     </div>
   );

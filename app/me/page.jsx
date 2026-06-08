@@ -8,6 +8,7 @@ import { queryRisk, createAppeal } from "@/lib/db";
 import AuthFlow from "@/components/AuthFlow";
 import Icon from "@/components/Icon";
 import NoticeList from "@/components/NoticeList";
+import StepFooter from "@/components/StepFooter";
 
 export default function MyStatus() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function MyStatus() {
   const [shared, setShared] = useState("");
   const [note, setNote] = useState("");
   const [file, setFile] = useState("");
+  const [copied, setCopied] = useState(false);
 
   async function onVerified(v) {
     setVerified(v);
@@ -34,6 +36,20 @@ export default function MyStatus() {
   function doShare() {
     if (!shareTo.trim()) { alert("공유할 렌트사명을 입력해 주세요."); return; }
     setShared(shareTo.trim());
+  }
+  function copyResult() {
+    if (!result) return;
+    const lines = [
+      "[착한거래 상태확인서]",
+      `성명: ${verified.name}`,
+      `생년월일: ${fmtBirth(verified.birth)}`,
+      clean ? "상태: 이상 없음 (등록된 거래이력 없음)" : `상태: 거래이력 있음 (${result.records.length}건)`,
+    ];
+    if (!clean) result.records.forEach((r) => lines.push(` · ${RISK_TYPES[r.type] || r.type} (등록처 ${r.company || "-"})`));
+    lines.push(`본인확인: ${verified.method}`, `발급일: ${fmtDate(new Date())}`, "— 착한거래");
+    navigator.clipboard?.writeText(lines.join("\n"));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
   async function submitAppeal() {
     if (!note.trim() && !file) { alert("소명 내용 또는 증빙을 입력해 주세요."); return; }
@@ -61,13 +77,16 @@ export default function MyStatus() {
   return (
     <div className="app">
       <div className="c-head">
-        <button className="c-back" onClick={goBack} aria-label="뒤로"><Icon name="back" size={20} /></button>
         <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
         <h1>내 거래이력 확인</h1>
         <div className="co">본인인증 후 본인의 정보만 열람하실 수 있습니다</div>
       </div>
       <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /></div>
 
+      {stage === "auth" && started ? (
+        <AuthFlow onVerified={onVerified} onCancel={() => setStarted(false)} supportHelp={supportHelp} />
+      ) : (
+        <>
       <div className="c-body">
         {stage === "auth" && !started && (
           <>
@@ -75,12 +94,9 @@ export default function MyStatus() {
             <div className="stitle">{CAMPAIGN_HEADLINE}</div>
             <div className="sdesc">{CAMPAIGN_LEAD}</div>
             <NoticeList items={STATUS_NOTICES} />
-            <button className="btn btn-safe btn-block" onClick={() => setStarted(true)}>본인인증하고 확인하기</button>
             {DEMO_MODE && <div className="demo-hint">샘플 본인인증 — 이름 <b>홍길동</b> / 생년월일 <b>900715</b> 입력 시 거래이력 있음. 다른 이름은 “이력 없음”.</div>}
           </>
         )}
-        {stage === "auth" && started && <AuthFlow onVerified={onVerified} supportHelp={supportHelp} />}
-
         {stage === "status" && verified && (
           <>
             <div className="verified">
@@ -99,7 +115,8 @@ export default function MyStatus() {
                 </div>
                 <div className="card" style={{ marginTop: 16, boxShadow: "none" }}>
                   <div style={{ fontWeight: 700, marginBottom: 10 }}>렌트사에 전달하기</div>
-                  <div className="hint" style={{ marginTop: 0, marginBottom: 12 }}>① 이 화면을 <b>캡처</b>해 전달하거나, ② 렌트사를 지정해 <b>공유</b>하세요.</div>
+                  <div className="hint" style={{ marginTop: 0, marginBottom: 12 }}>① <b>상태확인서 복사</b>해서 보내거나, ② 화면 <b>캡처</b>, ③ 렌트사 지정 <b>공유</b>.</div>
+                  <button className="btn btn-block" onClick={copyResult} style={{ marginBottom: 12 }}><Icon name="file" /> {copied ? "복사됨 ✓" : "상태확인서 복사"}</button>
                   {shared ? (
                     <div className="r-clean" style={{ padding: 14 }}><div className="ic" style={{ width: 36, height: 36, fontSize: 18 }}>✓</div><div><h3 style={{ fontSize: 14 }}>{shared}에 공유 완료</h3><p>상태확인서가 전달되었습니다.</p></div></div>
                   ) : (
@@ -118,6 +135,7 @@ export default function MyStatus() {
                     <div className="risk-row" key={r.id}><div><div className="type">{RISK_TYPES[r.type] || r.type}</div><div className="meta">등록처 {r.company || "-"}</div></div><div className="sp" /><span className="badge b-red"><span className="dot" />유효</span></div>
                   ))}
                 </div>
+                <button className="btn btn-block" onClick={copyResult} style={{ marginBottom: 16 }}><Icon name="file" /> {copied ? "복사됨 ✓" : "상태확인서 복사"}</button>
                 <div className="card" style={{ boxShadow: "none" }}>
                   <div style={{ fontWeight: 700, marginBottom: 6 }}>거래이력 해제 신청</div>
                   <div className="hint" style={{ marginTop: 0, marginBottom: 12 }}>정산 내역·합의서·변제 확인서 등을 올려주시면 확인 후 해제해 드려요.</div>
@@ -141,7 +159,15 @@ export default function MyStatus() {
           </div>
         )}
       </div>
-
+      {stage === "appealed" ? (
+        <StepFooter next={{ label: "처음으로", onClick: () => router.push("/") }} />
+      ) : stage === "status" ? (
+        <StepFooter prev={{ onClick: goBack }} next={{ label: "처음으로", onClick: () => router.push("/") }} />
+      ) : (
+        <StepFooter prev={{ onClick: goBack }} next={{ label: "다음", onClick: () => setStarted(true) }} />
+      )}
+        </>
+      )}
       </div>
   );
 }
