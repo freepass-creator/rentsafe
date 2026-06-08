@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { findMemberByCode, createSelfConsent } from "@/lib/db";
-import { CONSENT_CLAUSES, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE } from "@/lib/constants";
+import { CONSENT_CLAUSES, CONSENT_FOOTNOTES, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE } from "@/lib/constants";
 import { fmtBirth, fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
 import NoticeList from "@/components/NoticeList";
@@ -24,6 +24,14 @@ export default function SelfConsentPage() {
   const [sig, setSig] = useState("");
   const [done, setDone] = useState(false);
   const [receipt, setReceipt] = useState(null);
+
+  // 회원이 보낸 링크(/consent?code=...)로 들어오면 거래코드 자동 입력·확인
+  useEffect(() => {
+    const c = (new URLSearchParams(window.location.search).get("code") || "").replace(/\D/g, "");
+    if (!c) return;
+    setCode(c);
+    findMemberByCode(c).then((m) => { if (m) setTarget(m); }).catch(() => {});
+  }, []);
 
   async function lookup() {
     setErr("");
@@ -133,6 +141,9 @@ export default function SelfConsentPage() {
                 <div className="clause" key={i}><div className="clause-t">{c.t}</div><div className="clause-b">{c.b}</div></div>
               ))}
             </div>
+            <ul className="footnotes">
+              {CONSENT_FOOTNOTES.map((f, i) => <li key={i}>{f}</li>)}
+            </ul>
             <label className={`cc ${agreed ? "on" : ""}`} onClick={() => setAgreed((v) => !v)}>
               <input type="checkbox" checked={agreed} readOnly onClick={(e) => e.stopPropagation()} /> 위 내용을 모두 확인하였으며 거래이력 제공에 동의합니다.
             </label>

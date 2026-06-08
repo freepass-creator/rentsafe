@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { RISK_TYPES, CONTRACT_CONSENT_FORM, CONSENT_NOTICES, CONSENT_CLAUSES, STATUS_NOTICES, CODE_LABEL, VIOLATION_LABEL } from "@/lib/constants";
+import { RISK_TYPES, CONTRACT_CONSENT_FORM, CONSENT_NOTICES, CONSENT_CLAUSES, CONSENT_FOOTNOTES, STATUS_NOTICES, CODE_LABEL, VIOLATION_LABEL } from "@/lib/constants";
 import { mask, fmtBirth, fmtDate } from "@/lib/format";
 import { IS_LOCAL, listConsents, addRisk } from "@/lib/db";
 import { getSession, logout } from "@/lib/auth";
@@ -64,13 +64,10 @@ function SendTab({ toast, company, code }) {
   return (
     <>
       <div className="card code-card">
-        <div className="card-title">우리 {CODE_LABEL}</div>
-        <div className="card-desc">손님에게 이 {CODE_LABEL}를 알려주세요. 손님이 <b>착한거래 동의하기</b>에서 이 {CODE_LABEL}를 입력하면 우리 앞으로 동의가 등록됩니다.</div>
-        <div className="code-row">
-          <span className="code-val">{code || "—"}</span>
-          {code && <button className="btn btn-sm" onClick={() => copyText(code)}><Icon name="file" /> {CODE_LABEL} 복사</button>}
-          <button className="btn btn-sm" onClick={() => copyText(`${location.origin}/consent`)}>동의 화면 링크 복사</button>
-        </div>
+        <div className="card-title">손님에게 동의 요청 보내기</div>
+        <div className="card-desc">아래 <b>동의 링크</b>를 손님에게 보내세요(문자·카톡 등). 손님이 링크를 열면 우리 회원으로 자동 확인되고, 본인인증 후 동의가 진행됩니다.</div>
+        <button className="btn btn-primary btn-block" onClick={() => copyText(`${location.origin}/consent?code=${code}`)}><Icon name="send" /> 동의 링크 복사</button>
+        <div className="hint" style={{ marginTop: 12 }}>링크를 못 쓰는 경우, 손님이 <b>착한거래 동의하기</b>에서 직접 입력하는 {CODE_LABEL}: <b className="mono">{code || "—"}</b>{code && <button className="btn btn-sm" style={{ marginLeft: 8 }} onClick={() => copyText(code)}>복사</button>}</div>
       </div>
 
       <div className="card">
@@ -86,6 +83,9 @@ function SendTab({ toast, company, code }) {
                 <div className="clause" key={i}><div className="clause-t">{c.t}</div><div className="clause-b">{c.b}</div></div>
               ))}
             </div>
+            <ul className="footnotes">
+              {CONSENT_FOOTNOTES.map((f, i) => <li key={i}>{f}</li>)}
+            </ul>
           </>
         )}
       </div>

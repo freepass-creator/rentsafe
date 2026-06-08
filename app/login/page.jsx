@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login, TEST_LOGIN } from "@/lib/auth";
-import StepFooter from "@/components/StepFooter";
-import FlowHeader from "@/components/FlowHeader";
+import BrandMark from "@/components/BrandMark";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,15 +22,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="app">
-      <FlowHeader title="회원 로그인" sub="렌터카 사업자 회원 전용" />
-      <div className="c-body">
+    <div className="auth-wrap">
+      <div className="auth-card">
+        <div className="auth-brand">
+          <BrandMark size={26} className="auth-mark" />
+          <div className="auth-name"><span className="accent">착한</span>거래</div>
+          <div className="auth-tag">회원 로그인</div>
+        </div>
         <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
           <div className="field"><label>이메일</label>
             <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@company.com" autoComplete="username" /></div>
           <div className="field"><label>비밀번호</label>
             <input value={pw} onChange={(e) => setPw(e.target.value)} type="password" placeholder="비밀번호" autoComplete="current-password" /></div>
           {err && <div className="auth-err">{err}</div>}
+          <div className="auth-actions">
+            <button type="button" className="btn" onClick={() => router.push("/")}>이전</button>
+            <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? "로그인 중…" : "로그인"}</button>
+          </div>
         </form>
 
         <div className="auth-test">
@@ -42,7 +49,6 @@ export default function LoginPage() {
         <div className="auth-links"><a href="/reset">비밀번호를 잊으셨나요?</a></div>
         <div className="auth-alt">아직 회원이 아니신가요? <a href="/signup">계정 만들기</a></div>
       </div>
-      <StepFooter prev={{ label: "이전", onClick: () => router.push("/") }} next={{ label: busy ? "로그인 중…" : "로그인", onClick: submit, disabled: busy }} />
     </div>
   );
 }

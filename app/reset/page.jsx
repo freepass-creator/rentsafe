@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { resetPassword } from "@/lib/auth";
-import StepFooter from "@/components/StepFooter";
-import FlowHeader from "@/components/FlowHeader";
+import BrandMark from "@/components/BrandMark";
 
 export default function ResetPage() {
   const router = useRouter();
@@ -23,22 +22,37 @@ export default function ResetPage() {
   }
 
   return (
-    <div className="app">
-      <FlowHeader title="비밀번호 재설정" sub="가입하신 이메일로 재설정 링크를 보내드립니다" />
-      <div className="c-body">
+    <div className="auth-wrap">
+      <div className="auth-card">
+        <div className="auth-brand">
+          <BrandMark size={26} className="auth-mark" />
+          <div className="auth-name"><span className="accent">착한</span>거래</div>
+          <div className="auth-tag">비밀번호 재설정</div>
+        </div>
+
         {sent ? (
-          <div className="r-clean"><div className="ic">✓</div><div><h3>메일을 보냈습니다</h3><p>메일함의 링크로 새 비밀번호를 설정해 주세요.</p></div></div>
+          <>
+            <div className="card-desc" style={{ textAlign: "center", marginBottom: 16 }}>
+              비밀번호 재설정 메일을 보냈습니다.<br />메일함의 링크로 새 비밀번호를 설정해 주세요.
+            </div>
+            <button className="btn btn-primary btn-block" onClick={() => router.replace("/login")}>로그인으로 돌아가기</button>
+          </>
         ) : (
-          <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
-            <div className="field"><label>이메일</label>
-              <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@company.com" autoComplete="username" /></div>
-            {err && <div className="auth-err">{err}</div>}
-          </form>
+          <>
+            <div className="card-desc" style={{ textAlign: "center", marginBottom: 18 }}>가입하신 이메일로 비밀번호 재설정 링크를 보내드립니다.</div>
+            <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
+              <div className="field"><label>이메일</label>
+                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@company.com" autoComplete="username" /></div>
+              {err && <div className="auth-err">{err}</div>}
+              <div className="auth-actions">
+                <button type="button" className="btn" onClick={() => router.push("/login")}>이전</button>
+                <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? "보내는 중…" : "메일 보내기"}</button>
+              </div>
+            </form>
+          </>
         )}
+        <div className="auth-alt"><a href="/login">로그인으로 돌아가기</a></div>
       </div>
-      {sent
-        ? <StepFooter next={{ label: "로그인으로", onClick: () => router.replace("/login") }} />
-        : <StepFooter prev={{ label: "이전", onClick: () => router.push("/login") }} next={{ label: busy ? "보내는 중…" : "재설정 메일 보내기", onClick: submit, disabled: busy }} />}
     </div>
   );
 }
