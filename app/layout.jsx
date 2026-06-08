@@ -4,10 +4,21 @@ import DemoNav from "@/components/DemoNav";
 import PWARegister from "@/components/PWARegister";
 
 export const metadata = {
-  title: "렌터카 착한거래",
-  description: "외상·후불 등 비금융 거래의 거래이력 확인 플랫폼 (첫 서비스: 렌터카)",
+  metadataBase: process.env.VERCEL_URL ? new URL(`https://${process.env.VERCEL_URL}`) : undefined,
+  title: "착한거래",
+  description: "비금융 거래의 거래이력 확인 플랫폼 (렌터카)",
   robots: { index: false, follow: false },
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "착한거래" },
+  openGraph: {
+    title: "착한거래",
+    description: "비금융 거래의 거래이력 확인 플랫폼 (렌터카)",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "착한거래",
+    description: "비금융 거래의 거래이력 확인 플랫폼 (렌터카)",
+  },
 };
 
 export const viewport = {
