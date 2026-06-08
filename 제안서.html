@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>렌터카 착한거래 — 회원사 제안서</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root{
+    --navy:#16314d; --navy2:#1f4263; --navy50:#eef3f8;
+    --mint:#13a37a; --mint2:#0f7f5b; --mint50:#e6f5ef; --mint-line:#bfe3d3;
+    --red:#c0392b; --red50:#fbeae8;
+    --ink:#1b2733; --ink2:#445466; --ink3:#7c8a98;
+    --line:#e6ebf1; --line2:#eef2f6; --bg:#eceff3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;word-break:keep-all}
+  body{font-family:"Pretendard",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.exporting{background:#fff}
+  body.exporting .toolbar{display:none}
+  body.exporting .page{margin:0;box-shadow:none}
+
+  .toolbar{position:sticky;top:0;z-index:50;display:flex;justify-content:center;gap:10px;padding:12px;background:rgba(22,49,77,.96);backdrop-filter:blur(6px)}
+  .toolbar button{font:inherit;font-weight:700;font-size:13px;border:none;border-radius:8px;padding:9px 18px;cursor:pointer;background:var(--mint);color:#fff}
+  .toolbar button.ghost{background:transparent;color:#cfe0ee;border:1px solid rgba(255,255,255,.25)}
+  .toolbar button:disabled{opacity:.6;cursor:default}
+
+  .page{width:210mm;min-height:297mm;background:#fff;margin:22px auto;padding:18mm 17mm;box-shadow:0 6px 30px rgba(22,49,77,.14);position:relative;display:flex;flex-direction:column}
+  .page>.pagefoot{margin-top:auto}
+
+  .cover{justify-content:center;background:linear-gradient(160deg,#15304c 0%,#1d4067 62%,#13a37a 240%);color:#fff;padding:24mm 20mm}
+  .cover .mark{width:96px;height:96px;border-radius:26px;background:linear-gradient(135deg,#1aa97c,#0f7f5b);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 34px rgba(0,0,0,.28)}
+  .cover .kicker{margin-top:30px;font-size:15px;font-weight:700;color:#9fe6c9;letter-spacing:.5px}
+  .cover h1{font-size:52px;font-weight:800;letter-spacing:-2px;margin-top:12px;line-height:1.12}
+  .cover h1 .hl{color:#5fe0b4}
+  .cover .lead{font-size:19px;font-weight:600;color:#dbe8f3;margin-top:20px;line-height:1.55}
+  .cover .pts{margin-top:26px;display:flex;flex-direction:column;gap:9px}
+  .cover .pts div{font-size:14.5px;color:#e6eef6}
+  .cover .pts b{color:#5fe0b4;font-weight:800}
+  .cover .foot{margin-top:auto;padding-top:42px;display:flex;justify-content:space-between;align-items:flex-end;font-size:14px;color:#bcd0e2}
+  .cover .foot b{color:#fff;font-size:16px}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--mint);letter-spacing:.4px}
+  .eyebrow .num{width:26px;height:26px;border-radius:8px;background:var(--mint50);color:var(--mint2);display:grid;place-items:center;font-size:13px}
+  h2.sec{font-size:26px;font-weight:800;letter-spacing:-1px;margin:11px 0 6px;color:var(--navy);line-height:1.28}
+  .sub{font-size:14.5px;color:var(--ink2);line-height:1.72;max-width:68ch}
+  .sub b{color:var(--navy)}
+  .sec-block{margin-bottom:20px;break-inside:avoid}
+  .subtitle{font-size:16px;font-weight:800;color:var(--navy);margin:22px 0 2px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin-top:16px}
+  .card{border:1px solid var(--line);border-radius:14px;padding:18px;break-inside:avoid}
+  .card.tint{background:var(--navy50);border-color:#dde7f1}
+  .card.mint{background:var(--mint50);border-color:var(--mint-line)}
+  .card.red{background:var(--red50);border-color:#f1cdc8}
+  .card h3{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .card p{font-size:13px;color:var(--ink2);line-height:1.62}
+  .ic{width:30px;height:30px;border-radius:9px;background:var(--mint);color:#fff;display:grid;place-items:center;flex-shrink:0;font-weight:800;font-size:14px}
+  .ic.navy{background:var(--navy)} .ic.red{background:var(--red)}
+
+  .interview{border:1px solid var(--line);border-radius:16px;padding:22px 24px;background:#fff;break-inside:avoid;margin-top:14px;position:relative}
+  .interview::before{content:"“";position:absolute;top:6px;left:18px;font-size:52px;color:var(--mint-line);font-weight:800;line-height:1}
+  .interview .q{font-size:15.5px;font-weight:600;color:var(--navy);line-height:1.75;padding-left:30px}
+  .interview .by{margin-top:13px;padding-left:30px;font-size:12.5px;color:var(--ink3);font-weight:700}
+
+  .keybox{margin-top:16px;border:1.5px solid var(--mint);background:var(--mint50);border-radius:16px;padding:20px 22px;break-inside:avoid}
+  .keybox .h{font-size:17px;font-weight:800;color:var(--navy)}
+  .keybox p{font-size:13.5px;color:var(--ink2);margin-top:8px;line-height:1.68}
+  .keybox p b{color:var(--mint2)}
+
+  .statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  .statbox{border:1px solid var(--line);border-radius:14px;padding:15px 17px;background:var(--navy50)}
+  .statbox .v{font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-.5px;line-height:1.2}
+  .statbox .k{font-size:12px;color:var(--ink2);margin-top:5px;line-height:1.45}
+
+  .painlist{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+  .painlist .row{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:12px;padding:12px 15px;break-inside:avoid}
+  .painlist .row .t{font-size:14px;font-weight:800;color:var(--navy)}
+  .painlist .row .d{font-size:12.5px;color:var(--ink2);margin-top:2px}
+  .painlist .row .x{width:24px;height:24px;border-radius:50%;background:var(--red50);color:var(--red);display:grid;place-items:center;font-weight:900;flex-shrink:0;margin-top:1px;font-size:13px}
+
+  .steps{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+  .step{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:15px 17px;break-inside:avoid}
+  .step.acc{border-color:var(--mint-line);background:var(--mint50)}
+  .step .n{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;flex-shrink:0}
+  .step.acc .n{background:var(--mint)}
+  .step h3{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:2px}
+  .step p{font-size:12.5px;color:var(--ink2)}
+
+  .checklist{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+  .checklist li{list-style:none;display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ink2)}
+  .checklist .ck{width:23px;height:23px;border-radius:7px;background:var(--mint50);color:var(--mint2);display:grid;place-items:center;flex-shrink:0;font-weight:900;margin-top:1px}
+  .checklist b{color:var(--navy)}
+
+  .callout{margin-top:18px;background:var(--navy);color:#fff;border-radius:16px;padding:21px 24px;break-inside:avoid}
+  .callout .big{font-size:18.5px;font-weight:800;line-height:1.5}
+  .callout .big .hl{color:#5fe0b4}
+  .callout p{font-size:13px;color:#cfe0ee;margin-top:8px}
+
+  table.cmp{width:100%;border-collapse:collapse;margin-top:16px;font-size:12.5px}
+  table.cmp th,table.cmp td{border:1px solid var(--line);padding:10px 11px;text-align:center;vertical-align:middle}
+  table.cmp thead th{background:var(--navy);color:#fff;font-weight:700}
+  table.cmp thead th.hi{background:var(--mint2)}
+  table.cmp td.k{text-align:left;font-weight:700;color:var(--navy);background:var(--line2)}
+  table.cmp td.good{color:var(--mint2);font-weight:800}
+  table.cmp td.bad{color:var(--red);font-weight:800}
+  table.cmp .col-hi{background:var(--mint50)}
+
+  .qa{border-top:1px solid var(--line);padding:12px 0;break-inside:avoid}
+  .qa:first-of-type{border-top:none}
+  .qa .q{font-size:14px;font-weight:800;color:var(--navy);display:flex;gap:8px}
+  .qa .q .mk{color:var(--mint2)}
+  .qa .a{font-size:12.5px;color:var(--ink2);margin-top:5px;padding-left:20px}
+
+  .footer-cta{display:flex;align-items:center;gap:18px;border:1.5px solid var(--mint);background:var(--mint50);border-radius:16px;padding:20px 23px;margin-top:20px}
+  .footer-cta .q{font-size:16px;font-weight:800;color:var(--navy);flex:1;line-height:1.4}
+  .footer-cta .contact{font-size:13px;color:var(--ink2);text-align:right;line-height:1.7}
+  .footer-cta .contact b{color:var(--navy)}
+
+  .pnote{font-size:11.5px;color:var(--ink3);margin-top:13px;line-height:1.6;border-top:1px dashed var(--line);padding-top:10px}
+  .pagefoot{display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);border-top:1px solid var(--line);padding-top:8px;margin-top:16px}
+
+  @media print{ @page{size:A4;margin:0} body{background:#fff} .toolbar{display:none} .page{margin:0;box-shadow:none;page-break-after:always} }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="savePDF(this)">📄 PDF 저장</button>
+  <button class="ghost" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href)">링크 복사</button>
+</div>
+
+<div id="doc">
+
+<!-- ===== 표지 ===== -->
+<section class="page cover">
+  <div class="mark"><svg width="54" height="54" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="kicker">무심사 장기 렌터카 회원사 제안서</div>
+  <h1>렌터카 <span class="hl">착한</span>거래</h1>
+  <div class="lead">미납 · 미반납 이력을 본인 동의 기반으로 확인하고,<br/>악용 의도가 있는 이용자를 <b style="color:#fff">계약 전에 거릅니다.</b></div>
+  <div class="pts">
+    <div><b>동의</b> 계약서·개인정보 동의서에 항목으로 포함</div>
+    <div><b>등록</b> 미납·미반납 등 위반이 발생한 경우에만</div>
+    <div><b>조회</b> 본인이 본인인증으로 직접 — 누구도 임의 조회 불가</div>
+  </div>
+  <div class="foot">
+    <div>무심사 장기 렌터카 거래이력 확인 서비스</div>
+    <div style="text-align:right"><b>착한거래</b></div>
+  </div>
+</section>
+
+<!-- ===== 인터뷰 ===== -->
+<section class="page">
+  <div class="sec-block">
+    <div class="eyebrow">현장의 목소리</div>
+    <h2 class="sec">“돈이 없어서가 아니라, 그냥 뭉개는 겁니다”</h2>
+    <p class="sub">무심사 장기 렌터카 현장에서 자주 듣는 이야기입니다. 특정 업체만의 일이 아니라는 점이 문제의 핵심입니다.</p>
+  </div>
+  <div class="interview">
+    <div class="q">보증금 조금만 받고 장기로 내보냈는데, 첫 달만 내고 그 뒤로 연락이 끊겼어요. 두어 달 뭉개다가 차는 돌려주더라고요. 미납은 민사라 당장 손쓸 방법도 없고, 알아보니 그새 다른 업체 차로 갈아탔더군요.</div>
+    <div class="by">— 김포 ○○렌터카 대표 (현장 인터뷰 재구성)</div>
+  </div>
+  <div class="interview">
+    <div class="q">업체가 많아지고 경쟁이 붙으니 보증금을 낮출 수밖에 없어요. 그러니 마음먹고 안 갚는 사람은 갈아탈 데가 널렸죠. 우리 업체에서 사고 친 사람을 옆 업체는 모르니까요.</div>
+    <div class="by">— 수도권 장기렌터카 운영자 (현장 인터뷰 재구성)</div>
+  </div>
+  <div class="callout">
+    <div class="big">문제는 개별 손님이 아니라, <span class="hl">걸러낼 방법이 없다는 구조</span>입니다.</div>
+    <p>이 제안서는 그 구조를 어떻게 바꾸는지에 대한 것입니다.</p>
+  </div>
+  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>현장의 목소리</span></div>
+</section>
+
+<!-- ===== 01 배경 ===== -->
+<section class="page">
+  <div class="sec-block">
+    <div class="eyebrow"><span class="num">01</span> 배경</div>
+    <h2 class="sec">무심사 장기 렌터카, 악용에 유리한 구조</h2>
+    <p class="sub">과거에는 보증금이 높고 업체도 적어 계약을 끝까지 유지했습니다. 지금은 다릅니다. <b>업체가 늘고 경쟁이 심해지면서</b> 보증금을 낮춰 차를 내보내고, <b>미납은 형사가 아닌 민사</b>라 즉각 제재가 어렵습니다. 갈아탈 업체도 많습니다.</p>
+  </div>
+  <div class="grid3">
+    <div class="card tint"><h3><span class="ic navy">●</span> 경쟁 심화 · 보증금 하락</h3><p>고객 유치를 위해 보증금을 낮춥니다. 미납 시 회수할 담보가 적어집니다.</p></div>
+    <div class="card tint"><h3><span class="ic navy">●</span> 미납 = 민사</h3><p>형사 사안이 아니라 즉각적인 제재가 어렵고, 소송은 시간·비용이 듭니다.</p></div>
+    <div class="card tint"><h3><span class="ic navy">●</span> 갈아타기 용이</h3><p>업체가 많아, 한 곳에서 미납해도 차만 반납하고 다른 업체로 옮기면 그만입니다.</p></div>
+  </div>
+  <div class="callout">
+    <div class="big">미납의 상당수는 지급 능력 부족이 아니라 <span class="hl">회피</span>입니다.</div>
+    <p>돈이 없어서가 아니라, 안 갚아도 별 탈이 없으니 버티는 것입니다. 구조가 그것을 가능하게 합니다.</p>
+  </div>
+  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>01 / 배경</span></div>
+</section>
+
+<!-- ===== 02 문제 ===== -->
+<section class="page">
+  <div class="sec-block">
+    <div class="eyebrow"><span class="num">02</span> 문제</div>
+    <h2 class="sec">한 곳의 위반을, 다음 업체는 알 수 없습니다</h2>
+    <p class="sub">대부분의 고객은 약속을 지킵니다. 문제는 위반이 발생해도 <b>그 이력이 업체 간에 이어지지 않는다</b>는 점입니다. 같은 이용자가 업체를 바꿔 동일한 일을 반복합니다.</p>
+  </div>
+  <div class="painlist">
+    <div class="row"><span class="x">!</span><div><div class="t">대여료 장기 미납 후 연락두절</div><div class="d">독촉·회수 부담을 회원사가 전부 떠안습니다.</div></div></div>
+    <div class="row"><span class="x">!</span><div><div class="t">차량 미반납</div><div class="d">계약 종료 후에도 반납하지 않아 추적·회수 비용이 발생합니다.</div></div></div>
+    <div class="row"><span class="x">!</span><div><div class="t">사고비용 미정산 · 무단 제3자 운행</div><div class="d">자기부담금을 정산하지 않거나, 계약자 아닌 사람이 운행합니다.</div></div></div>
+    <div class="row"><span class="x">!</span><div><div class="t">차량 임의처분 · 담보 제공</div><div class="d">대여 차량을 담보로 제공하거나 처분하는 경우도 있습니다.</div></div></div>
+  </div>
+  <div class="grid2">
+    <div class="card tint"><h3><span class="ic navy">×</span> 정보 단절</h3><p>한 업체의 위반 이력이 다른 업체로 이어지지 않아, 같은 이용자가 반복합니다.</p></div>
+    <div class="card red"><h3><span class="ic red">×</span> 블랙리스트는 위법 소지</h3><p>동의 없는 명단 공유는 개인정보보호법·명예훼손 위험이 큽니다. 부정확·분산되어 효과도 약합니다.</p></div>
+  </div>
+  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>02 / 문제</span></div>
+</section>
+
+<!-- ===== 03 방식 + 1차 필터 ===== -->
+<section class="page">
+  <div class="sec-block">
+    <div class="eyebrow"><span class="num">03</span> 착한거래의 방식</div>
+    <h2 class="sec">등록·조회가 아니라, 동의 → 본인 확인</h2>
+    <p class="sub">회원사가 손님 정보를 모아 조회하는 구조가 아닙니다. <b>동의는 계약서에 항목으로 받고</b>, 평소엔 아무것도 등록되지 않으며, <b>위반 시에만</b> 기록합니다. 그 기록은 <b>본인만</b> 확인합니다.</p>
+  </div>
+  <div class="grid3">
+    <div class="card mint"><h3>① 동의는 계약서에</h3><p>기존 개인정보 수집·이용 동의서에 <b>착한거래 제3자 제공 동의 항목</b>을 추가합니다. (디지털 동의 링크도 가능)</p></div>
+    <div class="card mint"><h3>② 위반 시에만 등록</h3><p>정상 거래는 <b>아무 기록이 없습니다.</b> 미납·미반납 등 위반 발생 시에만 증빙과 함께 등록합니다.</p></div>
+    <div class="card mint"><h3>③ 본인만 조회</h3><p>회원사·운영사 포함 <b>누구도 임의 조회 불가.</b> 렌터카가 필요한 본인이 본인인증으로 직접 확인합니다.</p></div>
+  </div>
+  <div class="keybox">
+    <div class="h">핵심은 등록이 아니라, ‘계약 전 1차 필터’입니다.</div>
+    <p>착한거래 동의를 <b>계약 조건으로 제시</b>하면, 정상 이용자는 거리낌 없이 동의합니다. 반면 <b>악용할 의도가 있는 사람은 이를 꺼립니다.</b> 동의를 거부하는 것 자체가 하나의 신호가 되어, 문제가 될 손님이 <b>계약 전에 걸러집니다.</b> 이 효과는 <b>한 업체만 도입해도 즉시 작동</b>합니다.</p>
+  </div>
+  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>03 / 방식</span></div>
+</section>
+
+<!-- ===== 04 작동 ===== -->
+<section class="page">
+  <div class="sec-block">
+    <div class="eyebrow"><span class="num">04</span> 작동 흐름</div>
+    <h2 class="sec">회원사 입장에서의 절차</h2>
+    <p class="sub">평상시 할 일은 거의 없습니다. 동의는 계약서에 포함되고, 등록은 위반이 생겼을 때만 합니다.</p>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div><h3>회원 가입 · 거래코드 발급</h3><p>사업자등록증 확인 후 가입하면 업체 전용 거래코드가 발급됩니다.</p></div></div>
+    <div class="step"><div class="n">2</div><div><h3>계약 시 동의 확보</h3><p>계약서·개인정보 동의서에 <b>제3자 제공 동의 항목</b>을 포함합니다. (또는 거래코드 링크로 본인인증 동의) — 이 시점에 등록되는 정보는 없습니다.</p></div></div>
+    <div class="step"><div class="n">3</div><div><h3>위반 발생 시에만 등록</h3><p>미납·미반납 등 위반이 발생하면 <b>증빙을 첨부해</b> 거래 위반 내역을 등록합니다.</p></div></div>
+    <div class="step acc"><div class="n">4</div><div><h3>신규 계약 시 본인 확인서 제출받기</h3><p>새 손님에게 착한거래 확인을 요청합니다. 손님이 본인인증으로 자기 이력을 확인해 제출합니다.</p></div></div>
+  </div>
+  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>04 / 작동 흐름</span></div>
+</section>
+
+<!-- ===== 05 적용 예시 ===== -->
+<section class="page">
+  <div class="sec-block">
+    <div class="eyebrow"><span class="num">05</span> 적용 예시</div>
+    <h2 class="sec">상습 미납 이용자의 경우</h2>
+    <p class="sub">이용자 ‘ㄱ’이 업체를 옮겨 다니는 상황에서, 착한거래가 어떻게 작동하는지 정리했습니다.</p>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div><h3>계약 단계 — 동의 요청</h3><p>B 업체가 ㄱ에게 착한거래 동의를 계약 조건으로 제시. <b>동의를 꺼리면 그 자체가 신호</b>가 되어 한 차례 걸러집니다.</p></div></div>
+    <div class="step"><div class="n">2</div><div><h3>본인 확인 — 거래이력 제출</h3><p>ㄱ이 본인인증으로 자기 거래이력을 확인해 제출합니다. A 업체에서의 미납 이력이 드러납니다.</p></div></div>
+    <div class="step"><div class="n">3</div><div><h3>자체 판단</h3><p>B 업체는 <b>보증금 강화·계약 거절 등</b>을 스스로 판단합니다. 착한거래는 정보만 제공합니다.</p></div></div>
+    <div class="step acc"><div class="n">4</div><div><h3>해소 시 삭제</h3><p>ㄱ이 A 업체 미납금을 정산하면 거래이력은 <b>지체 없이 삭제</b>되어 다시 정상 거래가 가능합니다.</p></div></div>
+  </div>
+  <div class="callout">
+    <div class="big">위반 이력은 거를 수 있고, <span class="hl">해소하면 사라집니다.</span></div>
+    <p>이력 삭제 조건이 곧 정산·반납의 동기가 됩니다.</p>
+  </div>
+  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>05 / 적용 예시</span></div>
+</section>
+
+<!-- ===== 06 적법 ===== -->
+<section class="page">
+  <div class="sec-block">
+    <div class="eyebrow"><span class="num">06</span> 적법 · 정보보호</div>
+    <h2 class="sec">조회가 아니라 본인 확인, 그래서 적법합니다</h2>
+    <p class="sub">본인 동의에 기반하고, 회원사에 조회 권한을 주지 않는 설계입니다. 그래서 손님 동의를 받기 쉽고 법적 부담이 적습니다.</p>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3><span class="ic">✓</span> 회원사는 조회 권한 없음</h3><p>회원사는 위반 시 <b>등록</b>만 합니다. 타인의 이력을 검색·조회하는 기능이 없습니다.</p></div>
+    <div class="card"><h3><span class="ic">✓</span> 본인만 열람</h3><p>등록 내용은 <b>본인인증을 거친 당사자만</b> 봅니다. 운영사 포함 제3자 임의 조회 불가.</p></div>
+    <div class="card"><h3><span class="ic">✓</span> 최소 수집 · 암호화</h3><p>필요한 항목만 암호화 보관합니다. 제3자 제공 동의 대상은 「착한거래」 한 곳입니다.</p></div>
+    <div class="card"><h3><span class="ic">✓</span> 해소 시 삭제</h3><p>정산·반환으로 해결되면 <b>지체 없이 삭제</b>합니다. (보유 최장 3년)</p></div>
+  </div>
+  <div class="callout">
+    <div class="big">정상 이용 시 <span class="hl">기록이 남지 않습니다.</span></div>
+    <p>성실한 손님에게는 부담이 없고, 회원사는 위반 시에만 안전장치를 갖습니다.</p>
+  </div>
+  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>06 / 적법·정보보호</span></div>
+</section>
+
+<!-- ===== 07 비교 + 효과 ===== -->
+<section class="page">
+  <div class="sec-block">
+    <div class="eyebrow"><span class="num">07</span> 비교 · 효과</div>
+    <h2 class="sec">기존 방식과의 차이</h2>
+  </div>
+  <table class="cmp">
+    <thead><tr><th style="text-align:left">구분</th><th>아무 조치 없음</th><th>단톡방 명단</th><th class="hi">착한거래</th></tr></thead>
+    <tbody>
+      <tr><td class="k">적법성</td><td>—</td><td class="bad">✗ 위법 소지</td><td class="col-hi good">✓ 본인 동의 기반</td></tr>
+      <tr><td class="k">정확성</td><td>—</td><td class="bad">✗ 부정확</td><td class="col-hi good">✓ 증빙 기반</td></tr>
+      <tr><td class="k">계약 전 차단</td><td class="bad">✗ 불가</td><td class="bad">✗ 사후</td><td class="col-hi good">✓ 동의 단계서 1차 필터</td></tr>
+      <tr><td class="k">개인정보 위험</td><td>—</td><td class="bad">✗ 높음</td><td class="col-hi good">✓ 최소수집·암호화</td></tr>
+      <tr><td class="k">조회 주체</td><td>—</td><td>공유자</td><td class="col-hi good">본인만</td></tr>
+    </tbody>
+  </table>
+  <div class="subtitle" style="margin-top:24px">회원사가 얻는 것</div>
+  <ul class="checklist">
+    <li><span class="ck">✓</span><div><b>계약 전 1차 필터</b> — 동의를 꺼리는 이용자를 계약 단계에서 거릅니다. 한 업체만 도입해도 작동합니다.</div></li>
+    <li><span class="ck">✓</span><div><b>판단 근거 확보</b> — 본인이 제출한 거래이력으로 보증금·계약 여부를 가늠합니다.</div></li>
+    <li><span class="ck">✓</span><div><b>정산·반납 동기 부여</b> — 이력은 해소해야 삭제되므로, 이용자가 정산·반납에 응할 유인이 생깁니다.</div></li>
+    <li><span class="ck">✓</span><div><b>운영 부담 최소</b> — 동의는 계약서 항목, 등록은 위반 시에만. 별도 장비·개발이 없습니다.</div></li>
+  </ul>
+  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>07 / 비교·효과</span></div>
+</section>
+
+<!-- ===== 08 도입 + FAQ ===== -->
+<section class="page">
+  <div class="sec-block">
+    <div class="eyebrow"><span class="num">08</span> 도입 · 문의</div>
+    <h2 class="sec">도입 절차</h2>
+  </div>
+  <div class="grid3">
+    <div class="card tint"><h3>① 체험</h3><p>데모에 접속해 손님 동의·회원 콘솔을 직접 확인합니다.</p></div>
+    <div class="card tint"><h3>② 가입</h3><p>사업자등록증 확인 후 가입 → 거래코드 발급, 동의 항목 안내.</p></div>
+    <div class="card tint"><h3>③ 운영</h3><p>계약서에 동의 항목 포함 → 위반 시 등록 → 신규 계약 시 본인 확인서 제출.</p></div>
+  </div>
+  <div class="subtitle" style="margin-top:24px">자주 묻는 질문</div>
+  <div class="qa"><div class="q"><span class="mk">Q.</span> 손님 정보를 회원사가 조회할 수 있나요?</div><div class="a">아니요. 회원사는 등록만 하고 조회 기능이 없습니다. 거래이력은 본인이 본인인증으로 직접 확인해 제출합니다.</div></div>
+  <div class="qa"><div class="q"><span class="mk">Q.</span> 동의는 어떻게 받나요?</div><div class="a">기존 계약서·개인정보 동의서에 제3자 제공 동의 항목을 추가하면 됩니다. 디지털 동의 링크도 제공합니다.</div></div>
+  <div class="qa"><div class="q"><span class="mk">Q.</span> 손님이 동의를 거부하면요?</div><div class="a">동의는 계약 조건입니다. 정상 이용자는 거부할 이유가 없고, 거부 자체가 계약 여부를 판단하는 하나의 신호가 됩니다.</div></div>
+  <div class="qa"><div class="q"><span class="mk">Q.</span> 업체끼리 정보 공유, 담합 아닌가요?</div><div class="a">가격·영업 조건이 아니라, 본인 동의하에 미납·미반납 등 사실 이력만 다룹니다. 금융권의 신용정보 공동활용과 같은 취지입니다.</div></div>
+  <div class="qa"><div class="q"><span class="mk">Q.</span> 비용·도입은요?</div><div class="a">현재 회원사 모집 단계로 데모를 무료 체험할 수 있습니다. 별도 장비·개발 없이 시작합니다. 요금은 협의합니다.</div></div>
+
+  <div class="footer-cta">
+    <div class="q">렌터카 회원사 도입 및 데모 안내</div>
+    <div class="contact"><b>1600-0000</b> · help@chakan.kr</div>
+  </div>
+  <p class="pnote">※ 본 제안서의 인터뷰·예시는 현장 사례를 바탕으로 재구성한 것입니다. 세부 약관·요금·법적 검토 사항은 별도 협의하며, 데모 URL은 담당자에게 문의해 주세요.</p>
+  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>08 / 도입·문의</span></div>
+</section>
+
+</div><!-- /#doc -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+<script>
+function savePDF(btn){
+  if(btn){btn.disabled=true;btn.textContent='저장 중…';}
+  document.body.classList.add('exporting');
+  var el=document.getElementById('doc');
+  var opt={ margin:0, filename:'렌터카_착한거래_제안서.pdf',
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+    pagebreak:{mode:['css','legacy'],before:'.page'} };
+  function done(){ document.body.classList.remove('exporting'); if(btn){btn.disabled=false;btn.textContent='📄 PDF 저장';} }
+  if(window.html2pdf){ html2pdf().set(opt).from(el).save().then(done).catch(function(){ done(); window.print(); }); }
+  else { done(); window.print(); }
+}
+</script>
+</body>
+</html>
