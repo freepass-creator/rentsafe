@@ -32,8 +32,8 @@ export default function ConsentPage({ params }) {
   return (
     <div className="app">
       <div className="c-head">
-        <div className="eyebrow">착한<span style={{ color: "#4fd6a8" }}>거래</span></div>
-        <h1>대여자동차 착한거래 동의 안내</h1>
+        <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
+        <h1>렌터카 착한거래 동의 안내</h1>
         <div className="co">{company} 차량 임대차계약</div>
       </div>
       <div className="steps"><div className={`s ${step >= 1 ? "on" : ""}`} /><div className={`s ${step >= 2 ? "on" : ""}`} /><div className={`s ${step >= 3 ? "on" : ""}`} /></div>

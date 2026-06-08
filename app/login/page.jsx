@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login, TEST_LOGIN } from "@/lib/auth";
-import AppHeader from "@/components/AppHeader";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,44 +16,39 @@ export default function LoginPage() {
     router.replace(s.role === "admin" ? "/admin" : "/");
   }
   function fillTest() {
-    document.getElementById("login-email").value = TEST_LOGIN.email;
-    document.getElementById("login-pw").value = TEST_LOGIN.pw;
+    document.getElementById("le").value = TEST_LOGIN.email;
+    document.getElementById("lp").value = TEST_LOGIN.pw;
   }
 
   return (
-    <>
-      <AppHeader subtitle="회원사 로그인" />
-      <div className="container" style={{ maxWidth: 440 }}>
-        <div className="card">
-          <div className="card-title">로그인</div>
-          <div className="card-desc">착한거래 회원사 계정으로 로그인하세요.</div>
-          <form onSubmit={submit}>
-            <div className="field" style={{ marginBottom: 12 }}>
-              <label>이메일</label>
-              <input id="login-email" name="email" type="email" placeholder="dudguq@gmail.com" autoComplete="username" />
-            </div>
-            <div className="field" style={{ marginBottom: 12 }}>
-              <label>비밀번호</label>
-              <input id="login-pw" name="pw" type="password" placeholder="비밀번호" autoComplete="current-password" />
-            </div>
-            {err && <div style={{ color: "var(--danger)", fontSize: 13, marginBottom: 10 }}>{err}</div>}
-            <button className="btn btn-primary btn-block" type="submit">로그인</button>
-          </form>
-          <div style={{ textAlign: "center", marginTop: 14, fontSize: 13.5 }}>
-            아직 회원이 아니신가요? <a href="/signup" style={{ color: "var(--navy2)", fontWeight: 700 }}>계정 만들기</a>
-          </div>
+    <div className="auth-wrap">
+      <div className="auth-card">
+        <div className="auth-brand">
+          <span className="auth-mark">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+          <div className="auth-name"><span className="accent">착한</span>거래</div>
+          <div className="auth-tag">렌터카 착한거래 · 회원사 로그인</div>
         </div>
 
-        <div className="card">
-          <div className="card-title">테스트 계정</div>
-          <div className="card-desc">데모용 — 아래 계정으로 바로 로그인하실 수 있습니다.</div>
-          <div className="risk-row">
-            <div><div className="type">스피드렌터카</div><div className="meta" style={{ fontFamily: "Consolas,monospace" }}>{TEST_LOGIN.email} / {TEST_LOGIN.pw}</div></div>
-            <div className="sp" />
-            <button className="btn btn-sm" onClick={fillTest}>자동 입력</button>
-          </div>
+        <form onSubmit={submit}>
+          <div className="field"><label>이메일</label>
+            <input id="le" name="email" type="email" placeholder="name@company.com" autoComplete="username" /></div>
+          <div className="field"><label>비밀번호</label>
+            <input id="lp" name="pw" type="password" placeholder="비밀번호" autoComplete="current-password" /></div>
+          {err && <div className="auth-err">{err}</div>}
+          <button className="btn btn-primary btn-block" style={{ marginTop: 8 }} type="submit">로그인</button>
+        </form>
+
+        <div className="auth-test">
+          <span>테스트 계정</span>
+          <span><code>{TEST_LOGIN.email}</code> / <code>{TEST_LOGIN.pw}</code>
+            <button className="btn btn-sm" style={{ marginLeft: 8 }} onClick={fillTest}>입력</button></span>
         </div>
+        <div className="auth-alt">아직 회원이 아니신가요? <a href="/signup">계정 만들기</a></div>
       </div>
-    </>
+    </div>
   );
 }
