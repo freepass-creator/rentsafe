@@ -12,7 +12,7 @@ import { getSession, logout, login } from "@/lib/auth";
 
 export default function Admin() {
   const router = useRouter();
-  const [session, setSession] = useState(undefined); // undefined=확인중, null=로그인필요, obj=운영자
+  const [session, setSession] = useState(undefined); // undefined=확인중, null=로그인필요, obj=관리자
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
@@ -33,7 +33,7 @@ export default function Admin() {
     const s = await login(email, pw);
     setBusy(false);
     if (!s) { setErr("이메일 또는 비밀번호가 올바르지 않습니다."); return; }
-    if (s.role !== "admin") { await logout(); setErr("운영자 전용 계정이 아닙니다."); return; }
+    if (s.role !== "admin") { await logout(); setErr("관리자 전용 계정이 아닙니다."); return; }
     setSession(s);
   }
 
@@ -63,11 +63,11 @@ export default function Admin() {
   if (session === undefined) return null;
   if (session === null) return (
     <div className="app">
-      <FlowHeader title="운영자 로그인" sub="착한거래 운영팀 전용" />
+      <FlowHeader title="관리자 로그인" sub="착한거래 관리자 전용" />
       <div className="c-body c-center">
         <form onSubmit={(e) => { e.preventDefault(); adminLogin(); }}>
           <div className="field"><label>이메일</label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="운영자 이메일" autoComplete="username" /></div>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="관리자 이메일" autoComplete="username" /></div>
           <div className="field"><label>비밀번호</label>
             <input value={pw} onChange={(e) => setPw(e.target.value)} type="password" placeholder="비밀번호" autoComplete="current-password" /></div>
           {err && <div className="auth-err">{err}</div>}

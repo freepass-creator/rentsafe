@@ -19,7 +19,7 @@ export default function LoginPage() {
     const s = await login(email, pw);
     setBusy(false);
     if (!s) { setErr("이메일 또는 비밀번호가 올바르지 않습니다."); return; }
-    if (s.role === "admin") { await logout(); setErr("운영자 계정입니다. 관리자 페이지에서 로그인해 주세요."); return; }
+    if (s.role === "admin") { await logout(); setErr("관리자 계정입니다. 관리자 페이지에서 로그인해 주세요."); return; }
     router.replace("/console");
   }
 
