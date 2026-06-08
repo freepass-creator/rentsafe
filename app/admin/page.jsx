@@ -66,7 +66,7 @@ export default function Admin() {
           <div className="card-title">소명 심사 <span style={{ fontSize: 12, fontWeight: 500, color: "var(--ink3)" }}>· 대기 {pending.length}건</span>
             <button className="btn btn-sm" style={{ marginLeft: "auto" }} onClick={reload}>새로고침</button>
           </div>
-          {loading ? <div className="empty">불러오는 중…</div> :
+          {loading ? <><div className="skel" /><div className="skel" /></> :
             pending.length === 0 ? <div className="empty">대기 중인 소명이 없습니다.</div> :
               pending.map((a) => (
                 <div className="risk-row" key={a.id} style={{ alignItems: "flex-start" }}>
@@ -82,7 +82,7 @@ export default function Admin() {
         {/* 전체 등록 거래이력 */}
         <div className="card">
           <div className="card-title">전체 등록 거래이력 <span style={{ fontSize: 12, fontWeight: 500, color: "var(--ink3)" }}>· 유효 {active.length} / 해소 {resolved.length}</span></div>
-          {loading ? <div className="empty">불러오는 중…</div> :
+          {loading ? <><div className="skel" /><div className="skel" /></> :
             risks.length === 0 ? <div className="empty">등록된 거래이력이 없습니다.</div> :
               risks.map((r) => (
                 <div className="risk-row" key={r.id}>

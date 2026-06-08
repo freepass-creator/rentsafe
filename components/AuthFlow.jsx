@@ -38,7 +38,7 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
   if (stage === "loading")
     return (
       <>
-        <div className="c-body"><div className="verifying"><div className="spinner" /><div style={{ fontWeight: 700, fontSize: 15 }}>본인인증 처리 중…</div></div></div>
+        <div className="c-body anim-in" key={stage}><div className="verifying"><div className="spinner" /><div style={{ fontWeight: 700, fontSize: 15 }}>본인인증 처리 중…</div></div></div>
         <div className="c-footer"><button className="btn btn-block" disabled>처리 중…</button></div>
       </>
     );
@@ -46,7 +46,7 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
   if (stage === "select")
     return (
       <>
-        <div className="c-body">
+        <div className="c-body anim-in" key={stage}>
           <div className="slabel">STEP 1 · 본인확인</div>
           <div className="stitle">본인인증 방법을 선택해 주세요</div>
           <div className="sdesc">동의 전 본인 명의 확인이 필요합니다.</div>
@@ -63,7 +63,7 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
   if (stage === "form")
     return (
       <>
-        <div className="c-body">
+        <div className="c-body anim-in" key={stage}>
           <div className="slabel">휴대폰 본인확인</div>
           <div className="stitle">본인 정보 입력</div>
           <div className="sdesc" style={{ marginBottom: 18 }}>데모이므로 아무 값이나 입력해도 됩니다.</div>
@@ -78,7 +78,7 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
 
   return (
     <>
-      <div className="c-body">
+      <div className="c-body anim-in" key={stage}>
         <div className="slabel">인증번호 입력</div>
         <div className="stitle">인증번호를 입력하세요</div>
         <div className="sent-to"><Icon name="mail" /> <b>{a.simple ? `${a.simple} 앱` : a.phone}</b> 로 발송했습니다.</div>

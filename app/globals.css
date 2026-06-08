@@ -134,6 +134,14 @@ a{color:inherit;text-decoration:none}
 .clause-t{font-size:12.5px;font-weight:800;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;gap:7px}
 .clause-t::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--safe);flex-shrink:0}
 .clause-b{font-size:12.5px;line-height:1.65;color:var(--ink2);padding-left:12px}
+
+/* ---- 전환 애니메이션 / 스켈레톤 ---- */
+@keyframes screenIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.anim-in{animation:screenIn .26s cubic-bezier(.22,.61,.36,1) both}
+.skel{height:52px;border-radius:10px;background:linear-gradient(100deg,var(--line2) 30%,#f6f8fb 50%,var(--line2) 70%);background-size:200% 100%;animation:skel 1.2s linear infinite}
+.skel+.skel{margin-top:8px}
+@keyframes skel{from{background-position:200% 0}to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.anim-in{animation:none}.skel{animation:none}}
 .steps{display:flex;gap:6px;padding:16px 22px 4px;flex-shrink:0}
 .steps .s{flex:1;height:4px;border-radius:2px;background:var(--line);transition:.3s}
 .steps .s.on{background:var(--safe)}

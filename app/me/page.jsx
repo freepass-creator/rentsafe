@@ -59,6 +59,7 @@ export default function MyStatus() {
   }
 
   const step = stage === "appealed" ? 3 : verified ? 2 : 1;
+  const screen = stage === "appealed" ? "done" : stage === "status" ? "status" : "intro";
   const clean = result?.kind === "none";
 
   function goBack() {
@@ -83,7 +84,7 @@ export default function MyStatus() {
         <AuthFlow onVerified={onVerified} onCancel={() => setStarted(false)} supportHelp={supportHelp} />
       ) : (
         <>
-      <div className="c-body">
+      <div className="c-body anim-in" key={screen}>
         {stage === "auth" && !started && (
           <>
             <div className="slabel">{CAMPAIGN_TITLE}</div>

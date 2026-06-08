@@ -106,7 +106,7 @@ function SendTab({ toast, company, code }) {
         <div className="card-title">동의 현황
           <button className="btn btn-sm" style={{ marginLeft: "auto" }} onClick={reload}>↻ 새로고침</button>
         </div>
-        {loading ? <div className="empty">불러오는 중…</div> :
+        {loading ? <><div className="skel" /><div className="skel" /></> :
           list.filter((c) => c.status === "completed").length === 0 ? <div className="empty">아직 동의한 손님이 없습니다.</div> :
             list.filter((c) => c.status === "completed").map((c) => (
               <div className="risk-row" key={c.id}>

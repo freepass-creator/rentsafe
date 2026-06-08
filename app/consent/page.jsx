@@ -74,6 +74,7 @@ export default function SelfConsentPage() {
   }
 
   const step = done ? 4 : signing ? 3 : verified ? 2 : 1;
+  const screen = done ? "done" : signing ? "sign" : verified ? "agree" : target ? "intro" : "code";
 
   function goBack() {
     if (done) { router.push("/"); return; }
@@ -92,7 +93,7 @@ export default function SelfConsentPage() {
         <AuthFlow onVerified={setVerified} onCancel={() => setStarted(false)} />
       ) : (
         <>
-      <div className="c-body">
+      <div className="c-body anim-in" key={screen}>
         {/* STEP 0 — 업체코드 입력 */}
         {!target && (
           <>
