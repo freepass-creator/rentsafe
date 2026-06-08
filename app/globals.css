@@ -213,6 +213,10 @@ a{color:inherit;text-decoration:none}
 .auth-tag{font-size:12.5px;color:var(--ink3);margin-top:5px}
 .auth-card h2{font-size:16px;font-weight:800;margin-bottom:16px}
 .auth-card .field{margin-bottom:13px}
+.c-body .field{margin-bottom:18px}
+.admin-lock{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:26px;color:var(--ink3)}
+.admin-lock .lk{width:64px;height:64px;border-radius:18px;background:var(--navy50);color:var(--navy);display:grid;place-items:center}
+.admin-lock .tx{font-size:13px;line-height:1.55}
 .auth-alt{text-align:center;margin-top:16px;font-size:13.5px;color:var(--ink2)}
 .auth-alt a{color:var(--navy2);font-weight:700}
 .auth-err{color:var(--danger);font-size:13px;margin:10px 0 0}

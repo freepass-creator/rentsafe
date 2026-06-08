@@ -5,6 +5,7 @@ import { RISK_TYPES } from "@/lib/constants";
 import { mask, fmtBirth, cleanBirth, fmtDate } from "@/lib/format";
 import { IS_LOCAL, listAppeals, resolveAppeal, listRisks } from "@/lib/db";
 import AppHeader from "@/components/AppHeader";
+import Icon from "@/components/Icon";
 import FlowHeader from "@/components/FlowHeader";
 import StepFooter from "@/components/StepFooter";
 import { useRouter } from "next/navigation";
@@ -65,6 +66,10 @@ export default function Admin() {
     <div className="app">
       <FlowHeader title="관리자 로그인" sub="착한거래 관리자 전용" />
       <div className="c-body c-center">
+        <div className="admin-lock">
+          <span className="lk"><Icon name="shield" size={30} /></span>
+          <div className="tx">관리자만 접근할 수 있는 페이지입니다.<br />권한이 있는 계정으로 로그인해 주세요.</div>
+        </div>
         <form onSubmit={(e) => { e.preventDefault(); adminLogin(); }}>
           <div className="field"><label>이메일</label>
             <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="관리자 이메일" autoComplete="username" /></div>
