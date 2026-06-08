@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { findMemberByCode, createSelfConsent } from "@/lib/db";
-import Icon from "@/components/Icon";
 import { CONSENT_STATEMENT, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE } from "@/lib/constants";
 import { fmtBirth, fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
@@ -24,16 +23,42 @@ export default function SelfConsentPage() {
   const [done, setDone] = useState(false);
   const [receipt, setReceipt] = useState(null);
 
-  async function lookup(e) {
-    e.preventDefault();
+  async function lookup() {
     setErr("");
     const c = code.trim();
     if (!c) { setErr(`${CODE_LABEL}를 입력해 주세요.`); return; }
     setChecking(true);
-    const m = await findMemberByCode(c);
-    setChecking(false);
-    if (!m) { setErr(`‘${c}’ ${CODE_LABEL}의 거래 상대를 찾을 수 없습니다. 아직 착한거래 회원이 아니라면 동의를 진행할 수 없어요.`); return; }
-    setTarget(m);
+    try {
+      const m = await findMemberByCode(c);
+      if (!m) { setErr(`‘${c}’ ${CODE_LABEL}의 거래 상대를 찾을 수 없습니다. 아직 착한거래 회원이 아니라면 동의를 진행할 수 없어요.`); return; }
+      setTarget(m);
+    } catch (e) {
+      console.error(e);
+      setErr("확인 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setChecking(false);
+    }
+  }
+
+  // 하단 [다음] 버튼 — 현재 단계에 따라 동작/문구/비활성 결정
+  function onNext() {
+    if (!target) return lookup();
+    if (!started && !verified) return setStarted(true);
+    if (verified && !signing) return setSigning(true);
+    if (verified && signing) return finish();
+  }
+  function nextLabel() {
+    if (!target) return checking ? "확인 중…" : "다음";
+    if (!started && !verified) return "본인인증하고 진행";
+    if (verified && !signing) return "동의하고 서명";
+    if (verified && signing) return "동의 완료";
+    return "다음";
+  }
+  function nextDisabled() {
+    if (!target) return checking || !code.trim();
+    if (verified && !signing) return !agreed;
+    if (verified && signing) return !sig;
+    return false;
   }
 
   async function finish() {
@@ -62,7 +87,6 @@ export default function SelfConsentPage() {
   return (
     <div className="app">
       <div className="c-head">
-        <button className="c-back" onClick={goBack} aria-label="뒤로"><Icon name="back" size={20} /></button>
         <div className="eyebrow"><span style={{ color: "#4fd6a8" }}>착한</span>거래</div>
         <h1>착한거래 동의하기</h1>
         <div className="co">{target ? `${target.company} 와의 거래` : `${CODE_LABEL}를 입력해 시작하세요`}</div>
@@ -76,11 +100,10 @@ export default function SelfConsentPage() {
             <div className="slabel">동의 대상 확인</div>
             <div className="stitle">어느 거래에 동의하시나요?</div>
             <div className="sdesc">거래 상대로부터 받은 <b>{CODE_LABEL}</b>를 입력해 주세요. 착한거래에 등록된 회원만 동의 대상이 될 수 있습니다.</div>
-            <form onSubmit={lookup}>
+            <form onSubmit={(e) => { e.preventDefault(); lookup(); }}>
               <div className="field"><label>{CODE_LABEL}</label>
                 <input value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} inputMode="numeric" maxLength={6} placeholder="예: 100001" style={{ letterSpacing: 2 }} /></div>
               {err && <div className="auth-err">{err}</div>}
-              <button className="btn btn-safe btn-block" type="submit" disabled={checking} style={{ marginTop: 16 }}>{checking ? "확인 중…" : "거래 상대 확인"}</button>
             </form>
             {DEMO_MODE && <div className="demo-hint">샘플 {CODE_LABEL} — <b>100001</b> 스피드렌터카 · <b>100002</b> 테스트렌터카 · <b>100003</b> 하나모빌리티</div>}
           </>
@@ -149,14 +172,16 @@ export default function SelfConsentPage() {
         )}
       </div>
 
-      {target && !started && !verified && (
-        <div className="c-footer"><button className="btn btn-safe btn-block" onClick={() => setStarted(true)}>본인인증하고 동의 진행</button></div>
-      )}
-      {verified && !signing && !done && (
-        <div className="c-footer"><button className="btn btn-safe btn-block" disabled={!agreed} onClick={() => setSigning(true)}>동의하고 서명하기</button></div>
-      )}
-      {verified && signing && !done && (
-        <div className="c-footer"><button className="btn btn-safe btn-block" disabled={!sig} onClick={finish}>서명 완료 · 동의 제출</button></div>
+      {!done && (
+        started && !verified ? (
+          /* 본인인증(자체 흐름) 중 — 이전만 */
+          <div className="c-footer"><button className="btn btn-block" onClick={goBack}>이전</button></div>
+        ) : (
+          <div className="c-footer wiz">
+            <button className="btn btn-prev" onClick={goBack}>이전</button>
+            <button className="btn btn-safe btn-next" disabled={nextDisabled()} onClick={onNext}>{nextLabel()}</button>
+          </div>
+        )
       )}
     </div>
   );

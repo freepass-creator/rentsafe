@@ -16,7 +16,12 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
 
-  useEffect(() => { const s = getSession(); if (!s) router.replace("/login"); else setSession(s); }, [router]);
+  useEffect(() => {
+    const s = getSession();
+    if (!s) router.replace("/login");
+    else if (s.role !== "admin") router.replace("/console");
+    else setSession(s);
+  }, [router]);
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -30,7 +35,7 @@ export default function Admin() {
 
   async function approve(a) {
     await resolveAppeal(a);
-    setToast("해제 처리되었습니다. 해당 위반정보가 해소되었습니다.");
+    setToast("해제 처리되었습니다. 해당 거래 위반사항이 해소되었습니다.");
     setTimeout(() => setToast(null), 2600);
     reload();
   }

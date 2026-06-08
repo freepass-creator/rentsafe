@@ -22,8 +22,13 @@ export default function MyStatus() {
 
   async function onVerified(v) {
     setVerified(v);
-    const res = await queryRisk({ name: v.name, birth: v.birth });
-    setResult(res);
+    try {
+      const res = await queryRisk({ name: v.name, birth: v.birth });
+      setResult(res);
+    } catch (e) {
+      console.error(e);
+      setResult({ kind: "none", records: [] });
+    }
     setStage("status");
   }
   function doShare() {

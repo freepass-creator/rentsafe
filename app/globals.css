@@ -112,10 +112,10 @@ a{color:inherit;text-decoration:none}
 .c-head h1{font-size:18px;font-weight:800;margin-top:5px;letter-spacing:-.3px}
 .c-head .co{font-size:13px;opacity:.85;margin-top:8px;display:flex;align-items:center;gap:6px}
 .c-head .co::before{content:"";width:6px;height:6px;border-radius:50%;background:#5fd0a8}
-.c-back{display:inline-grid;place-items:center;width:34px;height:34px;margin:0 0 10px -6px;border-radius:50%;background:rgba(255,255,255,.13);color:#fff;border:none;cursor:pointer;transition:transform .08s,background .12s}
-.c-back:active{transform:scale(.9);background:rgba(255,255,255,.22)}
-.c-back-auth{display:inline-grid;place-items:center;width:34px;height:34px;margin:0 0 12px -4px;border-radius:50%;background:var(--bg);color:var(--ink2);border:1px solid var(--line);cursor:pointer;transition:transform .08s}
-.c-back-auth:active{transform:scale(.9)}
+.c-back{display:inline-grid;place-items:center;width:32px;height:32px;margin:0 0 6px -7px;background:none;border:none;color:#fff;opacity:.9;cursor:pointer;transition:opacity .12s}
+.c-back:active{opacity:.5}
+.c-back-auth{display:inline-grid;place-items:center;width:32px;height:32px;margin:0 0 8px -7px;background:none;border:none;color:var(--ink2);cursor:pointer;transition:opacity .12s}
+.c-back-auth:active{opacity:.5}
 .demo-hint{margin-top:16px;font-size:11.5px;line-height:1.55;color:var(--ink3);background:var(--bg);border:1px dashed var(--line);border-radius:9px;padding:9px 12px}
 .demo-hint b{color:var(--navy2);font-weight:800}
 
@@ -164,6 +164,9 @@ a{color:inherit;text-decoration:none}
 .cc.on{border-color:var(--safe);background:var(--safe50)}
 .cc input{width:21px;height:21px;accent-color:var(--safe);flex-shrink:0}
 .c-footer{flex-shrink:0;padding:12px 20px calc(14px + var(--sab));background:#fff;border-top:1px solid var(--line)}
+.c-footer.wiz{display:flex;gap:10px}
+.c-footer.wiz .btn-prev{flex:0 0 auto;min-width:92px}
+.c-footer.wiz .btn-next{flex:1}
 .done{text-align:center;padding:48px 16px 20px;flex:1;display:flex;flex-direction:column;justify-content:center}
 .done .big{width:80px;height:80px;border-radius:50%;background:var(--safe50);color:var(--safe);display:grid;place-items:center;font-size:40px;margin:0 auto 18px;animation:pop .4s ease}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
