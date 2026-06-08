@@ -124,6 +124,14 @@ a{color:inherit;text-decoration:none}
 .sig-canvas{width:100%;height:180px;background:#fff;border:1.5px dashed var(--navy2);border-radius:12px;touch-action:none;display:block;cursor:crosshair}
 .sig-bar{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
 .sig-hint{font-size:12px;color:var(--ink3)}
+
+/* ---- 동의 조항 카드 ---- */
+.clauses{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;margin-bottom:8px}
+.clause{padding:12px 14px;border-top:1px solid var(--line2)}
+.clause:first-child{border-top:none}
+.clause-t{font-size:12.5px;font-weight:800;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.clause-t::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--safe);flex-shrink:0}
+.clause-b{font-size:12.5px;line-height:1.65;color:var(--ink2);padding-left:12px}
 .steps{display:flex;gap:6px;padding:16px 22px 4px;flex-shrink:0}
 .steps .s{flex:1;height:4px;border-radius:2px;background:var(--line);transition:.3s}
 .steps .s.on{background:var(--safe)}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { findMemberByCode, createSelfConsent } from "@/lib/db";
-import { CONSENT_STATEMENT, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE } from "@/lib/constants";
+import { CONSENT_CLAUSES, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE } from "@/lib/constants";
 import { fmtBirth, fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
 import NoticeList from "@/components/NoticeList";
@@ -129,9 +129,12 @@ export default function SelfConsentPage() {
               <div className="info"><span><b>{verified.name}</b> 님</span><span>생년월일 {fmtBirth(verified.birth)}</span></div>
             </div>
             <div className="slabel">STEP 2 · {target.company} 착한거래 동의</div>
-            <div className="stitle">착한거래 동의 안내</div>
-            <NoticeList items={CONSENT_NOTICES} />
-            <div className="statement">{CONSENT_STATEMENT}</div>
+            <div className="stitle">아래 내용에 동의해 주세요</div>
+            <div className="clauses">
+              {CONSENT_CLAUSES.map((c, i) => (
+                <div className="clause" key={i}><div className="clause-t">{c.t}</div><div className="clause-b">{c.b}</div></div>
+              ))}
+            </div>
             <label className={`cc ${agreed ? "on" : ""}`} onClick={() => setAgreed((v) => !v)}>
               <input type="checkbox" checked={agreed} readOnly onClick={(e) => e.stopPropagation()} /> 위 내용을 모두 확인하였으며 거래이력 제공에 동의합니다.
             </label>

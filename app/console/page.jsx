@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { RISK_TYPES, CONTRACT_CONSENT_FORM, CONSENT_NOTICES, CONSENT_STATEMENT, STATUS_NOTICES, CODE_LABEL, VIOLATION_LABEL } from "@/lib/constants";
+import { RISK_TYPES, CONTRACT_CONSENT_FORM, CONSENT_NOTICES, CONSENT_CLAUSES, STATUS_NOTICES, CODE_LABEL, VIOLATION_LABEL } from "@/lib/constants";
 import { mask, fmtBirth, fmtDate } from "@/lib/format";
 import { IS_LOCAL, listConsents, addRisk } from "@/lib/db";
 import { getSession, logout } from "@/lib/auth";
@@ -81,7 +81,11 @@ function SendTab({ toast, company, code }) {
           <>
             <div className="card-desc">손님이 <b>착한거래 동의하기</b>에서 아래 내용을 확인하고 동의합니다.</div>
             <NoticeList items={CONSENT_NOTICES} />
-            <div className="statement">{CONSENT_STATEMENT}</div>
+            <div className="clauses" style={{ marginTop: 12 }}>
+              {CONSENT_CLAUSES.map((c, i) => (
+                <div className="clause" key={i}><div className="clause-t">{c.t}</div><div className="clause-b">{c.b}</div></div>
+              ))}
+            </div>
           </>
         )}
       </div>
