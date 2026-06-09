@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>렌터카 착한거래 — 회원사 제안서</title>
+<title>착한거래 — 렌터카 회원사 제안서</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <style>
   :root{
@@ -13,280 +13,452 @@
     --ink:#1b2733; --ink2:#445466; --ink3:#7c8a98;
     --line:#e6ebf1; --line2:#eef2f6; --bg:#eceff3;
   }
-  *{margin:0;padding:0;box-sizing:border-box;word-break:keep-all}
-  body{font-family:"Pretendard",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  body.exporting{background:#fff}
-  body.exporting .toolbar{display:none}
-  body.exporting .page{margin:0;box-shadow:none}
-
+  *{margin:0;padding:0;box-sizing:border-box;word-break:keep-all;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-family:"Pretendard",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
   .toolbar{position:sticky;top:0;z-index:50;display:flex;justify-content:center;gap:10px;padding:12px;background:rgba(22,49,77,.96);backdrop-filter:blur(6px)}
   .toolbar button{font:inherit;font-weight:700;font-size:13px;border:none;border-radius:8px;padding:9px 18px;cursor:pointer;background:var(--mint);color:#fff}
   .toolbar button.ghost{background:transparent;color:#cfe0ee;border:1px solid rgba(255,255,255,.25)}
-  .toolbar button:disabled{opacity:.6;cursor:default}
 
-  .page{width:210mm;min-height:297mm;background:#fff;margin:22px auto;padding:19mm 18mm;box-shadow:0 6px 30px rgba(22,49,77,.14);position:relative;display:flex;flex-direction:column}
-  .page>.pagefoot{margin-top:auto}
+  .page{width:210mm;height:297mm;background:#fff;margin:22px auto;padding:15mm 16mm;box-shadow:0 6px 30px rgba(22,49,77,.14);position:relative;display:flex;flex-direction:column;overflow:hidden}
+  .phead{flex:0 0 auto}
+  .pbody{flex:1 1 auto;display:flex;flex-direction:column;justify-content:flex-start;gap:26px;padding:24px 0 4px;min-height:0}
+  .pagefoot{flex:0 0 auto;display:flex;justify-content:space-between;font-size:10px;color:var(--ink3);border-top:1px solid var(--line);padding-top:8px}
 
-  .cover{justify-content:center;background:linear-gradient(160deg,#15304c 0%,#1d4067 60%,#13a37a 240%);color:#fff;padding:24mm 20mm}
-  .cover .mark{width:104px;height:104px;border-radius:28px;background:linear-gradient(135deg,#1aa97c,#0f7f5b);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 34px rgba(0,0,0,.28)}
-  .cover .kicker{margin-top:32px;font-size:15px;font-weight:700;color:#9fe6c9;letter-spacing:.5px}
-  .cover h1{font-size:58px;font-weight:800;letter-spacing:-2px;margin-top:12px;line-height:1.1}
+  .cover{justify-content:center;background:linear-gradient(160deg,#15304c 0%,#1d4067 60%,#13a37a 245%);color:#fff;padding:26mm 22mm}
+  .cover .mark{width:96px;height:96px;border-radius:27px;background:linear-gradient(135deg,#1aa97c,#0f7f5b);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 34px rgba(0,0,0,.28)}
+  .cover .kicker{margin-top:26px;font-size:14px;font-weight:700;color:#9fe6c9;letter-spacing:1px}
+  .cover h1{font-size:62px;font-weight:800;letter-spacing:-2.5px;margin-top:8px;line-height:1.03}
   .cover h1 .hl{color:#5fe0b4}
-  .cover .lead{font-size:20px;font-weight:600;color:#dbe8f3;margin-top:22px;line-height:1.55}
-  .cover .lead b{color:#fff}
-  .cover .chips{display:flex;gap:10px;margin-top:32px;flex-wrap:wrap}
-  .cover .chips span{font-size:14px;font-weight:700;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:9px 16px}
-  .cover .chips b{color:#5fe0b4}
-  .cover .foot{margin-top:auto;padding-top:46px;display:flex;justify-content:space-between;align-items:flex-end;font-size:14px;color:#bcd0e2}
-  .cover .foot b{color:#fff;font-size:16px}
+  .cover .tagline{font-size:25px;font-weight:700;color:#eaf3fb;margin-top:18px;line-height:1.4}
+  .cover .csub{font-size:18.5px;font-weight:600;color:#eaf3fb;margin-top:20px;line-height:1.6;max-width:64ch}
+  .cover .csub b{color:#5fe0b4;font-weight:800}
+  .cover .punch{margin-top:16px;font-size:17px;font-weight:800;color:#fff;line-height:1.5}
+  .cover .punch .hl{color:#5fe0b4}
+  .cover .fine{margin-top:14px;font-size:11.5px;color:#9fb6cc;line-height:1.5}
+  .cover .foot{margin-top:auto;padding-top:28px;display:flex;justify-content:space-between;align-items:flex-end;font-size:13px;color:#bcd0e2}
+  .cover .foot b{color:#fff;font-size:15px}
 
-  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--mint);letter-spacing:.4px}
-  .eyebrow .num{width:26px;height:26px;border-radius:8px;background:var(--mint50);color:var(--mint2);display:grid;place-items:center;font-size:13px}
-  h2.sec{font-size:28px;font-weight:800;letter-spacing:-1px;margin:11px 0 6px;color:var(--navy);line-height:1.26}
-  .sub{font-size:14.5px;color:var(--ink2);line-height:1.72;max-width:70ch}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;color:var(--mint);letter-spacing:.4px}
+  .eyebrow .num{width:25px;height:25px;border-radius:8px;background:var(--mint50);color:var(--mint2);display:grid;place-items:center;font-size:12.5px}
+  h2.sec{font-size:28px;font-weight:800;letter-spacing:-1px;margin:12px 0 8px;color:var(--navy);line-height:1.26}
+  .sub{font-size:14px;color:var(--ink2);line-height:1.72;max-width:80ch}
   .sub b{color:var(--navy)}
-  .sec-block{margin-bottom:18px}
-  .subtitle{font-size:15px;font-weight:800;color:var(--navy);margin:24px 0 0}
+  .subtitle{font-size:15.5px;font-weight:800;color:var(--navy);margin-bottom:9px}
+  .seg{display:flex;flex-direction:column}
 
-  /* 가로 흐름도 */
-  .flow{display:flex;align-items:stretch;gap:0;margin-top:18px}
-  .flow .node{flex:1;border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;background:#fff;display:flex;flex-direction:column;justify-content:center}
-  .flow .node.hi{border-color:var(--mint);background:var(--mint50)}
-  .flow .node .bdg{width:26px;height:26px;border-radius:8px;background:var(--navy);color:#fff;font-weight:800;font-size:12px;display:grid;place-items:center;margin:0 auto 8px}
-  .flow .node.hi .bdg{background:var(--mint)}
-  .flow .node .ti{font-size:14px;font-weight:800;color:var(--navy);line-height:1.3}
-  .flow .node .de{font-size:11.5px;color:var(--ink2);margin-top:5px;line-height:1.45}
-  .flow .arr{flex:0 0 28px;display:grid;place-items:center;color:var(--mint);font-weight:800;font-size:19px}
-
-  /* 악순환 고리 */
-  .cycle{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:18px}
-  .cycle .c{border:1px solid var(--red-line);background:var(--red50);border-radius:13px;padding:14px 11px;text-align:center;position:relative}
-  .cycle .c .n{width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:12px;display:grid;place-items:center;margin:0 auto 7px}
-  .cycle .c .t{font-size:12.5px;font-weight:700;color:var(--navy);line-height:1.4}
-  .cycle .c::after{content:"→";position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:var(--red);font-weight:800;font-size:14px}
-  .cycle .c:last-child::after{content:"↺"}
-
-  /* 1차 필터 */
-  .filter{margin-top:18px;border:1.5px solid var(--mint);background:var(--mint50);border-radius:18px;padding:20px 22px}
-  .filter .top{text-align:center;font-size:15px;font-weight:800;color:var(--navy)}
-  .filter .top .s{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-top:3px}
-  .filter .vbar{width:2px;height:18px;background:var(--mint);margin:10px auto 0}
-  .filter .split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-  .filter .br{border-radius:12px;padding:15px;background:#fff}
-  .filter .br.pass{border:1.5px solid var(--mint-line)}
-  .filter .br.block{border:1.5px solid var(--red-line)}
-  .filter .br .h{font-size:14px;font-weight:800;display:flex;align-items:center;gap:7px}
-  .filter .br.pass .h{color:var(--mint2)} .filter .br.block .h{color:var(--red)}
-  .filter .br p{font-size:12.5px;color:var(--ink2);margin-top:5px;line-height:1.5}
-
-  .interview{border-left:4px solid var(--mint);background:var(--navy50);border-radius:0 12px 12px 0;padding:16px 18px;margin-top:18px}
-  .interview .q{font-size:14.5px;font-weight:600;color:var(--navy);line-height:1.7}
-  .interview .by{margin-top:9px;font-size:12px;color:var(--ink3);font-weight:700}
-
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin-top:14px}
-  .card{border:1px solid var(--line);border-radius:14px;padding:17px;break-inside:avoid}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .card{border:1px solid var(--line);border-radius:14px;padding:19px;break-inside:avoid}
   .card.tint{background:var(--navy50);border-color:#dde7f1}
   .card.mint{background:var(--mint50);border-color:var(--mint-line)}
-  .card h3{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;gap:8px}
-  .card p{font-size:12.5px;color:var(--ink2);line-height:1.6}
-  .ic{width:28px;height:28px;border-radius:8px;background:var(--mint);color:#fff;display:grid;place-items:center;flex-shrink:0;font-weight:800;font-size:13px}
+  .card.red{background:var(--red50);border-color:var(--red-line)}
+  .card .lab{font-size:11px;font-weight:800;color:var(--mint2);letter-spacing:.3px}
+  .card h3{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:7px;display:flex;align-items:center;gap:8px}
+  .card p{font-size:12.5px;color:var(--ink2);line-height:1.62}
+  .ic{width:25px;height:25px;border-radius:7px;background:var(--mint);color:#fff;display:grid;place-items:center;flex-shrink:0;font-weight:800;font-size:12px}
+  .ic.navy{background:var(--navy)} .ic.red{background:var(--red)}
 
-  table.cmp{width:100%;border-collapse:collapse;margin-top:16px;font-size:12.5px}
-  table.cmp th,table.cmp td{border:1px solid var(--line);padding:10px 11px;text-align:center}
-  table.cmp thead th{background:var(--navy);color:#fff;font-weight:700}
-  table.cmp thead th.hi{background:var(--mint2)}
-  table.cmp td.k{text-align:left;font-weight:700;color:var(--navy);background:var(--line2)}
-  table.cmp td.good{color:var(--mint2);font-weight:800}
-  table.cmp td.bad{color:var(--red);font-weight:800}
-  table.cmp .col-hi{background:var(--mint50)}
+  .flow{display:flex;align-items:stretch}
+  .flow .node{flex:1;border:1px solid var(--line);border-radius:12px;padding:18px 9px;text-align:center;background:#fff;display:flex;flex-direction:column;justify-content:center}
+  .flow .node.hi{border-color:var(--mint);background:var(--mint50)}
+  .flow .node .bdg{width:26px;height:26px;border-radius:8px;background:var(--navy);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;margin:0 auto 7px}
+  .flow .node.hi .bdg{background:var(--mint)}
+  .flow .node .ti{font-size:12.5px;font-weight:800;color:var(--navy)}
+  .flow .node .de{font-size:10px;color:var(--ink2);margin-top:4px;line-height:1.38}
+  .flow .arr{flex:0 0 20px;display:grid;place-items:center;color:var(--mint);font-weight:800;font-size:16px}
 
-  .callout{margin-top:18px;background:var(--navy);color:#fff;border-radius:16px;padding:20px 24px}
-  .callout .big{font-size:18px;font-weight:800;line-height:1.5}
+  .steps{display:flex;flex-direction:column;gap:9px}
+  .step{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:18px 17px}
+  .step.acc{border-color:var(--mint-line);background:var(--mint50)}
+  .step .n{width:29px;height:29px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0}
+  .step.acc .n{background:var(--mint)}
+  .step h3{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:3px}
+  .step p{font-size:12.5px;color:var(--ink2);line-height:1.55}
+
+  .keybox{border:1.5px solid var(--mint);background:var(--mint50);border-radius:13px;padding:20px 23px}
+  .keybox .h{font-size:17.5px;font-weight:800;color:var(--navy);line-height:1.4}
+  .keybox .h .hl{color:var(--mint2)}
+  .keybox p{font-size:12.5px;color:var(--ink2);margin-top:9px;line-height:1.65}
+
+  .callout{background:var(--navy);color:#fff;border-radius:13px;padding:21px 24px}
+  .callout .big{font-size:18.5px;font-weight:800;line-height:1.45}
   .callout .big .hl{color:#5fe0b4}
-  .callout p{font-size:13px;color:#cfe0ee;margin-top:7px}
+  .callout p{font-size:12.5px;color:#cfe0ee;margin-top:9px;line-height:1.62}
 
-  .qa{border-top:1px solid var(--line);padding:11px 0}
-  .qa:first-of-type{border-top:none}
-  .qa .q{font-size:13.5px;font-weight:800;color:var(--navy)}
-  .qa .a{font-size:12.5px;color:var(--ink2);margin-top:4px}
+  .loss{display:flex;align-items:stretch;gap:7px}
+  .loss .b{flex:1;border:1px solid var(--red-line);background:var(--red50);border-radius:11px;padding:12px 6px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+  .loss .b .t{font-size:12px;font-weight:800;color:var(--navy)}
+  .loss .b .d{font-size:9.5px;color:var(--ink2);margin-top:3px;line-height:1.32}
+  .loss .plus{flex:0 0 12px;display:grid;place-items:center;color:var(--red);font-weight:800;font-size:14px}
+  .loss .eq{flex:0 0 86px;display:grid;place-items:center;background:var(--navy);color:#fff;border-radius:11px;font-size:12px;font-weight:800;text-align:center;line-height:1.35}
 
-  .footer-cta{display:flex;align-items:center;gap:18px;border:1.5px solid var(--mint);background:var(--mint50);border-radius:16px;padding:20px 23px;margin-top:18px}
-  .footer-cta .q{font-size:16px;font-weight:800;color:var(--navy);flex:1}
-  .footer-cta .contact{font-size:13px;color:var(--ink2);text-align:right;line-height:1.7}
+  .imba{display:flex;align-items:stretch;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .imba .side{flex:1;padding:26px 24px;display:flex;flex-direction:column;justify-content:center}
+  .imba .side.out{background:var(--navy50)}
+  .imba .side.risk{background:var(--red50)}
+  .imba .side .tag{font-size:11.5px;font-weight:800;letter-spacing:.3px;display:flex;align-items:center;gap:7px;color:var(--navy)}
+  .imba .side.risk .tag{color:var(--red)}
+  .imba .side .v{font-size:32px;font-weight:800;color:var(--navy);margin-top:11px;line-height:1.08}
+  .imba .side.risk .v{color:var(--red)}
+  .imba .side .d{font-size:11.5px;color:var(--ink2);margin-top:8px;line-height:1.5}
+  .imba .mid{flex:0 0 50px;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:25px;font-weight:800}
+
+  .shift{display:flex;align-items:stretch;gap:11px}
+  .shift .col{flex:1;border:1px solid var(--line);border-radius:12px;padding:20px 19px}
+  .shift .col.now{border-color:var(--red-line);background:var(--red50)}
+  .shift .col .t{font-size:12px;font-weight:800;color:var(--ink3);letter-spacing:.3px}
+  .shift .col.now .t{color:var(--red)}
+  .shift .col ul{list-style:none;margin-top:9px;display:flex;flex-direction:column;gap:6px}
+  .shift .col li{font-size:12.5px;color:var(--ink2);padding-left:14px;position:relative;line-height:1.6}
+  .shift .col li b{color:var(--navy)}
+  .shift .col li::before{content:"–";position:absolute;left:0;color:var(--ink3)}
+  .shift .arr{flex:0 0 24px;display:grid;place-items:center;color:var(--red);font-weight:800;font-size:19px}
+
+  .snap{border:1px solid var(--line);border-radius:14px;padding:24px 22px;display:flex;flex-direction:column;gap:14px}
+  .snap .row{display:flex;align-items:center;gap:12px}
+  .snap .lab{flex:0 0 58px;font-size:11.5px;font-weight:800;color:var(--ink3);text-align:right}
+  .snap .bar{flex:1;border-radius:9px;font-size:11.5px;font-weight:700;display:flex;align-items:center;overflow:hidden}
+  .snap .bar.full{background:var(--navy);color:#fff;padding:12px 16px}
+  .snap .bar.broken{border:1px dashed var(--red-line)}
+  .snap .bar.broken .ok{flex:0 0 30%;background:var(--mint);color:#fff;padding:12px 14px;font-weight:800;white-space:nowrap}
+  .snap .bar.broken .brk{flex:1;color:var(--red);font-weight:800;padding:12px 14px}
+
+  table.lim{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:13px}
+  table.lim th,table.lim td{padding:13px 17px;text-align:left;vertical-align:middle;border-bottom:1px solid var(--line)}
+  table.lim tr:last-child td{border-bottom:none}
+  table.lim thead th{background:var(--navy);color:#fff;font-weight:700;font-size:12.5px}
+  table.lim thead th:first-child{border-right:1px solid rgba(255,255,255,.18)}
+  table.lim td.w{font-weight:800;color:var(--navy);background:var(--navy50);width:34%;border-right:1px solid var(--line)}
+  table.lim td.p{color:var(--ink2);font-size:12.5px}
+
+  .cert{border:1px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:0 5px 18px rgba(22,49,77,.09)}
+  .cert .ch{background:var(--navy);color:#fff;padding:12px 17px;display:flex;justify-content:space-between;align-items:center}
+  .cert .ch .t{font-size:15px;font-weight:800}
+  .cert .ch .qr{width:30px;height:30px;border-radius:7px;background:#fff;color:var(--navy);font-size:9px;font-weight:800;display:grid;place-items:center}
+  .cert .meta{display:flex;justify-content:space-between;padding:9px 17px;font-size:10.5px;color:var(--ink3);border-bottom:1px solid var(--line)}
+  .cert table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .cert td{padding:12px 18px;border-top:1px solid var(--line2)}
+  .cert td.k{color:var(--ink2);width:44%;font-weight:600}
+  .cert td.v{font-weight:800;color:var(--navy)}
+  .cert td.v.bad{color:var(--red)}
+  .cert .nt{font-size:10px;color:var(--ink3);padding:9px 17px;background:var(--navy50);line-height:1.5}
+  .cert .nt b{color:var(--ink2)}
+
+  .clause{border:1px dashed var(--mint-line);background:var(--mint50);border-radius:12px;padding:14px 17px}
+  .clause .l{font-size:11.5px;font-weight:800;color:var(--mint2)}
+  .clause .q{font-size:12px;color:var(--navy);font-style:italic;margin-top:5px;line-height:1.6}
+
+  .contract{border:1px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:0 5px 18px rgba(22,49,77,.07)}
+  .contract .ch{background:var(--navy50);border-bottom:1px solid var(--line);padding:13px 18px;font-size:12.5px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:8px}
+  .contract .body{padding:17px 19px}
+  .contract .clause-no{font-size:11.5px;font-weight:800;color:var(--mint2);margin-bottom:7px}
+  .contract .body .q{font-size:13.5px;color:var(--ink);line-height:1.75}
+  .contract .foot{padding:11px 18px;border-top:1px solid var(--line2);font-size:10.5px;color:var(--ink3);background:#fafbfc}
+  .contract .cfield{display:flex;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line2);font-size:12.5px}
+  .contract .cfield:last-child{border-bottom:none}
+  .contract .cfield .ck{flex:0 0 84px;font-weight:800;color:var(--navy)}
+  .contract .cfield .cv{color:var(--ink2);line-height:1.5}
+
+  .inquiry{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;border-radius:13px;padding:18px 24px;margin-top:auto}
+  .inquiry .il{font-size:15px;font-weight:800}
+  .inquiry .il b{color:#5fe0b4}
+  .inquiry .ir{font-size:12.5px;color:#cfe0ee}
+
+  .branch{display:flex;flex-direction:column;gap:11px}
+  .branch .top{background:var(--navy);color:#fff;border-radius:11px;padding:15px 18px;font-size:14.5px;font-weight:800;text-align:center}
+  .branch .arms{display:flex;gap:12px}
+  .branch .arm{flex:1;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .branch .arm.yes{border-color:var(--mint-line);background:var(--mint50)}
+  .branch .arm.no{border-color:var(--red-line);background:var(--red50)}
+  .branch .arm .lab{font-size:13.5px;font-weight:800;color:var(--navy)}
+  .branch .arm.yes .lab{color:var(--mint2)}
+  .branch .arm.no .lab{color:var(--red)}
+  .branch .arm .d{font-size:12px;color:var(--ink2);margin-top:6px;line-height:1.55}
+
+  .bridge{font-size:13.5px;color:var(--ink2);line-height:1.74;max-width:82ch}
+  .bridge b{color:var(--navy);font-weight:700}
+
+  .gains{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .gains .g{display:flex;gap:11px;align-items:center;border:1px solid var(--line);border-radius:11px;padding:17px 15px}
+  .gains .g .ck{width:23px;height:23px;border-radius:7px;background:var(--mint50);color:var(--mint2);display:grid;place-items:center;flex-shrink:0;font-weight:900;font-size:12px}
+  .gains .g .tx{font-size:12.5px;font-weight:700;color:var(--navy)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chips .c{font-size:11.5px;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px}
+  .chips .c.lab{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+  .footer-cta{display:flex;align-items:center;gap:16px;border:1.5px solid var(--mint);background:var(--mint50);border-radius:13px;padding:16px 20px}
+  .footer-cta .q{font-size:15px;font-weight:800;color:var(--navy);flex:1;line-height:1.45}
+  .footer-cta .contact{font-size:12.5px;color:var(--ink2);text-align:right;line-height:1.6;white-space:nowrap}
   .footer-cta .contact b{color:var(--navy)}
+  .pnote{font-size:10px;color:var(--ink3);line-height:1.55}
 
-  .pnote{font-size:11px;color:var(--ink3);margin-top:12px;line-height:1.55;border-top:1px dashed var(--line);padding-top:9px}
-  .pagefoot{display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);border-top:1px solid var(--line);padding-top:8px;margin-top:16px}
-
-  @media print{ @page{size:A4;margin:0} body{background:#fff} .toolbar{display:none} .page{margin:0;box-shadow:none;page-break-after:always} }
+  @media print{
+    @page{size:A4;margin:0}
+    html,body{background:#fff;margin:0}
+    .toolbar{display:none}
+    .page{width:210mm;height:297mm;margin:0;box-shadow:none;page-break-after:always;break-after:page}
+    .page:last-child{page-break-after:auto;break-after:auto}
+  }
 </style>
 </head>
 <body>
 
 <div class="toolbar">
-  <button onclick="savePDF(this)">📄 PDF 저장</button>
+  <button onclick="window.print()">🖨 인쇄 · PDF 저장</button>
   <button class="ghost" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href)">링크 복사</button>
 </div>
 
 <div id="doc">
 
-<!-- ===== 표지 ===== -->
+<!-- ===== 1P 표지 ===== -->
 <section class="page cover">
-  <div class="mark"><svg width="58" height="58" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-  <div class="kicker">무심사 장기 렌터카 회원사 제안서</div>
-  <h1>렌터카 <span class="hl">착한</span>거래</h1>
-  <div class="lead">미납·미반납 이력을 본인 동의로 확인하고,<br/>악용 의도가 있는 이용자를 <b>계약 전에 거릅니다.</b></div>
-  <div class="chips">
-    <span><b>동의</b> 계약서 항목</span>
-    <span><b>등록</b> 위반 시에만</span>
-    <span><b>조회</b> 본인만</span>
-  </div>
-  <div class="foot">
-    <div>렌터카 거래이력 확인 서비스</div>
-    <div style="text-align:right"><b>착한거래</b></div>
-  </div>
+  <div class="mark"><svg width="54" height="54" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="kicker">렌터카 회원사 제안서</div>
+  <h1><span class="hl">착한</span>거래</h1>
+  <div class="tagline">무심사 장기렌터카를 위한<br/>계약 전 리스크 판단 서비스</div>
+  <div class="csub">신뢰를 바탕으로 더 좋은 거래 문화를 만드는 <b>착한거래</b></div>
+  <div class="foot"><div>동의 기반 거래 안전장치 · 손님 본인 발급 확인서</div><div style="text-align:right"><b>착한거래</b> · teamjpk.com</div></div>
 </section>
 
-<!-- ===== 1. 문제 ===== -->
+<!-- ===== 2P Background ===== -->
 <section class="page">
-  <div class="sec-block">
-    <div class="eyebrow"><span class="num">1</span> 문제</div>
-    <h2 class="sec">한 곳에서 안 갚은 사람을, 다음 업체는 모릅니다</h2>
-    <p class="sub">무심사 장기 렌터카는 <b>경쟁 심화로 보증금이 낮아졌고</b>, 미납은 형사가 아닌 <b>민사</b>라 제재가 약합니다. 갈아탈 업체도 많습니다. 그래서 미납의 상당수는 지급 능력 부족이 아니라 <b>회피</b>입니다.</p>
+  <div class="phead">
+    <div class="eyebrow"><span class="num">01</span> Background · 시장 배경</div>
+    <h2 class="sec">수천만 원짜리 차량을 인도하면서도,<br/>손님의 리스크는 운에 맡기는 현실입니다</h2>
+    <p class="sub">무심사 장기렌터카는 기존 금융 심사로 차를 빌리기 어려운 손님까지 끌어안는 시장입니다. 구조 자체는 건강합니다. 다만 한 가지가 비어 있습니다 — 고가의 차량을 먼저 인도하면서도, 그 손님의 계약 이행 리스크를 가늠할 근거가 마땅치 않다는 점입니다.</p>
   </div>
-
-  <div class="interview">
-    <div class="q">“보증금 조금 받고 내보냈는데 첫 달만 내고 잠수했어요. 미납은 민사라 손쓸 방법도 없고, 알고 보니 그새 다른 업체 차로 갈아탔더라고요.”</div>
-    <div class="by">— 김포 ○○렌터카 대표 (현장 인터뷰 재구성)</div>
-  </div>
-
-  <div class="subtitle">정보가 끊겨서 생기는 악순환</div>
-  <div class="cycle">
-    <div class="c"><div class="n">1</div><div class="t">한 업체가<br/>미납·미반납 피해</div></div>
-    <div class="c"><div class="n">2</div><div class="t">다른 업체는<br/>그 사실을 모름</div></div>
-    <div class="c"><div class="n">3</div><div class="t">또 빌려주고<br/>또 당함</div></div>
-    <div class="c"><div class="n">4</div><div class="t">악성 이용자가<br/>업체를 돌며 반복</div></div>
-  </div>
-
-  <div class="callout">
-    <div class="big">막아보려 돌리는 <span class="hl">단톡방 블랙리스트는 위법</span> 소지가 큽니다.</div>
-    <p>동의 없는 명단 공유는 개인정보보호법·명예훼손 위험. 정확성·범위도 제한적입니다.</p>
-  </div>
-  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>1 / 문제</span></div>
-</section>
-
-<!-- ===== 2. 해결 방식 ===== -->
-<section class="page">
-  <div class="sec-block">
-    <div class="eyebrow"><span class="num">2</span> 해결 방식</div>
-    <h2 class="sec">등록·조회가 아니라, 동의 → 본인 확인</h2>
-    <p class="sub">회원사가 손님 정보를 모아 조회하는 구조가 아닙니다. 평소엔 아무것도 등록되지 않고, <b>위반 시에만</b> 기록하며, 그 기록은 <b>본인만</b> 확인합니다.</p>
-  </div>
-
-  <div class="flow">
-    <div class="node"><div class="bdg">1</div><div class="ti">동의</div><div class="de">계약서·개인정보 동의서에<br/>제3자 제공 항목 추가</div></div>
-    <div class="arr">→</div>
-    <div class="node"><div class="bdg">2</div><div class="ti">등록</div><div class="de">미납·미반납 등<br/>위반 시에만 증빙과 함께</div></div>
-    <div class="arr">→</div>
-    <div class="node hi"><div class="bdg">3</div><div class="ti">조회</div><div class="de">본인이 본인인증으로<br/>직접 확인 (조회 권한 없음)</div></div>
-  </div>
-
-  <div class="subtitle">핵심 — 등록이 아니라 ‘계약 전 1차 필터’</div>
-  <div class="filter">
-    <div class="top">계약 시 “착한거래 동의” 요청<span class="s">동의를 계약 조건으로 제시</span></div>
-    <div class="vbar"></div>
-    <div class="split">
-      <div class="br pass"><div class="h">✓ 정상 이용자</div><p>거리낌 없이 동의 → 그대로 계약 진행. 정상 이용 시 기록은 남지 않습니다.</p></div>
-      <div class="br block"><div class="h">✕ 악용 의도</div><p>동의를 꺼립니다. 거부 자체가 신호 → <b>계약 전에 걸러집니다.</b></p></div>
+  <div class="pbody">
+    <div class="imba">
+      <div class="side out">
+        <div class="tag"><svg width="17" height="14" viewBox="0 0 24 20" fill="none"><path d="M3 12l2-5a2 2 0 011.9-1.3h10.2A2 2 0 0119 7l2 5v4h-2.5M3 12v4h2.5M3 12h18" stroke="#16314d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="16" r="1.6" stroke="#16314d" stroke-width="1.8"/><circle cx="17" cy="16" r="1.6" stroke="#16314d" stroke-width="1.8"/></svg> 인도하는 가치</div>
+        <div class="v">수천만 원</div>
+        <div class="d">가동률을 위해, 고가의 차량을 손님에게 먼저 인도합니다.</div>
+      </div>
+      <div class="mid">≠</div>
+      <div class="side risk">
+        <div class="tag"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 4l9 16H3L12 4z" stroke="#c0392b" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4M12 17.5h.01" stroke="#c0392b" stroke-width="2" stroke-linecap="round"/></svg> 확보하는 안전장치</div>
+        <div class="v">거의 없음</div>
+        <div class="d">낮은 보증금에, 이전 거래이력은 확인할 길조차 없습니다.</div>
+      </div>
+    </div>
+    <p class="bridge">이 불균형이 처음부터 이렇게 컸던 건 아닙니다 — 시장이 커지고 경쟁이 붙으면서 빠르게 벌어졌습니다.</p>
+    <div class="seg">
+      <div class="subtitle">왜 지금, 이 문제가 커졌나</div>
+      <div class="shift">
+        <div class="col">
+          <div class="t">과거</div>
+          <ul>
+            <li>업체가 적고 <b>경쟁이 없었다</b></li>
+            <li>갈아타도 <b>가격이 비슷</b>해 옮길 이유가 없었다</li>
+            <li>그래서 자연히 <b>한 곳을 오래</b> 이용했다</li>
+          </ul>
+        </div>
+        <div class="arr">→</div>
+        <div class="col now">
+          <div class="t">지금</div>
+          <ul>
+            <li>업체 포화·<b>보증금 경쟁</b>으로 갈아탈 곳이 많아짐</li>
+            <li>승계·무심사 확대로 <b>진입 장벽이 낮아짐</b></li>
+            <li>마음만 먹으면 <b>더 싼 곳으로 언제든</b> 갈아탐</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="seg">
+      <div class="subtitle">차량 인도 후, 계약 위반은 온전히 렌트사 손실로</div>
+      <div class="grid3">
+        <div class="card"><h3>떠안는 건 렌트사</h3><p>미납·미반납·면책금·승계 악용이 터지면, 결국 렌트사가 떠안습니다.</p></div>
+        <div class="card"><h3>민사의 벽</h3><p>형사가 아닌 민사라, 즉시 손쓸 방법이 마땅치 않습니다.</p></div>
+        <div class="card"><h3>손실은 한 겹이 아님</h3><p>미납액에 회수·탁송·공백·재유치까지 줄줄이 이어집니다.</p></div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="big">문제는 경쟁도, 높은 대여료도 아닙니다 — <span class="hl">판단 없이 경쟁한다</span>는 것입니다.</div>
+      <p>무심사는 원래 리스크를 반영해 대여료가 높습니다. 하지만 지금은 그 수준을 넘어, 손님을 판단할 근거조차 없이 보증금만 낮춰 경쟁합니다. 경쟁하더라도 판단은 할 수 있어야 합니다 — 그 판단 근거를 더하는 것이 착한거래입니다.</p>
     </div>
   </div>
-  <p class="sub" style="margin-top:14px">한 업체만 도입해도 이 필터 효과는 <b>즉시 작동</b>합니다. 회원사가 늘수록 확인되는 이력 범위가 넓어집니다.</p>
-  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>2 / 해결 방식</span></div>
+  <div class="pagefoot"><span>착한거래 · 렌터카 회원사 제안서</span><span>01 / Background</span></div>
 </section>
 
-<!-- ===== 3. 작동 + 비교 ===== -->
+<!-- ===== 3P Problem ===== -->
 <section class="page">
-  <div class="sec-block">
-    <div class="eyebrow"><span class="num">3</span> 회원사 절차 · 비교</div>
-    <h2 class="sec">회원사 절차 — 4단계</h2>
+  <div class="phead">
+    <div class="eyebrow"><span class="num">02</span> Problem · 현장의 문제</div>
+    <h2 class="sec">서류상 48개월 계약,<br/>현실은 언제 부러질지 모르는 계약입니다</h2>
+    <p class="sub">무심사 장기렌터카는 보통 48·60개월 약정을 기준으로 — 차량 매입가, 금융비용, 보험, 잔존가치, 가동기간을 계산해 — 월 대여료를 설계합니다. 이 계산은 그 약정이 끝까지 유지된다는 전제 위에 있습니다.</p>
   </div>
-
-  <div class="flow">
-    <div class="node"><div class="bdg">1</div><div class="ti">가입·코드 발급</div><div class="de">사업자등록증 확인 후<br/>거래코드 발급</div></div>
-    <div class="arr">→</div>
-    <div class="node"><div class="bdg">2</div><div class="ti">계약 시 동의</div><div class="de">동의서에 항목 포함<br/>(등록되는 정보 없음)</div></div>
-    <div class="arr">→</div>
-    <div class="node"><div class="bdg">3</div><div class="ti">위반 시 등록</div><div class="de">미납·미반납 발생 시<br/>증빙 첨부 등록</div></div>
-    <div class="arr">→</div>
-    <div class="node hi"><div class="bdg">4</div><div class="ti">신규계약 확인</div><div class="de">손님 본인이 이력<br/>확인서 제출</div></div>
+  <div class="pbody">
+    <div class="snap">
+      <div class="row">
+        <div class="lab">서류상</div>
+        <div class="bar full">48 · 60개월 약정 — 매입가·금융·보험·잔존가치로 설계한 대여료</div>
+      </div>
+      <div class="row">
+        <div class="lab">현실</div>
+        <div class="bar broken"><span class="ok">정상 가동</span><span class="brk">✕ 언제 끊길지 모름 — 첫 달 미납 · 반납 지연 · 승계 이탈</span></div>
+      </div>
+    </div>
+    <p class="bridge">약정은 4년이지만, 그 약정을 끝까지 지킬 손님인지는 차가 나가기 전엔 알 수 없습니다. 전제가 깨지는 건 늘 차량 인도 뒤입니다.</p>
+    <div class="seg">
+      <div class="subtitle">전제를 깨는 일은, 차량이 인도된 뒤 시작됩니다</div>
+      <table class="lim">
+        <thead><tr><th style="width:34%">미해소 위반 유형</th><th>현장에서 발생하는 문제</th></tr></thead>
+        <tbody>
+          <tr><td class="w">대여료 미납</td><td class="p">장기 미납 후 연락두절</td></tr>
+          <tr><td class="w">차량 미반납</td><td class="p">계약 종료·해지 후에도 반납 지연</td></tr>
+          <tr><td class="w">면책금 미정산</td><td class="p">자기부담금·수리비를 고지 후에도 미정산</td></tr>
+          <tr><td class="w">제3자 무단 운행</td><td class="p">계약자 외 운행으로 사고·책임 회피</td></tr>
+          <tr><td class="w">승계 악용</td><td class="p">심사 없는 승계 직후 위반</td></tr>
+          <tr><td class="w">연락두절</td><td class="p">반납·정산 요청에도 무응답</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <div class="big">48·60개월을 보고 계산했지만, <span class="hl">확인하지 못한 계약은 언제 끊길지 모릅니다.</span></div>
+      <p>게다가 그 미해소 이력은 다음 업체로 이어지지 않습니다 — 같은 손님이 업체만 바꿔 같은 손실을 반복시킬 수 있습니다. 회수·탁송·공백·재유치까지, 깨진 전제의 대가는 온전히 렌트사 몫입니다.</p>
+    </div>
   </div>
-
-  <div class="subtitle">기존 방식과의 차이</div>
-  <table class="cmp">
-    <thead><tr><th style="text-align:left">구분</th><th>아무 조치 없음</th><th>단톡방 명단</th><th class="hi">착한거래</th></tr></thead>
-    <tbody>
-      <tr><td class="k">적법성</td><td>—</td><td class="bad">✗ 위법 소지</td><td class="col-hi good">✓ 본인 동의 기반</td></tr>
-      <tr><td class="k">정확성</td><td>—</td><td class="bad">✗ 부정확</td><td class="col-hi good">✓ 증빙 기반</td></tr>
-      <tr><td class="k">계약 전 차단</td><td class="bad">✗ 불가</td><td class="bad">✗ 사후</td><td class="col-hi good">✓ 동의 단계 1차 필터</td></tr>
-      <tr><td class="k">개인정보 위험</td><td>—</td><td class="bad">✗ 높음</td><td class="col-hi good">✓ 최소수집·암호화</td></tr>
-      <tr><td class="k">조회 주체</td><td>—</td><td>공유자</td><td class="col-hi good">본인만</td></tr>
-    </tbody>
-  </table>
-  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>3 / 절차·비교</span></div>
+  <div class="pagefoot"><span>착한거래 · 렌터카 회원사 제안서</span><span>02 / Problem</span></div>
 </section>
 
-<!-- ===== 4. 효과 + 도입 ===== -->
+<!-- ===== 4P Proposal ===== -->
 <section class="page">
-  <div class="sec-block">
-    <div class="eyebrow"><span class="num">4</span> 효과 · 도입</div>
-    <h2 class="sec">계약 전에 거르고, 책임을 지웁니다</h2>
+  <div class="phead">
+    <div class="eyebrow"><span class="num">03</span> Proposal · 착한거래의 제안</div>
+    <h2 class="sec">착한거래는 확인서보다 먼저,<br/>계약서의 ‘동의’에서 시작됩니다</h2>
+    <p class="sub">착한거래는 회원사가 손님 정보를 조회하는 서비스가 아닙니다. 계약 시 손님에게 착한거래 동의를 받고, 정상 이용 시에는 아무 기록도 남기지 않습니다. 미납·미반납 등 객관적 위반이 해소되지 않을 때만, 사전 고지 후 등록됩니다.</p>
   </div>
-
-  <div class="grid3">
-    <div class="card mint"><h3><span class="ic">①</span> 계약 전 필터</h3><p>동의를 꺼리는 이용자를 계약 단계에서 거릅니다. 한 업체만 써도 작동합니다.</p></div>
-    <div class="card mint"><h3><span class="ic">②</span> 정산 동기</h3><p>이력은 해소해야 삭제되므로, 미납금 정산·반납에 응할 유인이 생깁니다.</p></div>
-    <div class="card mint"><h3><span class="ic">③</span> 운영 부담 0</h3><p>동의는 계약서 항목, 등록은 위반 시에만. 별도 장비·개발이 없습니다.</p></div>
+  <div class="pbody">
+    <div class="seg">
+      <div class="subtitle">계약 시 ‘동의 요청’ 자체가, 이미 1차 판단입니다</div>
+      <div class="branch">
+        <div class="top">계약 시 “착한거래 동의”를 요청</div>
+        <div class="arms">
+          <div class="arm yes"><div class="lab">✓ 동의</div><div class="d">정상적으로 계약을 진행합니다. 성실한 손님은 동의에 거리낌이 없습니다.</div></div>
+          <div class="arm no"><div class="lab">✕ 거절 · 무응답</div><div class="d">그 자체가 하나의 신호입니다 — 보증금·선납 조건을 강화하거나 계약을 다시 검토합니다.</div></div>
+        </div>
+      </div>
+    </div>
+    <p class="bridge">그래서 착한거래는 회원사가 손님 정보를 조회하거나 캐는 도구가 아닙니다. 손님이 <b>동의하고, 본인이 직접 발급해 제출</b>한다는 점이 핵심입니다.</p>
+    <div class="grid3">
+      <div class="card"><h3><span class="ic"><svg width="14" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span> 조회가 아닌 동의·제출</h3><p>회원사는 손님 정보를 캐거나 조회하지 않습니다. 손님이 발급·제출한 확인서만 받아 보면 됩니다.</p></div>
+      <div class="card"><h3><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span> 확인서엔 최소 정보만</h3><p>회원사가 보는 건 미해소 유무·유형·상태뿐입니다. 상세 금액·이전 업체명엔 접근하지 않아, 개인정보 부담이 적습니다.</p></div>
+      <div class="card"><h3><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></span> 받아두고, 문제 시 등록</h3><p>수집·이용 동의서 또는 플랫폼 전송으로 동의를 미리 받아둡니다. 미납·미반납 등 문제가 생겼을 때만 등록하면 됩니다.</p></div>
+    </div>
+    <div class="callout">
+      <div class="big">운전경력증명서처럼 — <span class="hl">거래이력도 손님이 본인인증으로 직접 발급해 제출합니다.</span></div>
+      <p>회원사가 캐묻거나 조회하는 것이 아니라, 손님이 스스로 자기 거래상태를 떳떳이 증명하는 방식입니다.</p>
+    </div>
+    <div class="keybox">
+      <div class="h">동의가 쌓이면, <span class="hl">확인서의 신뢰가 쌓입니다.</span></div>
+      <p>착한거래는 하루아침에 완성되는 조회망이 아니라, <b>회원사들이 수집·이용 동의서에 동의 항목을 쌓아가며 만들어가는 거래 신뢰 인프라</b>입니다.</p>
+    </div>
   </div>
+  <div class="pagefoot"><span>착한거래 · 렌터카 회원사 제안서</span><span>03 / Proposal</span></div>
+</section>
 
-  <div class="subtitle">도입은 3단계</div>
-  <div class="flow">
-    <div class="node"><div class="bdg">①</div><div class="ti">체험</div><div class="de">데모로 손님 동의·콘솔<br/>직접 확인</div></div>
-    <div class="arr">→</div>
-    <div class="node"><div class="bdg">②</div><div class="ti">가입</div><div class="de">사업자 확인 →<br/>거래코드 발급</div></div>
-    <div class="arr">→</div>
-    <div class="node hi"><div class="bdg">③</div><div class="ti">운영</div><div class="de">계약서 동의 항목 +<br/>위반 시 등록</div></div>
+<!-- ===== 5P How ===== -->
+<section class="page">
+  <div class="phead">
+    <div class="eyebrow"><span class="num">04</span> How · 작동 방식</div>
+    <h2 class="sec">동의 → 위반 등록 → 확인서 발급 → 조건 판단</h2>
+    <p class="sub">회원사는 손님 정보를 임의로 조회하지 않고, 손님이 제출한 확인서의 진위만 확인합니다. 별도 시스템도, 추가 인력도 필요하지 않습니다.</p>
   </div>
-
-  <div class="subtitle">자주 묻는 질문</div>
-  <div class="qa"><div class="q">Q. 손님 정보를 회원사가 조회할 수 있나요?</div><div class="a">아니요. 회원사는 등록만 하고 조회 기능이 없습니다. 본인이 본인인증으로 직접 확인해 제출합니다.</div></div>
-  <div class="qa"><div class="q">Q. 업체끼리 정보 공유, 담합 아닌가요?</div><div class="a">가격·영업이 아니라 본인 동의하의 미납·미반납 사실 이력만 다룹니다. 금융권 신용정보 공동활용과 같은 취지입니다.</div></div>
-  <div class="qa"><div class="q">Q. 비용·도입은요?</div><div class="a">현재 회원사 모집 단계로 데모 무료 체험. 별도 장비·개발 없이 시작합니다. 요금은 협의합니다.</div></div>
-
-  <div class="footer-cta">
-    <div class="q">렌터카 회원사 도입 및 데모 안내</div>
-    <div class="contact"><b>1600-0000</b> · help@chakan.kr</div>
+  <div class="pbody">
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><h3>계약 시 동의</h3><p>개인정보 수집·이용 동의서에 착한거래 항목을 반영합니다. 이 시점에는 등록되는 정보가 없습니다.</p></div></div>
+      <div class="step"><div class="n">2</div><div><h3>위반 시 등록</h3><p>객관자료가 있는 미해소 위반(미납·미반납 등)만, 사전 고지 후 등록합니다.</p></div></div>
+      <div class="step"><div class="n">3</div><div><h3>본인 발급</h3><p>신규·승계 계약 때 손님이 본인인증으로 착한거래 확인서를 직접 발급합니다.</p></div></div>
+      <div class="step acc"><div class="n">4</div><div><h3>조건 판단</h3><p>회원사는 QR·검증코드로 진위를 확인하고, 보증금·선납·담보·승계 가능 여부를 판단합니다.</p></div></div>
+    </div>
+    <p class="bridge">회원사가 실제로 받는 것은, 손님이 본인인증으로 발급한 <b>확인서 한 장</b>뿐입니다. 제출용 확인서는 이렇게 생겼습니다.</p>
+    <div class="cert">
+      <div class="ch"><div class="t">착한거래 확인서</div><div class="qr">QR</div></div>
+      <div class="meta"><span>성명 홍○○ · 010-****-1234</span><span>발급 2026.06.08 14:20 · CHK-260608-AB12</span></div>
+      <table>
+        <tr><td class="k">미해소 거래이력</td><td class="v bad">있음</td></tr>
+        <tr><td class="k">유형 / 건수</td><td class="v">대금 미납 · 1건</td></tr>
+        <tr><td class="k">상태</td><td class="v bad">미해소</td></tr>
+      </table>
+      <div class="nt">※ 제출용에는 <b>유무·유형·건수·상태</b>만 표시됩니다. 상세 금액·이전 업체명·경위는 본인 화면에서만 확인되며, 계약 여부는 회원사가 자체 기준에 따라 판단합니다.</div>
+    </div>
   </div>
-  <p class="pnote">※ 인터뷰·예시는 현장 사례를 바탕으로 재구성한 것입니다. 세부 약관·요금·법적 검토는 별도 협의하며, 데모 URL은 담당자에게 문의해 주세요.</p>
-  <div class="pagefoot"><span>렌터카 착한거래 · 회원사 제안서</span><span>4 / 효과·도입</span></div>
+  <div class="pagefoot"><span>착한거래 · 렌터카 회원사 제안서</span><span>04 / How</span></div>
+</section>
+
+<!-- ===== 6P Governance ===== -->
+<section class="page">
+  <div class="phead">
+    <div class="eyebrow"><span class="num">05</span> Usage · 이용 방식</div>
+    <h2 class="sec">수집·이용 동의서 한 줄, 또는 플랫폼 전송 —<br/>기존 방식에 더하기만 하면 됩니다</h2>
+    <p class="sub">회원사는 둘 중 편한 방식으로 손님 동의를 받아두면 됩니다 — 개인정보 수집·이용 동의서에 동의 문구 한 줄을 넣거나, 플랫폼으로 전송하거나. 미납·미반납 등 위반이 생기면 그때 플랫폼에 등록합니다. 복잡한 자체 시스템을 구축할 필요가 없습니다.</p>
+  </div>
+  <div class="pbody">
+    <div class="grid3">
+      <div class="card mint"><h3><span class="ic">A</span> 수집·이용 동의서 한 줄</h3><p>개인정보 수집·이용 동의서에 착한거래 동의 문구를 넣어 손님 동의를 받아둡니다.</p></div>
+      <div class="card mint"><h3><span class="ic">B</span> 또는 플랫폼 전송</h3><p>동의서 대신, 플랫폼으로 손님 동의를 전송해 받아둘 수도 있습니다. 둘 중 편한 방식이면 됩니다.</p></div>
+      <div class="card"><h3><span class="ic navy">→</span> 그다음, 문제 시 등록</h3><p>미납·미반납 등 미해소 위반이 생기면 그때 플랫폼에 사전 고지 후 등록합니다. 평소엔 할 일이 없습니다.</p></div>
+    </div>
+    <p class="bridge">동의서로 받는 경우, <b>「착한거래」가 안내하는 표준 동의 문구</b>를 그대로 넣으면 됩니다.</p>
+    <div class="contract">
+      <div class="ch"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z" stroke="#16314d" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3v5h5M8.5 13.5h7M8.5 17h5" stroke="#16314d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> 개인정보 제3자 제공 동의 — 「착한거래」 (발췌)</div>
+      <div class="body">
+        <div class="cfield"><span class="ck">제공받는 자</span><span class="cv">「착한거래」 운영사</span></div>
+        <div class="cfield"><span class="ck">제공 목적</span><span class="cv">대여료 미납·차량 미반납 등 거래이력의 기록·보관 및 본인 열람 제공</span></div>
+        <div class="cfield"><span class="ck">제공 항목</span><span class="cv">성명, 생년월일, 연락처, 미납·미반납 등 거래이력</span></div>
+        <div class="cfield"><span class="ck">보유·이용</span><span class="cv">문제 해소 시까지 (해소 시 지체 없이 파기), 최장 3년</span></div>
+      </div>
+      <div class="foot">※ 정상 이행 시 거래이력이 남지 않으며, 암호화 보관·본인만 열람합니다. &nbsp;&nbsp;☐ 동의함 &nbsp; ☐ 동의하지 않음</div>
+    </div>
+    <div class="keybox">
+      <div class="h">받아두면 끝입니다 — <span class="hl">나머지는 문제가 생겼을 때.</span></div>
+      <p>회원사가 평소 할 일은 수집·이용 동의서 한 줄(또는 플랫폼 전송)로 동의를 받아두는 것뿐입니다. 정상 이용은 아무 기록도 남지 않고, 등록 정보는 <b>본인 발급 · 암호화 보관 · 본인 열람</b>입니다.</p>
+    </div>
+  </div>
+  <div class="pagefoot"><span>착한거래 · 렌터카 회원사 제안서</span><span>05 / Usage</span></div>
+</section>
+
+<!-- ===== 7P Effect ===== -->
+<section class="page">
+  <div class="phead">
+    <div class="eyebrow"><span class="num">06</span> Effect · 기대효과 · 이용</div>
+    <h2 class="sec">리스크에 맞는 조건을 정하고,<br/>미해소 거래는 해결하게 합니다</h2>
+    <p class="sub">착한거래는 미납자를 처벌하는 서비스가 아니라, 미해소 상태를 해결하게 만드는 회수·정상화 장치입니다. 회원사 입장에서 달라지는 것들입니다.</p>
+  </div>
+  <div class="pbody">
+    <div class="gains">
+      <div class="g"><span class="ck">✓</span><span class="tx">보증금·선납 조건 설정 근거</span></div>
+      <div class="g"><span class="ck">✓</span><span class="tx">승계 심사 보완</span></div>
+      <div class="g"><span class="ck">✓</span><span class="tx">미수 회수 동기 부여</span></div>
+      <div class="g"><span class="ck">✓</span><span class="tx">차량 반납 유도</span></div>
+      <div class="g"><span class="ck">✓</span><span class="tx">갈아타기 손실 감소</span></div>
+      <div class="g"><span class="ck">✓</span><span class="tx">단톡방 명단 공유 대체</span></div>
+    </div>
+    <div class="keybox">
+      <div class="h">여러 회원사가 쌓아가는 <span class="hl">동의 기반 거래 안전망</span>.</div>
+      <p>정보가 쌓일수록 확인서는 더 신뢰할 수 있고, 미해소가 남으면 손님은 정산·반납으로 먼저 해소하게 됩니다 — 회수와 반납이 빨라집니다.</p>
+    </div>
+    <div class="seg">
+      <div class="subtitle">이용 절차 — 시스템 도입·개발 없음</div>
+      <div class="flow">
+        <div class="node"><div class="bdg">1</div><div class="ti">이용 문의</div><div class="de">서비스·약관 안내</div></div>
+        <div class="arr">→</div>
+        <div class="node"><div class="bdg">2</div><div class="ti">동의 받아두기</div><div class="de">수집·이용 동의서<br/>또는 플랫폼 전송</div></div>
+        <div class="arr">→</div>
+        <div class="node"><div class="bdg">3</div><div class="ti">평소</div><div class="de">할 일 없음</div></div>
+        <div class="arr">→</div>
+        <div class="node hi"><div class="bdg">4</div><div class="ti">문제 시 등록</div><div class="de">위반 시에만 등록·제출받기</div></div>
+      </div>
+    </div>
+    <div class="inquiry">
+      <div class="il"><b>이용 문의</b> · 도입 상담</div>
+      <div class="ir">박영협 010-6393-0926 &nbsp;·&nbsp; teamjpk.com</div>
+    </div>
+  </div>
+  <div class="pagefoot"><span>착한거래 · 렌터카 회원사 제안서</span><span>06 / Effect</span></div>
 </section>
 
 </div><!-- /#doc -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
-<script>
-function savePDF(btn){
-  if(btn){btn.disabled=true;btn.textContent='저장 중…';}
-  document.body.classList.add('exporting');
-  var el=document.getElementById('doc');
-  var opt={ margin:0, filename:'렌터카_착한거래_제안서.pdf',
-    image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-    pagebreak:{mode:['css','legacy'],before:'.page'} };
-  function done(){ document.body.classList.remove('exporting'); if(btn){btn.disabled=false;btn.textContent='📄 PDF 저장';} }
-  if(window.html2pdf){ html2pdf().set(opt).from(el).save().then(done).catch(function(){ done(); window.print(); }); }
-  else { done(); window.print(); }
-}
-</script>
 </body>
 </html>

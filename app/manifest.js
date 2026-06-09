@@ -3,7 +3,7 @@ export default function manifest() {
   return {
     name: "착한거래",
     short_name: "착한거래",
-    description: "비금융 거래의 거래이력 확인 플랫폼 (렌터카)",
+    description: "신뢰를 바탕으로 더 좋은 거래 문화를 만드는 착한거래",
     start_url: "/",
     scope: "/",
     display: "standalone",

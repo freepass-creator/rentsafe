@@ -32,7 +32,7 @@ export default async function OG() {
           </svg>
         </div>
         <div style={{ fontSize: 96, fontWeight: 700, marginTop: 40, letterSpacing: -2 }}>착한거래</div>
-        <div style={{ fontSize: 34, color: "#9fb6cc", marginTop: 18 }}>비금융 거래의 거래이력 확인 플랫폼</div>
+        <div style={{ fontSize: 34, color: "#9fb6cc", marginTop: 18 }}>신뢰를 바탕으로 더 좋은 거래 문화를 만드는</div>
       </div>
     ),
     { ...size, fonts }
