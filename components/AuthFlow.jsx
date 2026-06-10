@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { hyphenPhone, fmtBirth } from "@/lib/format";
 import StepFooter from "@/components/StepFooter";
 import CameraCapture from "@/components/CameraCapture";
@@ -18,6 +18,7 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
   const [faceImage, setFaceImage] = useState("");
   const set = (k) => (e) => setA((s) => ({ ...s, [k]: e.target.value }));
   const setPhone = (e) => setA((s) => ({ ...s, phone: hyphenPhone(e.target.value) }));
+  const camRef = useRef(null);
 
   async function runOcr() {
     if (!idImage) return;
@@ -52,7 +53,6 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
   }
 
   const linkBtn = { background: "none", border: "none", color: "#0f7f5b", fontWeight: 700, fontSize: 13, textDecoration: "underline", cursor: "pointer", padding: "8px 0 0", display: "block", margin: "10px auto 0" };
-  const whyNote = { background: "#eef3f8", border: "1px solid #dde7f1", borderRadius: 11, padding: "12px 14px", margin: "2px 0 14px", fontSize: 12, color: "#445466", lineHeight: 1.6 };
 
   if (stage === "ocr" || stage === "done")
     return (
@@ -65,17 +65,16 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
   if (stage === "idcam")
     return (
       <>
-        <div className="c-body anim-in" key={stage}>
+        <div className="c-body anim-in" key={stage} style={{ display: "flex", flexDirection: "column", paddingBottom: 6 }}>
           <div className="slabel">STEP 1 · 신분증 촬영</div>
           <div className="stitle">신분증을 촬영해 주세요</div>
-          <div className="sdesc">주민등록증·운전면허증을 화면에 맞춰 촬영하면, 이름·생년월일을 자동으로 읽어 드립니다.</div>
-          <div style={whyNote}><b style={{ color: "#16314d" }}>왜 신분증·얼굴인가요?</b><br />휴대폰 인증은 비밀번호만 알면 남이 대신 할 수 있어요. 착한거래는 거래를 앞두고 <b style={{ color: "#16314d" }}>대면 본인확인 수준</b>으로, 신분증과 본인 얼굴을 그 자리에서 촬영·대조합니다.</div>
-          <CameraCapture facing="environment" max={1100} onCapture={setIdImage} />
-          <button type="button" style={linkBtn} onClick={() => { setOcrUsed(false); setIdImage(""); setA({ name: "", birth: "", phone: "" }); setStage("manual"); }}>촬영이 어려우면 직접 입력</button>
-          {supportHelp}
-          <div className="hint">이름·생년월일만 본인확인에 사용되며, 주민등록번호 뒷자리 등 그 외 정보는 수집하지 않습니다.</div>
+          <div className="sdesc" style={{ marginBottom: 10 }}>가로 틀에 맞춰 촬영하면 이름·생년월일을 자동으로 읽어요. (대면 본인확인 수준)</div>
+          <div style={{ flex: 1, minHeight: 200 }}>
+            <CameraCapture ref={camRef} facing="environment" max={1100} onCapture={setIdImage} guide="신분증을 가로 틀에 꽉 차게" />
+          </div>
+          <button type="button" style={{ ...linkBtn, margin: "10px auto 0" }} onClick={() => { setOcrUsed(false); setIdImage(""); setA({ name: "", birth: "", phone: "" }); setStage("manual"); }}>촬영이 어려우면 직접 입력</button>
         </div>
-        <StepFooter prev={{ onClick: onCancel }} next={{ label: "다음", disabled: !idImage, onClick: runOcr }} />
+        <StepFooter prev={{ onClick: onCancel }} next={idImage ? { label: "다음", onClick: runOcr } : { label: "● 촬영", onClick: () => camRef.current?.capture() }} />
       </>
     );
 
@@ -116,14 +115,15 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
   // stage === "selfie"
   return (
     <>
-      <div className="c-body anim-in" key={stage}>
+      <div className="c-body anim-in" key={stage} style={{ display: "flex", flexDirection: "column", paddingBottom: 6 }}>
         <div className="slabel">STEP 2 · 본인 얼굴</div>
         <div className="stitle">본인 얼굴을 촬영해 주세요</div>
-        <div className="sdesc">신분증 사진과 같은 사람인지 확인합니다. 정면을 보고 촬영해 주세요.</div>
-        <CameraCapture facing="user" max={720} onCapture={setFaceImage} />
-        <div className="hint">얼굴 사진은 신분증 대조·본인확인 용도로만 사용되며, 암호화 보관됩니다.</div>
+        <div className="sdesc" style={{ marginBottom: 10 }}>신분증 사진과 같은 사람인지 확인합니다. 얼굴을 틀 안에 맞춰 주세요.</div>
+        <div style={{ flex: 1, minHeight: 200 }}>
+          <CameraCapture ref={camRef} facing="user" max={720} onCapture={setFaceImage} guide="얼굴을 틀 안에 맞춰 주세요" />
+        </div>
       </div>
-      <StepFooter prev={{ onClick: () => setStage(ocrUsed ? "review" : "manual") }} next={{ label: "본인확인 완료", disabled: !faceImage, onClick: finish }} />
+      <StepFooter prev={{ onClick: () => setStage(ocrUsed ? "review" : "manual") }} next={faceImage ? { label: "본인확인 완료", onClick: finish } : { label: "● 촬영", onClick: () => camRef.current?.capture() }} />
     </>
   );
 }
