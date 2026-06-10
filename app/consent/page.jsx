@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { findMemberByCode, createSelfConsent } from "@/lib/db";
-import { CONSENT_CLAUSES, CONSENT_FOOTNOTES, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE } from "@/lib/constants";
+import { findMemberByCode, createSelfConsent, queryRisk } from "@/lib/db";
+import { CONSENT_CLAUSES, CONSENT_FOOTNOTES, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE, RISK_TYPES } from "@/lib/constants";
 import { fmtBirth, fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
 import NoticeList from "@/components/NoticeList";
@@ -70,14 +70,21 @@ export default function SelfConsentPage() {
   }
 
   async function finish() {
+    // 본인 거래이력 확인서 산출 → 동의와 함께 이 회원사로 자동 제출
+    let cert = { unresolved: false, count: 0, types: [] };
+    try {
+      const q = await queryRisk({ name: verified.name, birth: verified.birth });
+      const recs = q.records || [];
+      cert = { unresolved: q.kind === "hit", count: recs.length, types: [...new Set(recs.map((r) => r.type))] };
+    } catch (e) { console.error(e); }
     try {
       const id = await createSelfConsent({
-        name: verified.name, company: target.company, code: target.code,
+        name: verified.name, phone: verified.phone, company: target.company, code: target.code,
         verified: { name: verified.name, birth: verified.birth, method: verified.method },
-        signed: !!sig,
+        signed: !!sig, cert,
       });
-      setReceipt({ cid: id.slice(-8).toUpperCase(), ts: fmtDateTime(new Date()) });
-    } catch (e) { console.error(e); setReceipt({ cid: "-", ts: fmtDateTime(new Date()) }); }
+      setReceipt({ cid: id.slice(-8).toUpperCase(), ts: fmtDateTime(new Date()), cert });
+    } catch (e) { console.error(e); setReceipt({ cid: "-", ts: fmtDateTime(new Date()), cert }); }
     setDone(true);
   }
 
@@ -169,7 +176,18 @@ export default function SelfConsentPage() {
           <div className="done">
             <div className="big">✓</div>
             <h2>동의가 완료되었습니다</h2>
-            <p>{target.company} 착한거래 동의가<br />정상 처리되었습니다.</p>
+            <p><b>{target.company}</b>에 착한거래 확인서가<br />함께 제출되었습니다.</p>
+            <div style={{ margin: "2px 0 16px", padding: "15px 16px", border: "1px solid #e6ebf1", borderRadius: 12, background: "#fff", textAlign: "left" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#7c8a98", marginBottom: 9 }}>착한거래 확인서 · {verified.name}</div>
+              {receipt.cert?.unresolved ? (
+                <>
+                  <span className="badge b-red"><span className="dot" />미해소 거래이력 {receipt.cert.count}건</span>
+                  {receipt.cert.types?.length > 0 && <div style={{ fontSize: 12.5, color: "#445466", marginTop: 9 }}>{receipt.cert.types.map((t) => RISK_TYPES[t] || t).join(" · ")}</div>}
+                </>
+              ) : (
+                <span className="badge b-green"><span className="dot" />미해소 거래이력 없음</span>
+              )}
+            </div>
             <div className="receipt">
               <div className="r"><span className="k">동의번호</span><span className="v mono">{receipt.cid}</span></div>
               <div className="r"><span className="k">대상 회원사</span><span className="v">{target.company}</span></div>

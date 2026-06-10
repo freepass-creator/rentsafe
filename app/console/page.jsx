@@ -103,19 +103,22 @@ function SendTab({ toast, company, code }) {
       </div>
 
       <div className="card">
-        <div className="card-title">동의 현황
+        <div className="card-title">제출된 착한거래 확인서
           <button className="btn btn-sm" style={{ marginLeft: "auto" }} onClick={reload}>↻ 새로고침</button>
         </div>
+        <div className="card-desc">손님이 동의하면 본인 거래이력 확인서가 우리 회사로 제출됩니다. 아래는 우리 회사로 제출받은 확인서입니다.</div>
         {loading ? <><div className="skel" /><div className="skel" /></> :
-          list.filter((c) => c.status === "completed").length === 0 ? <div className="empty">아직 동의한 손님이 없습니다.</div> :
+          list.filter((c) => c.status === "completed").length === 0 ? <div className="empty">아직 제출된 확인서가 없습니다.</div> :
             list.filter((c) => c.status === "completed").map((c) => (
               <div className="risk-row" key={c.id}>
                 <div>
-                  <div className="type">{mask(c.name)}</div>
-                  <div className="meta">{fmtDate(c.completedAt || c.createdAt)} · {c.self ? "손님 직접 동의" : "동의완료"}</div>
+                  <div className="type">{mask(c.name)}{c.verified?.birth ? ` · ${fmtBirth(c.verified.birth)}` : ""}</div>
+                  <div className="meta">{fmtDate(c.completedAt || c.createdAt)} 제출{c.cert?.unresolved && c.cert.types?.length ? ` · ${c.cert.types.map((t) => RISK_TYPES[t] || t).join(", ")}` : ""}</div>
                 </div>
                 <div className="sp" />
-                <span className="badge b-green"><span className="dot" />동의완료</span>
+                {c.cert?.unresolved
+                  ? <span className="badge b-red"><span className="dot" />미해소 {c.cert.count}건</span>
+                  : <span className="badge b-green"><span className="dot" />이상 없음</span>}
               </div>
             ))}
       </div>
