@@ -1,14 +1,41 @@
 rules_version = '2';
-// ⚠️ MVP/데모용 — 인증 전이라 우선 열어둠. 상용화 전 반드시 잠글 것.
-//   - 가맹사 인증(로그인) 도입 후 request.auth 기반으로 제한
-//   - 조회는 결과 최소화, 쓰기는 가맹사만
+// 착한거래 Firestore 보안 규칙 (실서비스)
+//  - 회원사(회원)는 Firebase Auth 인증, 손님은 미인증(셀프 동의/조회)
+//  - 관리자 = dudguq@gmail.com (이메일 화이트리스트)
+//  ⚠️ 미해결 과제: risks 읽기를 손님 거래이력 조회 때문에 열어둠 → 전체 노출 위험.
+//     상용 강화 시 서버 엔드포인트(/api/cert)에서 admin SDK로 조회하도록 이전 권장.
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /consents/{id} {
-      allow read, write: if true;   // TODO: 가맹사/본인 한정
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'dudguq@gmail.com';
     }
+    function isSignedIn() { return request.auth != null; }
+
+    // 회원사 프로필 — 본인(uid)만 생성·읽기, 관리자는 전체 읽기·승인(수정)
+    match /members/{uid} {
+      allow create: if isSignedIn() && request.auth.uid == uid;
+      allow read:   if isAdmin() || (isSignedIn() && request.auth.uid == uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // 동의(확인서) — 손님이 생성(미인증 허용), 읽기는 인증 회원사/관리자
+    match /consents/{id} {
+      allow create: if true;
+      allow read:   if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    // 거래위반 — 회원사가 생성(인증), 손님 거래이력 조회를 위해 읽기 허용(⚠️ 위 경고), 수정은 인증/관리자
     match /risks/{id} {
-      allow read, write: if true;   // TODO: 가맹사 한정 + 조회 최소화
+      allow create: if isSignedIn();
+      allow read:   if true;
+      allow update, delete: if isSignedIn();
+    }
+
+    // 소명 — 손님이 신청(미인증), 관리자가 처리
+    match /appeals/{id} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
     }
   }
 }

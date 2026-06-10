@@ -1,0 +1,14 @@
+rules_version = '2';
+// 착한거래 Firebase Storage 보안 규칙 (실서비스)
+//  - 회원사 서류(사업자등록증·대표자 신분증): 본인(uid) 경로에만 쓰기
+//  - 읽기는 인증 사용자(관리자 승인 화면). 단, getDownloadURL 토큰은 별도로 접근을 허용함.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /members/{uid}/{file=**} {
+      allow write: if request.auth != null && request.auth.uid == uid
+                   && request.resource.size < 8 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*|application/pdf');
+      allow read: if request.auth != null;
+    }
+  }
+}
