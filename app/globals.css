@@ -184,9 +184,9 @@ a{color:inherit;text-decoration:none}
 .ni-t{font-weight:700;font-size:13.5px;color:var(--ink)}
 .ni-d{font-size:12.5px;color:var(--ink3);margin-top:2px;line-height:1.5}
 .statement{border:1px solid var(--line);border-radius:12px;padding:15px;font-size:12.5px;color:var(--ink2);line-height:1.7;max-height:150px;overflow-y:auto;background:#fbfcfd;margin-bottom:16px}
-.cc{display:flex;align-items:center;gap:11px;padding:15px 16px;border:1.5px solid var(--line);border-radius:13px;cursor:pointer;font-weight:700;font-size:14.5px;transition:.12s;line-height:1.4}
+.cc{display:flex;align-items:flex-start;gap:11px;padding:15px 16px;border:1.5px solid var(--line);border-radius:13px;cursor:pointer;font-weight:700;font-size:14.5px;transition:.12s;line-height:1.45}
 .cc.on{border-color:var(--safe);background:var(--safe50)}
-.cc input{width:21px;height:21px;accent-color:var(--safe);flex-shrink:0}
+.cc input{width:21px;height:21px;accent-color:var(--safe);flex-shrink:0;margin:1px 0 0;cursor:pointer}
 .c-footer{flex-shrink:0;padding:12px 20px calc(14px + var(--sab));background:#fff;border-top:1px solid var(--line)}
 .c-footer.wiz{display:flex;gap:10px}
 .btn-prev{flex:0 0 auto;min-width:92px}

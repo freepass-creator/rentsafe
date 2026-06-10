@@ -31,14 +31,21 @@ export default function CameraCapture({ facing = "environment", max = 1100, onCa
     return () => { cancelled = true; stop(); };
   }, [facing, shot]);
 
+  // 프리뷰 프레임과 동일한 비율로 '중앙 크롭' 캡처 → 본 대로 찍힘(WYSIWYG).
+  // 신분증(후면)=가로 3:2, 셀카(전면)=세로 3:4.
   function capture() {
     const v = videoRef.current;
     if (!v || !v.videoWidth) return;
-    const scale = Math.min(1, max / Math.max(v.videoWidth, v.videoHeight));
+    const targetAR = facing === "user" ? 3 / 4 : 3 / 2;
+    const vw = v.videoWidth, vh = v.videoHeight;
+    let sw, sh, sx, sy;
+    if (vw / vh > targetAR) { sh = vh; sw = vh * targetAR; sx = (vw - sw) / 2; sy = 0; }
+    else { sw = vw; sh = vw / targetAR; sx = 0; sy = (vh - sh) / 2; }
+    const scale = Math.min(1, max / Math.max(sw, sh));
     const cv = document.createElement("canvas");
-    cv.width = Math.round(v.videoWidth * scale);
-    cv.height = Math.round(v.videoHeight * scale);
-    cv.getContext("2d").drawImage(v, 0, 0, cv.width, cv.height);
+    cv.width = Math.round(sw * scale);
+    cv.height = Math.round(sh * scale);
+    cv.getContext("2d").drawImage(v, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
     const url = cv.toDataURL("image/jpeg", 0.72);
     setShot(url);
     onCapture(url);
@@ -66,7 +73,7 @@ export default function CameraCapture({ facing = "environment", max = 1100, onCa
 
   return (
     <div>
-      <div style={{ borderRadius: 12, overflow: "hidden", background: "#000", aspectRatio: facing === "user" ? "3 / 4" : "4 / 3", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ borderRadius: 12, overflow: "hidden", background: "#000", aspectRatio: facing === "user" ? "3 / 4" : "3 / 2", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <video ref={videoRef} playsInline muted style={{ width: "100%", height: "100%", objectFit: "cover", transform: facing === "user" ? "scaleX(-1)" : "none" }} />
       </div>
       <button type="button" onClick={capture} disabled={!ready} style={{ ...shootBtn, opacity: ready ? 1 : 0.55 }}>{ready ? "● 촬영" : "카메라 준비 중…"}</button>

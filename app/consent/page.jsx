@@ -153,8 +153,8 @@ export default function SelfConsentPage() {
             <ul className="footnotes">
               {CONSENT_FOOTNOTES.map((f, i) => <li key={i}>{f}</li>)}
             </ul>
-            <label className={`cc ${agreed ? "on" : ""}`} onClick={() => setAgreed((v) => !v)}>
-              <input type="checkbox" checked={agreed} readOnly onClick={(e) => e.stopPropagation()} /> 위 내용을 확인하였으며, 내 거래이력 확인서를 <b>{target.company}</b>에 제출하는 데 동의합니다.
+            <label className={`cc ${agreed ? "on" : ""}`}>
+              <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} /> <span>위 내용을 확인하였으며, 내 거래이력 확인서를 <b>{target.company}</b>에 제출하는 데 동의합니다.</span>
             </label>
           </>
         )}
