@@ -109,7 +109,7 @@ export default function SelfConsentPage() {
         <AuthFlow onVerified={setVerified} onCancel={() => setStarted(false)} />
       ) : (
         <>
-      <div className="c-body anim-in" key={screen}>
+      <div className="c-body anim-in" key={screen} style={screen === "sign" ? { display: "flex", flexDirection: "column" } : undefined}>
         {/* STEP 0 — 업체코드 입력 */}
         {!target && (
           <>
@@ -162,14 +162,12 @@ export default function SelfConsentPage() {
         {/* STEP 3 — 서명 */}
         {verified && signing && !done && (
           <>
-            <div className="verified">
-              <div className="vrow"><span className="chk">✓</span> 본인확인 완료 <span style={{ fontSize: 11, color: "var(--ink3)", fontWeight: 600 }}>· {verified.method}</span></div>
-              <div className="info"><span><b>{verified.name}</b> 님</span><span>생년월일 {fmtBirth(verified.birth)}</span></div>
-            </div>
             <div className="slabel">STEP 3 · 전자서명</div>
             <div className="stitle">동의 확인을 위해 서명해 주세요</div>
-            <div className="sdesc">{target.company}와의 거래에 대한 착한거래 동의를 본인이 직접 확인하는 전자서명입니다.</div>
-            <SignaturePad onChange={setSig} />
+            <div className="sdesc" style={{ marginBottom: 10 }}>{target.company}와의 거래 동의를 본인이 직접 확인하는 전자서명입니다.</div>
+            <div style={{ flex: 1, minHeight: 220, display: "flex" }}>
+              <SignaturePad onChange={setSig} fill />
+            </div>
           </>
         )}
 

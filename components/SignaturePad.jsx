@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 
 // 손가락/마우스 서명 캔버스. onChange(dataURL|"") 로 결과 전달.
-export default function SignaturePad({ onChange }) {
+export default function SignaturePad({ onChange, fill }) {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const drawing = useRef(false);
@@ -37,10 +37,11 @@ export default function SignaturePad({ onChange }) {
   }
 
   return (
-    <div className="sig">
+    <div className="sig" style={fill ? { display: "flex", flexDirection: "column", height: "100%", width: "100%", marginTop: 0 } : undefined}>
       <canvas
         ref={canvasRef}
         className="sig-canvas"
+        style={fill ? { flex: 1, minHeight: 0, height: "auto" } : undefined}
         onMouseDown={start} onMouseMove={move} onMouseUp={end} onMouseLeave={end}
         onTouchStart={start} onTouchMove={move} onTouchEnd={end}
       />
