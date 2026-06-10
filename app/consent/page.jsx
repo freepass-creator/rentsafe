@@ -121,7 +121,7 @@ export default function SelfConsentPage() {
                 <input value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} inputMode="numeric" maxLength={4} placeholder="예: 1234" style={{ letterSpacing: 2 }} /></div>
               {err && <div className="auth-err">{err}</div>}
             </form>
-            {DEMO_MODE && <div className="demo-hint">샘플 {CODE_LABEL} — <b>1001</b> 스피드렌터카 · <b>1002</b> 테스트렌터카 · <b>1003</b> 하나모빌리티</div>}
+            {DEMO_MODE && <div className="demo-hint">샘플 {CODE_LABEL} — <b>1001</b> 테스트렌터카 · <b>1002</b> 스피드렌터카 · <b>1003</b> 하나모빌리티</div>}
           </>
         )}
 
