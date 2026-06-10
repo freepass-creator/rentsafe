@@ -52,6 +52,7 @@ function SendTab({ toast, company, code }) {
   const [showTpl, setShowTpl] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [showStatusPreview, setShowStatusPreview] = useState(false);
+  const [open, setOpen] = useState(null);
   const copyText = (t) => { navigator.clipboard?.writeText(t); toast("복사되었습니다.", "safe"); };
 
   const reload = useCallback(async () => {
@@ -109,18 +110,30 @@ function SendTab({ toast, company, code }) {
         <div className="card-desc">손님이 동의하면 본인 거래이력 확인서가 우리 회사로 제출됩니다. 아래는 우리 회사로 제출받은 확인서입니다.</div>
         {loading ? <><div className="skel" /><div className="skel" /></> :
           list.filter((c) => c.status === "completed").length === 0 ? <div className="empty">아직 제출된 확인서가 없습니다.</div> :
-            list.filter((c) => c.status === "completed").map((c) => (
-              <div className="risk-row" key={c.id}>
-                <div>
-                  <div className="type">{mask(c.name)}{c.verified?.birth ? ` · ${fmtBirth(c.verified.birth)}` : ""}</div>
-                  <div className="meta">{fmtDate(c.completedAt || c.createdAt)} 제출{c.cert?.unresolved && c.cert.types?.length ? ` · ${c.cert.types.map((t) => RISK_TYPES[t] || t).join(", ")}` : ""}</div>
+            list.filter((c) => c.status === "completed").map((c) => {
+              const hasPhotos = c.photos?.id || c.photos?.face;
+              return (
+                <div key={c.id} style={{ borderBottom: "1px solid #eef2f6" }}>
+                  <div className="risk-row" style={{ borderBottom: "none" }}>
+                    <div>
+                      <div className="type">{mask(c.name)}{c.verified?.birth ? ` · ${fmtBirth(c.verified.birth)}` : ""}</div>
+                      <div className="meta">{fmtDate(c.completedAt || c.createdAt)} 제출{c.cert?.unresolved && c.cert.types?.length ? ` · ${c.cert.types.map((t) => RISK_TYPES[t] || t).join(", ")}` : ""}</div>
+                    </div>
+                    <div className="sp" />
+                    {hasPhotos && <button className="btn btn-sm" style={{ marginRight: 8 }} onClick={() => setOpen(open === c.id ? null : c.id)}>{open === c.id ? "대조 닫기" : "신분증·얼굴 대조"}</button>}
+                    {c.cert?.unresolved
+                      ? <span className="badge b-red"><span className="dot" />미해소 {c.cert.count}건</span>
+                      : <span className="badge b-green"><span className="dot" />이상 없음</span>}
+                  </div>
+                  {open === c.id && hasPhotos && (
+                    <div style={{ display: "flex", gap: 10, padding: "2px 0 12px" }}>
+                      {c.photos?.id && <figure style={{ flex: 1, margin: 0 }}><img src={c.photos.id} alt="신분증" style={{ width: "100%", borderRadius: 8, border: "1px solid #e6ebf1" }} /><figcaption style={{ fontSize: 11, color: "#7c8a98", textAlign: "center", marginTop: 4 }}>신분증</figcaption></figure>}
+                      {c.photos?.face && <figure style={{ flex: 1, margin: 0 }}><img src={c.photos.face} alt="본인 얼굴" style={{ width: "100%", borderRadius: 8, border: "1px solid #e6ebf1" }} /><figcaption style={{ fontSize: 11, color: "#7c8a98", textAlign: "center", marginTop: 4 }}>본인 얼굴</figcaption></figure>}
+                    </div>
+                  )}
                 </div>
-                <div className="sp" />
-                {c.cert?.unresolved
-                  ? <span className="badge b-red"><span className="dot" />미해소 {c.cert.count}건</span>
-                  : <span className="badge b-green"><span className="dot" />이상 없음</span>}
-              </div>
-            ))}
+              );
+            })}
       </div>
 
       <div className="card">

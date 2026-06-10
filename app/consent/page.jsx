@@ -82,6 +82,7 @@ export default function SelfConsentPage() {
         name: verified.name, phone: verified.phone, company: target.company, code: target.code,
         verified: { name: verified.name, birth: verified.birth, method: verified.method },
         signed: !!sig, cert,
+        photos: { id: verified.idImage || "", face: verified.faceImage || "" },
       });
       setReceipt({ cid: id.slice(-8).toUpperCase(), ts: fmtDateTime(new Date()), cert });
     } catch (e) { console.error(e); setReceipt({ cid: "-", ts: fmtDateTime(new Date()), cert }); }
@@ -143,6 +144,7 @@ export default function SelfConsentPage() {
             </div>
             <div className="slabel">STEP 2 · {target.company} 착한거래 동의</div>
             <div className="stitle">아래 내용에 동의해 주세요</div>
+            <div className="sdesc" style={{ marginBottom: 8 }}>동의하면 본인의 거래이력 확인서가 <b>{target.company}</b>에 <b>함께 제출</b>됩니다.</div>
             <div className="clauses">
               {CONSENT_CLAUSES.map((c, i) => (
                 <div className="clause" key={i}><div className="clause-t">{c.t}</div><div className="clause-b">{c.b}</div></div>
@@ -152,7 +154,7 @@ export default function SelfConsentPage() {
               {CONSENT_FOOTNOTES.map((f, i) => <li key={i}>{f}</li>)}
             </ul>
             <label className={`cc ${agreed ? "on" : ""}`} onClick={() => setAgreed((v) => !v)}>
-              <input type="checkbox" checked={agreed} readOnly onClick={(e) => e.stopPropagation()} /> 위 내용을 모두 확인하였으며 거래이력 제공에 동의합니다.
+              <input type="checkbox" checked={agreed} readOnly onClick={(e) => e.stopPropagation()} /> 위 내용을 확인하였으며, 내 거래이력 확인서를 <b>{target.company}</b>에 제출하는 데 동의합니다.
             </label>
           </>
         )}
