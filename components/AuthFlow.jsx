@@ -69,7 +69,7 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
           <div className="stitle">신분증을 올려 주세요</div>
           <div className="sdesc">본인·운전면허 확인을 위해 신분증(주민등록증·운전면허증) 사진을 올리면, 이름·생년월일을 자동으로 읽어 드립니다.</div>
           <label style={{ display: "block", border: "1.5px dashed #cdd6e0", borderRadius: 14, padding: 30, textAlign: "center", cursor: "pointer", background: "#f7f9fb" }}>
-            <input type="file" accept="image/*" capture="environment" onChange={onFile} style={{ display: "none" }} />
+            <input type="file" accept="image/*" onChange={onFile} style={{ display: "none" }} />
             <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 9 }}>
               <svg width="42" height="42" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#7c8a98" strokeWidth="1.7" /><circle cx="8.5" cy="11" r="2" stroke="#7c8a98" strokeWidth="1.7" /><path d="M14 10h4M14 13.5h4M5.6 16c.5-1.6 4.3-1.6 4.8 0" stroke="#7c8a98" strokeWidth="1.7" strokeLinecap="round" /></svg>
               <b style={{ fontSize: 15, color: "#445466" }}>신분증 사진 올리기</b>
