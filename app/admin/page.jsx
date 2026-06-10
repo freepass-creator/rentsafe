@@ -9,7 +9,7 @@ import Icon from "@/components/Icon";
 import FlowHeader from "@/components/FlowHeader";
 import StepFooter from "@/components/StepFooter";
 import { useRouter } from "next/navigation";
-import { getSession, logout, login } from "@/lib/auth";
+import { getSession, logout, login, listPendingMembers, approveMember, rejectMember } from "@/lib/auth";
 
 export default function Admin() {
   const router = useRouter();
@@ -22,6 +22,8 @@ export default function Admin() {
   const [risks, setRisks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [omid, setOmid] = useState(null);
 
   useEffect(() => {
     const s = getSession();
@@ -41,8 +43,8 @@ export default function Admin() {
   const reload = useCallback(async () => {
     setLoading(true);
     try {
-      const [a, r] = await Promise.all([listAppeals(), listRisks()]);
-      setAppeals(a); setRisks(r);
+      const [a, r, m] = await Promise.all([listAppeals(), listRisks(), listPendingMembers()]);
+      setAppeals(a); setRisks(r); setMembers(m);
     } catch (e) { console.error(e); }
     setLoading(false);
   }, []);
@@ -51,6 +53,20 @@ export default function Admin() {
   async function approve(a) {
     await resolveAppeal(a);
     setToast("해제 처리되었습니다. 해당 거래 위반사항이 해소되었습니다.");
+    setTimeout(() => setToast(null), 2600);
+    reload();
+  }
+
+  async function approveMem(m) {
+    const code = await approveMember(m.id);
+    setToast(`${m.company} 승인 완료 · 거래코드 ${code} 발급`);
+    setTimeout(() => setToast(null), 3200);
+    reload();
+  }
+  async function rejectMem(m) {
+    if (!confirm(`${m.company} 가입을 반려할까요?`)) return;
+    await rejectMember(m.id);
+    setToast(`${m.company} 가입을 반려했습니다.`);
     setTimeout(() => setToast(null), 2600);
     reload();
   }
@@ -93,6 +109,32 @@ export default function Admin() {
           <div className="stat-box"><div className="v">{people}</div><div className="k">등록 인원</div></div>
           <div className="stat-box"><div className="v">{active.length}</div><div className="k">유효 건수</div></div>
           <div className="stat-box"><div className="v">{pending.length}</div><div className="k">소명 대기</div></div>
+        </div>
+
+        {/* 회원사 가입 승인 */}
+        <div className="card">
+          <div className="card-title">회원사 가입 승인 <span style={{ fontSize: 12, fontWeight: 500, color: "var(--ink3)" }}>· 대기 {members.length}건</span></div>
+          {loading ? <><div className="skel" /><div className="skel" /></> :
+            members.length === 0 ? <div className="empty">대기 중인 가입 신청이 없습니다.</div> :
+              members.map((m) => (
+                <div key={m.id} style={{ borderBottom: "1px solid #eef2f6" }}>
+                  <div className="risk-row" style={{ borderBottom: "none", alignItems: "flex-start" }}>
+                    <div style={{ flex: 1 }}>
+                      <div className="type">{m.company}</div>
+                      <div className="meta">{m.email}{m.bizNo ? ` · ${m.bizNo}` : ""}{m.ceo ? ` · 대표 ${m.ceo}` : ""}{m.service ? ` · ${m.service}` : ""}</div>
+                    </div>
+                    <button className="btn btn-sm" onClick={() => setOmid(omid === m.id ? null : m.id)}>{omid === m.id ? "닫기" : "서류"}</button>
+                    <button className="btn btn-sm btn-safe" style={{ marginLeft: 6 }} onClick={() => approveMem(m)}>승인</button>
+                    <button className="btn btn-sm" style={{ marginLeft: 6 }} onClick={() => rejectMem(m)}>반려</button>
+                  </div>
+                  {omid === m.id && (
+                    <div style={{ display: "flex", gap: 10, padding: "2px 0 12px" }}>
+                      <DocView label="사업자등록증" src={m.bizImage} />
+                      <DocView label="대표자 신분증" src={m.ceoIdImage} />
+                    </div>
+                  )}
+                </div>
+              ))}
         </div>
 
         {/* 소명 대기 */}
@@ -146,5 +188,18 @@ export default function Admin() {
       </div>
       {toast && <div className="toast-host"><div className="toast safe">{toast}</div></div>}
     </>
+  );
+}
+
+function DocView({ label, src }) {
+  if (!src) return <div style={{ flex: 1, fontSize: 11, color: "var(--ink3)", textAlign: "center", padding: 18, border: "1px dashed #e6ebf1", borderRadius: 8 }}>{label} 없음</div>;
+  const isPdf = src.startsWith("data:application/pdf");
+  return (
+    <figure style={{ flex: 1, margin: 0, minWidth: 0 }}>
+      {isPdf
+        ? <a href={src} target="_blank" rel="noreferrer" className="btn btn-sm btn-block">📄 {label} 열기</a>
+        : <img src={src} alt={label} style={{ width: "100%", borderRadius: 8, border: "1px solid #e6ebf1", display: "block" }} />}
+      <figcaption style={{ fontSize: 11, color: "var(--ink3)", textAlign: "center", marginTop: 4 }}>{label}</figcaption>
+    </figure>
   );
 }

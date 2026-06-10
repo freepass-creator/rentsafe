@@ -22,6 +22,25 @@ export default function Console() {
 
   useEffect(() => { const s = getSession(); if (!s) router.replace("/login"); else setSession(s); }, [router]);
   if (!session) return null;
+  if (session.role !== "admin" && session.status && session.status !== "approved") {
+    const rejected = session.status === "rejected";
+    return (
+      <>
+        <AppHeader subtitle={<>회원 콘솔</>} right={<button className="btn btn-sm" style={{ background: "transparent", borderColor: "rgba(255,255,255,.3)", color: "#fff" }} onClick={async () => { await logout(); router.replace("/login"); }}>로그아웃</button>} />
+        <div className="container">
+          <div className="card" style={{ textAlign: "center", padding: "42px 22px" }}>
+            <div style={{ fontSize: 38 }}>{rejected ? "⛔" : "⏳"}</div>
+            <h2 style={{ margin: "12px 0 8px", fontSize: 18 }}>{rejected ? "가입이 반려되었습니다" : "승인 대기 중입니다"}</h2>
+            <p style={{ color: "var(--ink2)", fontSize: 13.5, lineHeight: 1.65 }}>
+              {rejected
+                ? "제출하신 서류 확인 결과 가입이 반려되었습니다. 문의: 박영협 010-6393-0926"
+                : "관리자가 사업자등록증·대표자 신분증을 확인하고 있습니다. 승인되면 거래코드가 발급되고 바로 이용할 수 있어요. (승인 후 다시 로그인해 주세요)"}
+            </p>
+          </div>
+        </div>
+      </>
+    );
+  }
   const company = session.company;
   const code = session.code || "";
 
