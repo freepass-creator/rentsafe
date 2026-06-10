@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login, logout, TEST_LOGIN } from "@/lib/auth";
+import { login, logout } from "@/lib/auth";
 import FlowHeader from "@/components/FlowHeader";
 import StepFooter from "@/components/StepFooter";
 
@@ -34,11 +34,6 @@ export default function LoginPage() {
             <input value={pw} onChange={(e) => setPw(e.target.value)} type="password" placeholder="비밀번호" autoComplete="current-password" /></div>
           {err && <div className="auth-err">{err}</div>}
         </form>
-        <div className="auth-test">
-          <span>테스트 계정</span>
-          <span><code>{TEST_LOGIN.email}</code> / <code>{TEST_LOGIN.pw}</code>
-            <button className="btn btn-sm" style={{ marginLeft: 8 }} onClick={() => { setEmail(TEST_LOGIN.email); setPw(TEST_LOGIN.pw); }}>입력</button></span>
-        </div>
         <div className="auth-foot">
           <a href="/signup">회원 가입</a>
           <a href="/reset">비밀번호 찾기</a>

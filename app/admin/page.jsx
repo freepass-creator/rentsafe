@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { RISK_TYPES } from "@/lib/constants";
 import { mask, fmtBirth, cleanBirth, fmtDate } from "@/lib/format";
-import { IS_LOCAL, listAppeals, resolveAppeal, listRisks } from "@/lib/db";
+import { listAppeals, resolveAppeal, listRisks } from "@/lib/db";
 import AppHeader from "@/components/AppHeader";
 import Icon from "@/components/Icon";
 import FlowHeader from "@/components/FlowHeader";
@@ -103,7 +103,6 @@ export default function Admin() {
       <AppHeader subtitle="플랫폼 관리자 · 등록 현황 · 소명 심사"
         right={<button className="btn btn-sm" style={{ background: "transparent", borderColor: "rgba(255,255,255,.3)", color: "#fff" }} onClick={async () => { await logout(); setSession(null); }}>로그아웃</button>} />
       <div className="container">
-        {IS_LOCAL && <div className="demo-note">데모 모드 (localStorage). 회원사 등록·손님 소명이 여기로 모입니다.</div>}
 
         <div className="stat-row">
           <div className="stat-box"><div className="v">{people}</div><div className="k">등록 인원</div></div>

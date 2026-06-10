@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { RISK_TYPES, CONTRACT_CONSENT_FORM, CONSENT_NOTICES, CONSENT_CLAUSES, CONSENT_FOOTNOTES, STATUS_NOTICES, CODE_LABEL, VIOLATION_LABEL } from "@/lib/constants";
 import { mask, fmtBirth, fmtDate } from "@/lib/format";
-import { IS_LOCAL, listConsents, addRisk } from "@/lib/db";
+import { listConsents, addRisk } from "@/lib/db";
 import { getSession, logout } from "@/lib/auth";
 import AppHeader from "@/components/AppHeader";
 import Icon from "@/components/Icon";
@@ -51,7 +51,6 @@ export default function Console() {
         right={<button className="btn btn-sm" style={{ background: "transparent", borderColor: "rgba(255,255,255,.3)", color: "#fff" }} onClick={async () => { await logout(); router.replace("/login"); }}>로그아웃</button>}
       />
       <div className="container">
-        {IS_LOCAL && <div className="demo-note">데모 모드 — Firebase 미연결, 브라우저 로컬 저장으로 동작합니다. (배포 후 Firebase 키 등록 시 실제 DB로 전환)</div>}
         <div className="tabs">
           <button className={`tab ${tab === "send" ? "active" : ""}`} onClick={() => setTab("send")}><Icon name="check" /> 동의 현황</button>
           <button className={`tab ${tab === "register" ? "active" : ""}`} onClick={() => setTab("register")}><Icon name="plus" /> {VIOLATION_LABEL}</button>
@@ -211,7 +210,6 @@ function RegisterTab({ toast, company }) {
     <div className="card">
       <div className="card-title">{VIOLATION_LABEL} 등록</div>
       <div className="card-desc">중대한 계약 위반이 발생한 경우에만, <b>동의받은 손님에 한해 객관적 증빙을 첨부하여</b> 등록합니다. 등록처는 로그인 회원({company})으로 자동 기록됩니다.</div>
-      <div className="demo-note">⚠ 데모 단계 — 실제 개인정보 대신 테스트 데이터를 사용하세요.</div>
       <form onSubmit={submit}>
         <div className="grid">
           {completed.length > 0 && (

@@ -1,6 +1,4 @@
 import "./globals.css";
-import { DEMO_MODE } from "@/lib/constants";
-import DemoNav from "@/components/DemoNav";
 import PWARegister from "@/components/PWARegister";
 
 export const metadata = {
@@ -39,7 +37,6 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <PWARegister />
-        {DEMO_MODE && <DemoNav />}
         {children}
       </body>
     </html>
