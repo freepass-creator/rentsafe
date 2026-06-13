@@ -42,15 +42,9 @@ export default function InstallButton() {
 
   return (
     <>
-      <button type="button" className="land-card install" onClick={onClick}>
-        <span className="lc-ic">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12M7 11l5 5 5-5M5 21h14" /></svg>
-        </span>
-        <span className="lc-tx">
-          <b>앱 설치하기</b>
-          <span>홈 화면에 추가해 앱처럼 빠르게 사용하세요.</span>
-        </span>
-        <span className="lc-arrow">↓</span>
+      <button type="button" className="install-btn" onClick={onClick}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12M7 11l5 5 5-5M5 21h14" /></svg>
+        앱 설치하기
       </button>
       {guide && <p className="install-guide">{guide}</p>}
     </>

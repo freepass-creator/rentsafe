@@ -33,14 +33,13 @@ export default function Landing() {
           </span>
           <span className="lc-arrow">→</span>
         </a>
-
-        <InstallButton />
       </div>
       </div>
 
       <div className="land-foot">
         <span>회원이신가요?</span>
         <a href="/login" className="land-biz">회원 로그인</a>
+        <InstallButton />
       </div>
     </div>
   );
