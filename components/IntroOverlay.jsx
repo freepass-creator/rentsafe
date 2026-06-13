@@ -40,29 +40,29 @@ export default function IntroOverlay() {
         <div className="intro-head">
           <BrandMark size={30} className="intro-mark" />
           <h2 className="intro-title"><span className="accent">착한</span>거래는?</h2>
-          <p className="intro-tagline">신뢰가 필요한 곳에,<br /><b>스스로 증명</b>합니다.</p>
+          <p className="intro-tagline">신뢰가 필요한 곳에,<br /><b>스스로 증명</b>해요.</p>
         </div>
 
         <ul className="intro-vals">
           <li>
-            <b>동의가 곧, 첫 신뢰</b>
-            <span>거래이력이 없어도 괜찮습니다. 동의하는 것부터가 신뢰의 시작입니다.</span>
+            <b>시작은 가볍게</b>
+            <span>거래이력이 없어도 괜찮아요. 동의하는 것부터가 시작이에요.</span>
           </li>
           <li>
-            <b>낙인이 아니라, 해소</b>
-            <span>정상 거래엔 아무것도 남지 않고, 미해소 거래는 본인이 직접 풀어냅니다.</span>
+            <b>대부분은 남는 게 없어요</b>
+            <span>평소대로 거래하면 아무 기록도 안 생겨요. 몇몇 경우만 막으려는 거예요.</span>
           </li>
           <li>
-            <b>조회가 아니라, 증명</b>
-            <span>거래이력은 본인이 발급하고, 당사자만 열람합니다.</span>
+            <b>내 기록은 내가</b>
+            <span>거래이력은 본인이 발급하고, 당사자만 봐요.</span>
           </li>
           <li>
-            <b>한쪽이 아니라, 서로</b>
-            <span>좋은 거래는 한쪽만으로 만들어지지 않습니다. 사는 쪽도, 파는 쪽도 서로의 신뢰를 함께 쌓아갑니다.</span>
+            <b>서로 같이</b>
+            <span>거래는 한쪽만 잘하면 안 되니까요. 사는 쪽도, 파는 쪽도 같이 신경 써요.</span>
           </li>
         </ul>
 
-        <p className="intro-vision">여기서 쌓은 신뢰는,<br />신뢰가 필요한 <b>다른 거래</b>에서도 힘이 됩니다.</p>
+        <p className="intro-vision">여기서 쌓은 신뢰는,<br />신뢰가 필요한 <b>다른 거래</b>에서도 힘이 돼요.</p>
 
         <div className="intro-fields" aria-label="적용 분야">
           <span>렌터카</span>
