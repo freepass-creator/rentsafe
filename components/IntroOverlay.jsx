@@ -2,17 +2,22 @@
 
 import { useEffect, useState } from "react";
 import BrandMark from "@/components/BrandMark";
-import { SERVICE_NAME } from "@/lib/constants";
+import { SERVICE_NAME, PRE_LAUNCH_INTRO } from "@/lib/constants";
 
 const SEEN_KEY = "cd_intro_seen_v1";
 
-// 처음 방문한 손님에게 한 번 뜨는 '왜 만들었나(취지)' 소개 — "다시 보지 않기"로 끌 수 있음.
-// (설치 앱/재방문자는 한 번 닫으면 더 이상 보이지 않음)
+// 착한거래 소개 오버레이.
+// 오픈 전(PRE_LAUNCH_INTRO=true): 새로고침마다 떠서 확인하고 들어가게.
+// 오픈 후(false): 첫 방문 1회만 뜨고 '다시 보지 않기'로 끔.
 export default function IntroOverlay() {
   const [open, setOpen] = useState(false);
   const [dontShow, setDontShow] = useState(true);
 
   useEffect(() => {
+    const standalone =
+      window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+    if (standalone) return; // 설치 앱에선 표시하지 않음 (바로 진입)
+    if (PRE_LAUNCH_INTRO) { setOpen(true); return; } // 오픈 전: 새로고침마다 표시
     try {
       if (!localStorage.getItem(SEEN_KEY)) setOpen(true);
     } catch {
@@ -23,7 +28,7 @@ export default function IntroOverlay() {
   if (!open) return null;
 
   const close = () => {
-    if (dontShow) {
+    if (!PRE_LAUNCH_INTRO && dontShow) {
       try { localStorage.setItem(SEEN_KEY, "1"); } catch {}
     }
     setOpen(false);
@@ -63,10 +68,12 @@ export default function IntroOverlay() {
           <span>후불·외상 거래</span>
         </div>
 
-        <label className="intro-dont">
-          <input type="checkbox" checked={dontShow} onChange={(e) => setDontShow(e.target.checked)} />
-          <span>다시 보지 않기</span>
-        </label>
+        {!PRE_LAUNCH_INTRO && (
+          <label className="intro-dont">
+            <input type="checkbox" checked={dontShow} onChange={(e) => setDontShow(e.target.checked)} />
+            <span>다시 보지 않기</span>
+          </label>
+        )}
 
         <button type="button" className="intro-ok" onClick={close}>확인했어요</button>
       </div>
