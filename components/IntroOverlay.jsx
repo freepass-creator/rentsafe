@@ -43,6 +43,8 @@ export default function IntroOverlay() {
           <p className="intro-tagline">신뢰가 필요한 곳에,<br /><b>스스로 증명</b>해요.</p>
         </div>
 
+        <p className="intro-why">대부분의 거래는 믿음으로 충분해요. 다만 몇 번의 어긋남이 모두에게 한 겹의 문턱을 만들죠. 착한거래는 <b>그 문턱을 다시 낮춰요</b>.</p>
+
         <ul className="intro-vals">
           <li>
             <b>시작은 가볍게</b>
