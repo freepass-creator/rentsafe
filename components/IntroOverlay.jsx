@@ -40,7 +40,7 @@ export default function IntroOverlay() {
         <div className="intro-head">
           <BrandMark size={30} className="intro-mark" />
           <h2 className="intro-title"><span className="accent">착한</span>거래는?</h2>
-          <p className="intro-tagline">약속을 지킨 사람이 더 신뢰받는,<br /><b>거래 신뢰 인프라</b>입니다.</p>
+          <p className="intro-tagline">신뢰가 필요한 곳에,<br /><b>스스로 증명</b>합니다.</p>
         </div>
 
         <ul className="intro-vals">
@@ -56,9 +56,13 @@ export default function IntroOverlay() {
             <b>조회가 아니라, 증명</b>
             <span>거래이력은 본인이 발급하고 본인만 열람합니다. 캐묻지 않습니다.</span>
           </li>
+          <li>
+            <b>한쪽이 아니라, 서로</b>
+            <span>객관적 기록을 넘어, 거래 양쪽이 서로의 신뢰를 쌓아가는 네트워크로 나아갑니다.</span>
+          </li>
         </ul>
 
-        <p className="intro-vision">약속이 곧 자산이 되는 거래 신뢰 인프라.<br />지금은 <b>{SERVICE_NAME}</b>부터 시작합니다.</p>
+        <p className="intro-vision">지금은 <b>{SERVICE_NAME}</b>부터 —<br />신뢰가 필요한 모든 거래로 넓혀갑니다.</p>
 
         <div className="intro-fields" aria-label="확장 분야">
           <span className="on">{SERVICE_NAME}</span>
