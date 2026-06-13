@@ -14,6 +14,7 @@ export default function Landing() {
       <div className="land-hero">
         <BrandMark size={34} className="land-mark" />
         <h1 className="land-title"><span className="accent">착한</span>거래</h1>
+        <p className="land-cat">자기증명 서비스</p>
         <p className="land-lead">{CAMPAIGN_HEADLINE}<br />본인인증 후 안전하게 진행하세요.</p>
       </div>
 

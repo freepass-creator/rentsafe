@@ -240,6 +240,7 @@ a{color:inherit;text-decoration:none}
 .svc-badge{display:inline-block;margin-top:14px;font-size:12px;font-weight:800;letter-spacing:.3px;color:var(--safe);background:var(--safe50);border:1px solid #cdeadf;border-radius:var(--radius);padding:5px 12px}
 .land-title{font-size:28px;font-weight:800;letter-spacing:-.6px;color:var(--navy);margin-top:10px}
 .land-title .accent{color:var(--safe)}
+.land-cat{margin-top:7px;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--safe)}
 .land-lead{font-size:14px;line-height:1.6;color:var(--ink3);margin-top:12px}
 .land-cards{width:100%;display:flex;flex-direction:column;gap:12px}
 .land-card{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);transition:transform .1s,box-shadow .15s,border-color .15s}
