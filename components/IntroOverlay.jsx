@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import BrandMark from "@/components/BrandMark";
-import { SERVICE_NAME, PRE_LAUNCH_INTRO } from "@/lib/constants";
+import { PRE_LAUNCH_INTRO } from "@/lib/constants";
 
 const SEEN_KEY = "cd_intro_seen_v1";
 
@@ -58,14 +58,15 @@ export default function IntroOverlay() {
           </li>
           <li>
             <b>한쪽이 아니라, 서로</b>
-            <span>객관적 기록을 넘어, 거래 양쪽이 서로의 신뢰를 쌓아가는 네트워크로 나아갑니다.</span>
+            <span>거래는 한쪽만 잘해선 안 됩니다. 양쪽이 서로의 신뢰를 쌓아가는 네트워크로 나아갑니다.</span>
           </li>
         </ul>
 
-        <p className="intro-vision">지금은 <b>{SERVICE_NAME}</b>부터 —<br />신뢰가 필요한 모든 거래로 넓혀갑니다.</p>
+        <p className="intro-vision">신뢰가 필요한 곳이라면 어디에나,<br /><b>착한거래</b>가 함께합니다.</p>
 
-        <div className="intro-fields" aria-label="확장 분야">
-          <span className="on">{SERVICE_NAME}</span>
+        <div className="intro-fields" aria-label="적용 분야">
+          <span>렌터카</span>
+          <span>전월세 임대차</span>
           <span>숙박·예약 노쇼</span>
           <span>반려동물 분양</span>
           <span>음식점 예약</span>
