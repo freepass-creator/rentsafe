@@ -3,6 +3,7 @@
 import { CAMPAIGN_HEADLINE, CODE_LABEL } from "@/lib/constants";
 import Icon from "@/components/Icon";
 import BrandMark from "@/components/BrandMark";
+import InstallButton from "@/components/InstallButton";
 
 export default function Landing() {
   return (
@@ -32,21 +33,8 @@ export default function Landing() {
           </span>
           <span className="lc-arrow">→</span>
         </a>
-      </div>
 
-      <div style={{ marginTop: 26 }}>
-        {[
-          { label: "우리 서비스", items: ["렌터카매니저", "Freepasserp", "신차견적기", "중고차구독견적기", "착한거래"] },
-          { label: "협력사", items: ["프리패스", "카벨"] },
-          { label: "회원사", items: ["손오공", "웰릭스", "스위치"] },
-        ].map((g) => (
-          <div key={g.label} style={{ marginTop: 16 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 800, color: "var(--ink3)", letterSpacing: ".5px", marginBottom: 9 }}>{g.label}</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {g.items.map((it) => <span key={it} style={{ fontSize: 13, fontWeight: 700, color: "var(--ink2)", background: "#f3f6f9", border: "1px solid #e6ebf1", borderRadius: 9, padding: "8px 13px" }}>{it}</span>)}
-            </div>
-          </div>
-        ))}
+        <InstallButton />
       </div>
       </div>
 

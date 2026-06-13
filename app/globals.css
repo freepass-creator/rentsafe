@@ -251,6 +251,8 @@ a{color:inherit;text-decoration:none}
 .land-card .lc-tx b{font-size:16px;font-weight:800;color:var(--navy)}
 .land-card .lc-tx span{font-size:12.5px;color:var(--ink3);line-height:1.45}
 .land-card .lc-arrow{color:var(--ink3);font-size:18px;font-weight:700;flex-shrink:0}
+.land-card.install{width:100%;font:inherit;text-align:left;cursor:pointer}
+.install-guide{font-size:12.5px;color:var(--ink3);line-height:1.55;margin-top:10px;text-align:center;background:var(--navy50);border-radius:12px;padding:12px 14px}
 .land-foot{display:flex;flex-direction:column;align-items:center;gap:9px;margin-top:26px;font-size:13px;color:var(--ink3)}
 .land-biz{display:inline-flex;align-items:center;gap:6px;color:var(--navy);font-weight:700;border:1px solid var(--line);border-radius:999px;padding:9px 18px;background:#fff}
 .land-biz:active{transform:scale(.97)}
