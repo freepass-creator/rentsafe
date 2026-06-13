@@ -39,8 +39,8 @@ export default function Landing() {
       </div>
 
       <div className="land-foot">
-        <span>회원이신가요?</span>
-        <a href="/login" className="land-biz">회원 로그인</a>
+        <span>렌터카 회원사이신가요?</span>
+        <a href="/login" className="land-biz"><Icon name="user" size={15} />회원 로그인</a>
         <InstallButton />
       </div>
     </div>

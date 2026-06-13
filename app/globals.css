@@ -266,15 +266,15 @@ a{color:inherit;text-decoration:none}
 @media(min-width:520px){.intro-backdrop{align-items:center;padding:20px}.intro-sheet{border-radius:20px}}
 .intro-head{text-align:center;margin-bottom:20px}
 .intro-mark{display:inline-block}
-.intro-title{font-size:21px;font-weight:800;letter-spacing:-.5px;color:var(--navy);margin-top:8px}
+.intro-title{font-size:20px;font-weight:800;letter-spacing:-.5px;color:var(--navy);margin-top:8px}
 .intro-title .accent{color:var(--safe)}
-.intro-lead{font-size:13.5px;line-height:1.6;color:var(--ink3);margin-top:9px}
-.intro-points{list-style:none;display:flex;flex-direction:column;gap:14px;margin:0 0 20px}
-.intro-point{display:flex;gap:12px;align-items:flex-start}
-.ip-ic{flex:0 0 auto;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--safe50);color:var(--safe)}
-.ip-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
-.ip-tx b{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.2px}
-.ip-tx span{font-size:12.5px;line-height:1.55;color:var(--ink3)}
+.intro-kicker{font-size:14.5px;font-weight:700;color:var(--ink2);margin-top:8px;letter-spacing:-.3px}
+.intro-kicker s{color:var(--ink3);font-weight:600;text-decoration-color:var(--ink3);opacity:.8}
+.intro-kicker em{font-style:normal;color:var(--safe)}
+.intro-body{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.intro-body p{font-size:13.5px;line-height:1.66;color:var(--ink2);letter-spacing:-.2px}
+.intro-body b{font-weight:700;color:var(--ink)}
+.intro-punch{font-size:13.5px;font-weight:700;line-height:1.55;color:var(--navy);text-align:center;background:var(--navy50);border-radius:12px;padding:12px 14px;margin-bottom:16px;letter-spacing:-.3px}
 .intro-dont{display:flex;align-items:center;gap:8px;justify-content:center;font-size:13px;color:var(--ink3);margin-bottom:14px;cursor:pointer;user-select:none}
 .intro-dont input{width:16px;height:16px;accent-color:var(--navy);cursor:pointer}
 .intro-ok{width:100%;border:0;border-radius:12px;padding:14px;background:var(--navy);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .08s,background .12s}
