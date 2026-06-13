@@ -45,24 +45,24 @@ export default function IntroOverlay() {
 
         <ul className="intro-vals">
           <li>
-            <b>신뢰가 자산이 됩니다</b>
-            <span>약속을 지킬수록 더 좋은 조건으로 거래합니다.</span>
+            <b>동의가 곧, 첫 신뢰</b>
+            <span>거래이력이 없어도 괜찮습니다. 동의하는 것부터가 신뢰의 시작입니다.</span>
           </li>
           <li>
             <b>낙인이 아니라, 해소</b>
-            <span>정상 거래엔 아무것도 남지 않고, 위반 이력은 본인이 직접 풀어냅니다.</span>
+            <span>정상 거래엔 아무것도 남지 않고, 미해소 거래는 본인이 직접 풀어냅니다.</span>
           </li>
           <li>
             <b>조회가 아니라, 증명</b>
-            <span>거래이력은 본인이 발급하고 본인만 열람합니다. 캐묻지 않습니다.</span>
+            <span>거래이력은 본인이 발급하고, 당사자만 열람합니다.</span>
           </li>
           <li>
             <b>한쪽이 아니라, 서로</b>
-            <span>거래는 한쪽만 잘해선 안 됩니다. 양쪽이 서로의 신뢰를 쌓아가는 네트워크로 나아갑니다.</span>
+            <span>좋은 거래는 한쪽만으로 만들어지지 않습니다. 사는 쪽도, 파는 쪽도 서로의 신뢰를 함께 쌓아갑니다.</span>
           </li>
         </ul>
 
-        <p className="intro-vision">신뢰가 필요한 곳이라면 어디에나,<br /><b>착한거래</b>가 함께합니다.</p>
+        <p className="intro-vision">여기서 쌓은 신뢰는,<br />신뢰가 필요한 <b>다른 거래</b>에서도 힘이 됩니다.</p>
 
         <div className="intro-fields" aria-label="적용 분야">
           <span>렌터카</span>
