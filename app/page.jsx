@@ -4,10 +4,12 @@ import { CAMPAIGN_HEADLINE, CODE_LABEL } from "@/lib/constants";
 import Icon from "@/components/Icon";
 import BrandMark from "@/components/BrandMark";
 import InstallButton from "@/components/InstallButton";
+import IntroOverlay from "@/components/IntroOverlay";
 
 export default function Landing() {
   return (
     <div className="land">
+      <IntroOverlay />
       <div className="land-main">
       <div className="land-hero">
         <BrandMark size={34} className="land-mark" />

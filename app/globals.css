@@ -260,6 +260,29 @@ a{color:inherit;text-decoration:none}
 .land-biz:active{transform:scale(.97)}
 .land-templink{margin-top:4px;font-size:12.5px;color:var(--ink3);font-weight:600;border-bottom:1px solid var(--line);padding-bottom:1px}
 
+/* ---- 처음 방문 서비스 소개 오버레이 ---- */
+.intro-backdrop{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center;background:rgba(16,33,49,.42);padding:0;animation:introFade .2s ease}
+.intro-sheet{background:#fff;width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:28px 24px calc(22px + var(--sab));box-shadow:0 -8px 40px rgba(16,33,49,.18);animation:introUp .26s cubic-bezier(.2,.8,.2,1)}
+@media(min-width:520px){.intro-backdrop{align-items:center;padding:20px}.intro-sheet{border-radius:20px}}
+.intro-head{text-align:center;margin-bottom:20px}
+.intro-mark{display:inline-block}
+.intro-title{font-size:21px;font-weight:800;letter-spacing:-.5px;color:var(--navy);margin-top:8px}
+.intro-title .accent{color:var(--safe)}
+.intro-lead{font-size:13.5px;line-height:1.6;color:var(--ink3);margin-top:9px}
+.intro-points{list-style:none;display:flex;flex-direction:column;gap:14px;margin:0 0 20px}
+.intro-point{display:flex;gap:12px;align-items:flex-start}
+.ip-ic{flex:0 0 auto;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--safe50);color:var(--safe)}
+.ip-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ip-tx b{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.2px}
+.ip-tx span{font-size:12.5px;line-height:1.55;color:var(--ink3)}
+.intro-dont{display:flex;align-items:center;gap:8px;justify-content:center;font-size:13px;color:var(--ink3);margin-bottom:14px;cursor:pointer;user-select:none}
+.intro-dont input{width:16px;height:16px;accent-color:var(--navy);cursor:pointer}
+.intro-ok{width:100%;border:0;border-radius:12px;padding:14px;background:var(--navy);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .08s,background .12s}
+.intro-ok:hover{background:var(--navy2)}
+.intro-ok:active{transform:scale(.99)}
+@keyframes introFade{from{opacity:0}to{opacity:1}}
+@keyframes introUp{from{transform:translateY(22px);opacity:.4}to{transform:none;opacity:1}}
+
 /* ---- 업체코드 카드 (회원사 콘솔) ---- */
 .code-card{border-color:var(--safe)}
 .code-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
