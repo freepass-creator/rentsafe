@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { findMemberByCode, createSelfConsent, queryRisk } from "@/lib/db";
+import { putImage } from "@/lib/storage";
 import { CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE, RISK_TYPES } from "@/lib/constants";
 import { fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
@@ -78,12 +79,18 @@ export default function SelfConsentPage() {
       const recs = q.records || [];
       cert = { unresolved: q.kind === "hit", count: recs.length, types: [...new Set(recs.map((r) => r.type))] };
     } catch (e) { console.error(e); }
+    // 신분증·얼굴 이미지는 Storage 업로드 후 URL만 저장(문서 비대화·1MB 한도 방지). 업로드 불가 시 dataURL 폴백.
+    let photos = { id: verified.idImage || "", face: verified.faceImage || "" };
+    try {
+      const key = `consent_photos/${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      photos = { id: await putImage(`${key}/id`, photos.id), face: await putImage(`${key}/face`, photos.face) };
+    } catch (e) { console.error(e); }
     try {
       const id = await createSelfConsent({
         name: verified.name, phone: verified.phone, company: target.company, code: target.code,
         verified: { name: verified.name, birth: verified.birth, method: verified.method },
         signed: !!sig, cert,
-        photos: { id: verified.idImage || "", face: verified.faceImage || "" },
+        photos,
       });
       setReceipt({ cid: id.slice(-8).toUpperCase(), ts: fmtDateTime(new Date()), cert });
     } catch (e) { console.error(e); setReceipt({ cid: "-", ts: fmtDateTime(new Date()), cert }); }

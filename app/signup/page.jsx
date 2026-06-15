@@ -106,10 +106,10 @@ export default function SignupPage() {
             <input value={service} onChange={(e) => setService(e.target.value)} placeholder="예: 렌터카" list="svc-list" />
             <datalist id="svc-list"><option value="렌터카" /><option value="분양" /><option value="렌탈" /><option value="숙박" /></datalist></div>
           <div className="field">
-            <label>대표자 신분증 <span className="req">*</span></label>
+            <label>대표자 신분증 <span className="req">*</span> <span className="opt">촬영으로 첨부</span></label>
             <label className="btn btn-block" style={{ cursor: "pointer" }}>
-              <Icon name="file" /> {ceoIdName || "대표자 신분증 촬영·첨부"}
-              <input type="file" accept="image/*" style={{ display: "none" }} onChange={onCeoId} />
+              <Icon name="file" /> {ceoIdImage ? "대표자 신분증 촬영됨 ✓" : "대표자 신분증 촬영"}
+              <input type="file" accept="image/*" capture="environment" style={{ display: "none" }} onChange={onCeoId} />
             </label>
           </div>
           <div className="field"><label>이메일(로그인 ID) <span className="req">*</span></label><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@company.com" /></div>
