@@ -1,16 +1,14 @@
 /**
- * 사업자등록증 OCR — Gemini 기반 (회원사 가입 자동입력용).
- *   POST /api/ocr/biz  (multipart/form-data)  · file: 사업자등록증 이미지/PDF
- *   → { ok:true, company, bizNo, ceo, industry }   |   { ok:false, error }
- * 서버 전용 · GEMINI_API_KEY 필요 · 이미지는 추출 후 폐기(미저장).
+ * 사업자등록증 OCR — Gemini 기반(회원사 가입 자동입력용). POST /api/ocr/biz (multipart, file)
+ *   → { ok:true, company, bizNo, ceo, industry } | { ok:false, error }
+ * 이미지/PDF 지원. 추출 후 미저장.
  */
 import { NextResponse } from "next/server";
-import { GoogleGenAI, Type } from "@google/genai";
+import { Type } from "@google/genai";
+import { extractFromImage } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
-
-const MODEL = "gemini-2.5-flash";
 
 const SCHEMA = {
   type: Type.OBJECT,
@@ -31,45 +29,13 @@ const PROMPT = `이 이미지는 한국 사업자등록증입니다. 아래만 �
 값이 없으면 null.`;
 
 export async function POST(req) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return NextResponse.json({ ok: false, error: "GEMINI_API_KEY 미설정" }, { status: 500 });
-
   let file;
   try { file = (await req.formData()).get("file"); }
   catch { return NextResponse.json({ ok: false, error: "FormData 파싱 실패" }, { status: 400 }); }
-  if (!file || typeof file === "string") return NextResponse.json({ ok: false, error: "file 누락" }, { status: 400 });
-  if (file.size > 15 * 1024 * 1024) return NextResponse.json({ ok: false, error: "파일은 15MB 이하" }, { status: 413 });
-
-  const base64 = Buffer.from(await file.arrayBuffer()).toString("base64");
-  const mime = file.type || "image/jpeg";
-  const ai = new GoogleGenAI({ apiKey });
-
-  async function call() {
-    let lastErr;
-    for (let i = 0; i < 3; i++) {
-      try {
-        return await ai.models.generateContent({
-          model: MODEL,
-          contents: [{ role: "user", parts: [{ inlineData: { mimeType: mime, data: base64 } }, { text: PROMPT }] }],
-          config: { responseMimeType: "application/json", responseSchema: SCHEMA, temperature: 0, thinkingConfig: { thinkingBudget: 0 }, maxOutputTokens: 512 },
-        });
-      } catch (err) {
-        lastErr = err;
-        const m = err?.message || "";
-        if (i === 2 || !(m.includes("503") || m.includes("429") || m.includes("UNAVAILABLE") || m.includes("RESOURCE_EXHAUSTED"))) throw err;
-        await new Promise((r) => setTimeout(r, 1000 * 2 ** i + Math.random() * 500));
-      }
-    }
-    throw lastErr;
-  }
-
   try {
-    const res = await call();
-    const text = res.text;
-    if (!text) return NextResponse.json({ ok: false, error: "Gemini 응답 없음" }, { status: 502 });
-    const p = JSON.parse(text);
+    const p = await extractFromImage({ file, schema: SCHEMA, prompt: PROMPT, maxBytes: 15 * 1024 * 1024 });
     return NextResponse.json({ ok: true, company: p.company || "", bizNo: p.bizNo || "", ceo: p.ceo || "", industry: p.industry || "" });
   } catch (err) {
-    return NextResponse.json({ ok: false, error: `OCR 실패: ${err?.message || err}` }, { status: 500 });
+    return NextResponse.json({ ok: false, error: err?.message || "OCR 실패" }, { status: err?.status || 500 });
   }
 }
