@@ -265,8 +265,10 @@ a{color:inherit;text-decoration:none}
 
 /* ---- 처음 방문 서비스 소개 오버레이 ---- */
 .intro-backdrop{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center;background:rgba(16,33,49,.42);padding:0;animation:introFade .2s ease}
-.intro-sheet{background:#fff;width:100%;max-width:480px;max-height:90svh;overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius) var(--radius) 0 0;padding:22px 22px calc(18px + var(--sab));box-shadow:0 -8px 40px rgba(16,33,49,.18);animation:introUp .26s cubic-bezier(.2,.8,.2,1)}
-@media(min-width:520px){.intro-backdrop{align-items:center;padding:20px}.intro-sheet{border-radius:var(--radius);max-height:88svh}}
+.intro-sheet{background:#fff;width:100%;max-width:480px;height:100svh;display:flex;flex-direction:column;border-radius:0;padding:calc(16px + var(--sat)) 22px calc(16px + var(--sab));box-shadow:0 -8px 40px rgba(16,33,49,.18);animation:introUp .26s cubic-bezier(.2,.8,.2,1)}
+.intro-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex}
+.intro-inner{margin:auto;width:100%}
+@media(min-width:520px){.intro-backdrop{align-items:center;padding:20px}.intro-sheet{height:auto;max-height:90svh;border-radius:var(--radius);padding:24px}.intro-scroll{display:block;overflow:visible}.intro-inner{margin:0}}
 .intro-head{text-align:center;margin-bottom:14px}
 .intro-mark{display:inline-block}
 .intro-title{font-size:23px;font-weight:800;letter-spacing:-.6px;color:var(--navy);margin-top:8px}
@@ -284,9 +286,9 @@ a{color:inherit;text-decoration:none}
 .intro-fields{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:16px}
 .intro-fields span{font-size:11.5px;font-weight:600;color:var(--ink3);background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:5px 11px}
 .intro-fields span.on{color:#fff;background:var(--safe);border-color:var(--safe)}
-.intro-dont{display:flex;align-items:center;gap:8px;justify-content:center;font-size:13px;color:var(--ink3);margin-bottom:14px;cursor:pointer;user-select:none}
+.intro-dont{flex-shrink:0;display:flex;align-items:center;gap:8px;justify-content:center;font-size:13px;color:var(--ink3);margin:12px 0;cursor:pointer;user-select:none}
 .intro-dont input{width:16px;height:16px;accent-color:var(--navy);cursor:pointer}
-.intro-ok{width:100%;border:0;border-radius:var(--radius);padding:14px;background:var(--navy);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .08s,background .12s}
+.intro-ok{flex-shrink:0;width:100%;border:0;border-radius:var(--radius);padding:15px;margin-top:14px;background:var(--navy);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .08s,background .12s}
 .intro-ok:hover{background:var(--navy2)}
 .intro-ok:active{transform:scale(.99)}
 @keyframes introFade{from{opacity:0}to{opacity:1}}

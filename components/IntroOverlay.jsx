@@ -37,6 +37,7 @@ export default function IntroOverlay() {
   return (
     <div className="intro-backdrop" role="dialog" aria-modal="true" aria-label="착한거래 소개" onClick={close}>
       <div className="intro-sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="intro-scroll"><div className="intro-inner">
         <div className="intro-head">
           <BrandMark size={30} className="intro-mark" />
           <h2 className="intro-title"><span className="accent">착한</span>거래는?</h2>
@@ -74,6 +75,7 @@ export default function IntroOverlay() {
           <span>음식점 예약</span>
           <span>후불·외상 거래</span>
         </div>
+        </div></div>
 
         {!PRE_LAUNCH_INTRO && (
           <label className="intro-dont">
