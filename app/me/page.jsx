@@ -10,6 +10,7 @@ import Icon from "@/components/Icon";
 import NoticeList from "@/components/NoticeList";
 import StepFooter from "@/components/StepFooter";
 import FlowHeader from "@/components/FlowHeader";
+import { VerifiedCard } from "@/components/VerifyParts";
 
 export default function MyStatus() {
   const router = useRouter();
@@ -96,10 +97,7 @@ export default function MyStatus() {
         )}
         {stage === "status" && verified && (
           <>
-            <div className="verified">
-              <div className="vrow"><span className="chk">✓</span> 본인확인 완료 <span style={{ fontSize: 11, color: "var(--ink3)", fontWeight: 600 }}>· {verified.method}</span></div>
-              <div className="info"><span><b>{verified.name}</b> 님</span><span>생년월일 {fmtBirth(verified.birth)}</span></div>
-            </div>
+            <VerifiedCard v={verified} />
 
             {clean ? (
               <>

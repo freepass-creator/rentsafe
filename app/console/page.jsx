@@ -2,13 +2,14 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { RISK_TYPES, CONTRACT_CONSENT_FORM, CONSENT_NOTICES, CONSENT_CLAUSES, CONSENT_FOOTNOTES, STATUS_NOTICES, CODE_LABEL, VIOLATION_LABEL } from "@/lib/constants";
+import { RISK_TYPES, CONTRACT_CONSENT_FORM, CONSENT_NOTICES, STATUS_NOTICES, CODE_LABEL, VIOLATION_LABEL } from "@/lib/constants";
 import { mask, fmtBirth, fmtDate } from "@/lib/format";
 import { listConsents, addRisk } from "@/lib/db";
 import { getSession, logout } from "@/lib/auth";
 import AppHeader from "@/components/AppHeader";
 import Icon from "@/components/Icon";
 import NoticeList from "@/components/NoticeList";
+import { ConsentClauses, CertBadge } from "@/components/VerifyParts";
 
 export default function Console() {
   const router = useRouter();
@@ -97,14 +98,7 @@ function SendTab({ toast, company, code }) {
           <>
             <div className="card-desc">손님이 <b>착한거래 동의하기</b>에서 아래 내용을 확인하고 동의합니다.</div>
             <NoticeList items={CONSENT_NOTICES} />
-            <div className="clauses" style={{ marginTop: 12 }}>
-              {CONSENT_CLAUSES.map((c, i) => (
-                <div className="clause" key={i}><div className="clause-t">{c.t}</div><div className="clause-b">{c.b}</div></div>
-              ))}
-            </div>
-            <ul className="footnotes">
-              {CONSENT_FOOTNOTES.map((f, i) => <li key={i}>{f}</li>)}
-            </ul>
+            <ConsentClauses />
           </>
         )}
       </div>
@@ -139,9 +133,7 @@ function SendTab({ toast, company, code }) {
                     </div>
                     <div className="sp" />
                     {hasPhotos && <button className="btn btn-sm" style={{ marginRight: 8 }} onClick={() => setOpen(open === c.id ? null : c.id)}>{open === c.id ? "대조 닫기" : "신분증·얼굴 대조"}</button>}
-                    {c.cert?.unresolved
-                      ? <span className="badge b-red"><span className="dot" />미해소 {c.cert.count}건</span>
-                      : <span className="badge b-green"><span className="dot" />이상 없음</span>}
+                    <CertBadge cert={c.cert} />
                   </div>
                   {open === c.id && hasPhotos && (
                     <div style={{ display: "flex", gap: 10, padding: "2px 0 12px" }}>

@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { findMemberByCode, createSelfConsent, queryRisk } from "@/lib/db";
-import { CONSENT_CLAUSES, CONSENT_FOOTNOTES, CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE, RISK_TYPES } from "@/lib/constants";
-import { fmtBirth, fmtDateTime } from "@/lib/format";
+import { CONSENT_NOTICES, CONSENT_VERSION, CAMPAIGN_TITLE, CAMPAIGN_HEADLINE, CAMPAIGN_LEAD, CODE_LABEL, DEMO_MODE, RISK_TYPES } from "@/lib/constants";
+import { fmtDateTime } from "@/lib/format";
 import AuthFlow from "@/components/AuthFlow";
 import NoticeList from "@/components/NoticeList";
 import SignaturePad from "@/components/SignaturePad";
 import StepFooter from "@/components/StepFooter";
 import FlowHeader from "@/components/FlowHeader";
+import { VerifiedCard, ConsentClauses, CertBadge } from "@/components/VerifyParts";
 
 export default function SelfConsentPage() {
   const router = useRouter();
@@ -138,21 +139,11 @@ export default function SelfConsentPage() {
         {/* STEP 2 — 동의 */}
         {verified && !signing && !done && (
           <>
-            <div className="verified">
-              <div className="vrow"><span className="chk">✓</span> 본인확인 완료 <span style={{ fontSize: 11, color: "var(--ink3)", fontWeight: 600 }}>· {verified.method}</span></div>
-              <div className="info"><span><b>{verified.name}</b> 님</span><span>생년월일 {fmtBirth(verified.birth)}</span></div>
-            </div>
+            <VerifiedCard v={verified} />
             <div className="slabel">STEP 2 · {target.company} 착한거래 동의</div>
             <div className="stitle">아래 내용에 동의해 주세요</div>
             <div className="sdesc" style={{ marginBottom: 8 }}>동의하면 본인의 거래이력 확인서가 <b>{target.company}</b>에 <b>함께 제출</b>됩니다.</div>
-            <div className="clauses">
-              {CONSENT_CLAUSES.map((c, i) => (
-                <div className="clause" key={i}><div className="clause-t">{c.t}</div><div className="clause-b">{c.b}</div></div>
-              ))}
-            </div>
-            <ul className="footnotes">
-              {CONSENT_FOOTNOTES.map((f, i) => <li key={i}>{f}</li>)}
-            </ul>
+            <ConsentClauses />
             <label className={`cc ${agreed ? "on" : ""}`}>
               <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} /> <span>위 내용을 확인하였으며, 내 거래이력 확인서를 <b>{target.company}</b>에 제출하는 데 동의합니다.</span>
             </label>
@@ -179,14 +170,8 @@ export default function SelfConsentPage() {
             <p><b>{target.company}</b>에 착한거래 확인서가<br />함께 제출되었습니다.</p>
             <div style={{ margin: "2px 0 16px", padding: "15px 16px", border: "1px solid #e6ebf1", borderRadius: 12, background: "#fff", textAlign: "left" }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: "#7c8a98", marginBottom: 9 }}>착한거래 확인서 · {verified.name}</div>
-              {receipt.cert?.unresolved ? (
-                <>
-                  <span className="badge b-red"><span className="dot" />미해소 거래이력 {receipt.cert.count}건</span>
-                  {receipt.cert.types?.length > 0 && <div style={{ fontSize: 12.5, color: "#445466", marginTop: 9 }}>{receipt.cert.types.map((t) => RISK_TYPES[t] || t).join(" · ")}</div>}
-                </>
-              ) : (
-                <span className="badge b-green"><span className="dot" />미해소 거래이력 없음</span>
-              )}
+              <CertBadge cert={receipt.cert} full />
+              {receipt.cert?.unresolved && receipt.cert.types?.length > 0 && <div style={{ fontSize: 12.5, color: "#445466", marginTop: 9 }}>{receipt.cert.types.map((t) => RISK_TYPES[t] || t).join(" · ")}</div>}
             </div>
             <div className="receipt">
               <div className="r"><span className="k">동의번호</span><span className="v mono">{receipt.cid}</span></div>
