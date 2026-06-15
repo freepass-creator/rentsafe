@@ -31,5 +31,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# 대외비 — 내부 전략 문서 (공개 레포 노출 금지)
+# 대외비 — 내부 전략·영업 문서 (공개 레포 노출 금지)
 /규제대응전략.html
+/제안서.html
+/제안서/
