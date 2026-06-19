@@ -35,3 +35,4 @@ yarn-error.log*
 /규제대응전략.html
 /제안서.html
 /제안서/
+*.pdf

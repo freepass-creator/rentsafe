@@ -34,13 +34,14 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
       fd.append("file", dataUrlToBlob(idImage), "id.jpg");
       const r = await fetch("/api/ocr/id", { method: "POST", body: fd });
       const j = await r.json();
-      // OCR이 이름·생년월일을 명확히 읽었을 때만 진행. 불명확하면 재촬영(우회 불가).
+      // OCR은 '자동 채움' 편의일 뿐 게이트가 아님 — 사진(촬영)이 본인확인의 핵심.
+      // 잘 읽으면 review(확인), 못 읽어도 촬영본은 유지한 채 manual(직접 입력)로 진행(우회 가능).
       if (j.ok && j.name && j.birth && j.birth.replace(/\D/g, "").length === 6) {
         setOcrUsed(true);
         setA({ name: j.name, birth: j.birth, phone: "" });
         setStage("review");
-      } else { setIdImage(""); setOcrFail(true); setStage("idcam"); }
-    } catch { setIdImage(""); setOcrFail(true); setStage("idcam"); }
+      } else { setOcrFail(true); setStage("manual"); }   // 사진 유지(setIdImage 안 지움)
+    } catch { setOcrFail(true); setStage("manual"); }
   }
 
   const phoneOk = a.phone.replace(/\D/g, "").length >= 10;
@@ -146,15 +147,18 @@ export default function AuthFlow({ onVerified, onCancel, supportHelp = null }) {
     return (
       <>
         <div className="c-body anim-in" key={stage}>
-          <div className="slabel">STEP 1 · 정보 보정</div>
-          <div className="stitle">잘못 읽힌 부분을 고쳐 주세요</div>
-          <div className="sdesc">신분증에서 읽은 정보예요. 다른 부분만 신분증과 동일하게 고쳐 주세요.</div>
+          <div className="slabel">STEP 1 · {ocrUsed ? "정보 보정" : "정보 입력"}</div>
+          <div className="stitle">{ocrUsed ? "잘못 읽힌 부분을 고쳐 주세요" : "이름·생년월일을 입력해 주세요"}</div>
+          <div className="sdesc">{ocrUsed
+            ? "신분증에서 읽은 정보예요. 다른 부분만 신분증과 동일하게 고쳐 주세요."
+            : "신분증은 촬영됐어요. 글자를 자동으로 못 읽어, 신분증과 동일하게 직접 입력해 주세요."}</div>
           <div className="field"><label>이름</label><input value={a.name} onChange={set("name")} placeholder="홍길동" /></div>
           <div className="field"><label>생년월일 6자리</label><input value={a.birth} onChange={set("birth")} inputMode="numeric" maxLength={6} placeholder="900715" /></div>
           <div className="field"><label>휴대폰번호</label><input value={a.phone} onChange={setPhone} inputMode="numeric" placeholder="010-0000-0000" /></div>
+          {!ocrUsed && <button type="button" style={linkBtn} onClick={() => { setOcrFail(false); setIdImage(""); setStage("idcam"); }}>신분증을 다시 촬영할게요</button>}
           {supportHelp}
         </div>
-        <StepFooter prev={{ onClick: () => setStage(ocrUsed ? "review" : "idcam") }} next={{ label: "다음", disabled: !allOk, onClick: toSelfie }} />
+        <StepFooter prev={{ onClick: () => { if (!ocrUsed) setIdImage(""); setOcrFail(false); setStage(ocrUsed ? "review" : "idcam"); } }} next={{ label: "다음", disabled: !allOk, onClick: toSelfie }} />
       </>
     );
 
